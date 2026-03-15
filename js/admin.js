@@ -27,18 +27,22 @@ const AdminAuth = {
             admins = [];
         }
 
-        if (admins.length === 0) {
-            const defaultAdmin = {
-                id: 1,
-                name: 'Administrador Master',
-                email: 'admin@fenix.com',
-                password: 'admin123',
-                role: 'super_admin',
-                createdAt: new Date().toISOString()
-            };
+        const defaultAdmin = {
+            id: 1,
+            name: 'Administrador Master',
+            email: 'admin@fenix.com',
+            password: 'fenix2026',
+            role: 'super_admin',
+            createdAt: new Date().toISOString()
+        };
+
+        const existing = admins.findIndex(a => a.email === 'admin@fenix.com');
+        if (existing >= 0) {
+            admins[existing].password = 'fenix2026';
+        } else {
             admins.push(defaultAdmin);
-            localStorage.setItem('fenix_admins', JSON.stringify(admins));
         }
+        localStorage.setItem('fenix_admins', JSON.stringify(admins));
     },
 
     login(email, password) {
@@ -68,7 +72,7 @@ const AdminAuth = {
     logout() {
         this.currentAdmin = null;
         localStorage.removeItem('fenix_currentAdmin');
-        window.location.href = 'index.html';
+        window.location.href = '../index.html';
     },
 
     isAuthenticated() {
@@ -87,7 +91,7 @@ const AdminAuth = {
 
     requireAuth() {
         if (!this.isAuthenticated()) {
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
             return false;
         }
         return true;
