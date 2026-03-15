@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Afiliados - Minha Equipe</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">FENIX</span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h2>Fenix</h2>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 19l-7-7 7-7M18 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                    Dashboard
+                </a>
+                <a href="meus-links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                    Meus Links
+                </a>
+                <a href="minha-equipe.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Minha Equipe
+                </a>
+                <a href="minha-rede.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><path d="M12 8v4M6 15a3 3 0 100 6 3 3 0 000-6zM18 15a3 3 0 100 6 3 3 0 000-6z"/><path d="M12 12l-6 6M12 12l6 6"/></svg>
+                    Minha Rede
+                </a>
+                <a href="financeiro.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Financeiro
+                </a>
+                <a href="comissoes.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Comissões
+                </a>
+                <a href="materiais.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                    Materiais
+                </a>
+                <a href="suporte.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+                    Suporte
+                </a>
+                <a href="perfil.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Meu Perfil
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="../index.html" class="nav-item" onclick="Auth.logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Sair
+                </a>
+            </nav>
+
+            <!-- Platform Selector -->
+            <div class="platform-selector">
+                <div class="platform-label">Plataforma</div>
+                <div class="platform-buttons">
+                    <button class="platform-btn active" onclick="selectPlatform('superbet')">
+                        <img src="../img/superbet-logo.png" alt="Superbet">
+                    </button>
+                    <button class="platform-btn" onclick="selectPlatform('sportingbet')">
+                        <img src="../img/sportingbet-logo.png" alt="Sportingbet">
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">C</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Carregando...</div>
+                        <div class="user-role">Afiliado</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Minha Equipe</h1>
+                    <p>Gerencie suas indicações e ganhe comissões extras</p>
+                </div>
+
+                <!-- Referral Balance Card -->
+                <div class="referral-balance-card">
+                    <div class="referral-balance-info">
+                        <div class="referral-balance-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="referral-balance-label">Saldo de Indicações</div>
+                            <div class="referral-balance-value" id="referralBalance">R$ 0,00</div>
+                        </div>
+                    </div>
+                    <div class="referral-balance-stats">
+                        <div class="referral-stat">
+                            <span class="referral-stat-value" id="totalReferrals">0</span>
+                            <span class="referral-stat-label">Indicados</span>
+                        </div>
+                        <div class="referral-stat">
+                            <span class="referral-stat-value" id="activeReferrals">0</span>
+                            <span class="referral-stat-label">Ativos</span>
+                        </div>
+                        <div class="referral-stat">
+                            <span class="referral-stat-value" id="pendingReferrals">0</span>
+                            <span class="referral-stat-label">Pendentes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Referral Link Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h3>Link de Indicação</h3>
+                            <p>Compartilhe e ganhe R$ 10,00 por cada afiliado ativo</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="referral-link-box">
+                            <div class="referral-link-input">
+                                <span id="referralLink">https://fenixafiliados.com/cadastro?ref=CODIGO</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="copyReferralLink()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                                </svg>
+                                Copiar Link
+                            </button>
+                        </div>
+                        <div class="referral-share-row">
+                            <button class="share-mini-btn whatsapp" onclick="shareReferralWhatsApp()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                </svg>
+                            </button>
+                            <button class="share-mini-btn telegram" onclick="shareReferralTelegram()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- How It Works -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Como Funciona</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="how-it-works-grid">
+                            <div class="how-it-works-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h4>Compartilhe seu Link</h4>
+                                    <p>Envie seu link de indicação para amigos que querem ser afiliados</p>
+                                </div>
+                            </div>
+                            <div class="how-it-works-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h4>Eles se Cadastram</h4>
+                                    <p>Seus amigos se cadastram e são aprovados como afiliados</p>
+                                </div>
+                            </div>
+                            <div class="how-it-works-step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h4>Você Ganha</h4>
+                                    <p>Receba R$ 10,00 por cada indicado que fizer sua primeira conversão</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Referrals Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Meus Indicados</h3>
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" onclick="filterReferrals('all')">Todos</button>
+                            <button class="filter-tab" onclick="filterReferrals('active')">Ativos</button>
+                            <button class="filter-tab" onclick="filterReferrals('pending')">Pendentes</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="referralsTable">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                                </svg>
+                                <h3>Nenhum indicado ainda</h3>
+                                <p>Compartilhe seu link e comece a ganhar!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!Auth.requireAuth()) return;
+            loadUserInfo();
+            loadReferralData();
+        });
+
+        function loadUserInfo() {
+            const user = Auth.currentUser;
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+
+                const affiliateCode = user.affiliateCode || 'FENIX001';
+                document.getElementById('referralLink').textContent = `https://fenixafiliados.com/cadastro?ref=${affiliateCode}`;
+            }
+        }
+
+        function loadReferralData() {
+            // Simulated data
+            const referrals = getReferrals();
+
+            const totalReferrals = referrals.length;
+            const activeReferrals = referrals.filter(r => r.status === 'active').length;
+            const pendingReferrals = referrals.filter(r => r.status === 'pending').length;
+            const balance = activeReferrals * 10; // R$ 10 por indicado ativo
+
+            document.getElementById('referralBalance').textContent = Format.currency(balance);
+            document.getElementById('totalReferrals').textContent = totalReferrals;
+            document.getElementById('activeReferrals').textContent = activeReferrals;
+            document.getElementById('pendingReferrals').textContent = pendingReferrals;
+
+            renderReferralsTable(referrals);
+        }
+
+        function getReferrals() {
+            // Demo data - in production would come from API
+            return Storage.get('referrals') || [];
+        }
+
+        function renderReferralsTable(referrals) {
+            const container = document.getElementById('referralsTable');
+
+            let filtered = referrals;
+            if (currentFilter !== 'all') {
+                filtered = referrals.filter(r => r.status === currentFilter);
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                        </svg>
+                        <h3>Nenhum indicado ${currentFilter === 'all' ? 'ainda' : currentFilter === 'active' ? 'ativo' : 'pendente'}</h3>
+                        <p>Compartilhe seu link e comece a ganhar!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Afiliado</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                                <th>Comissão</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filtered.map(r => `
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <div class="user-avatar">${r.name.charAt(0)}</div>
+                                            <div>
+                                                <div style="font-weight: 600;">${r.name}</div>
+                                                <div style="font-size: 0.75rem; color: var(--text-muted);">${r.email}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>${Format.date(r.createdAt)}</td>
+                                    <td>
+                                        <span class="status-badge ${r.status === 'active' ? 'active' : 'pending'}">
+                                            <span class="status-dot"></span>
+                                            ${r.status === 'active' ? 'Ativo' : 'Pendente'}
+                                        </span>
+                                    </td>
+                                    <td style="font-weight: 600; color: ${r.status === 'active' ? 'var(--success)' : 'var(--text-muted)'};">
+                                        ${r.status === 'active' ? 'R$ 10,00' : '-'}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function filterReferrals(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            loadReferralData();
+        }
+
+        function copyReferralLink() {
+            const link = document.getElementById('referralLink').textContent;
+            Clipboard.copy(link);
+        }
+
+        function shareReferralWhatsApp() {
+            const link = document.getElementById('referralLink').textContent;
+            const text = `Quer ganhar dinheiro como afiliado? Cadastre-se agora! ${link}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function shareReferralTelegram() {
+            const link = document.getElementById('referralLink').textContent;
+            const text = `Quer ganhar dinheiro como afiliado? Cadastre-se agora!`;
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function selectPlatform(platform) {
+            document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.platform-btn.${platform}`).classList.add('active');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
+
+    <style>
+        .referral-balance-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            background: var(--gradient-fire);
+            border-radius: 16px;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .referral-balance-card {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+
+        .referral-balance-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .referral-balance-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+        }
+
+        .referral-balance-icon svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .referral-balance-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .referral-balance-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .referral-balance-stats {
+            display: flex;
+            gap: 32px;
+        }
+
+        .referral-stat {
+            text-align: center;
+        }
+
+        .referral-stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .referral-stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .referral-link-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .referral-link-box {
+                flex-direction: column;
+            }
+        }
+
+        .referral-link-input {
+            flex: 1;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.9rem;
+            color: var(--fire-orange);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .referral-share-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .share-mini-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .share-mini-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .share-mini-btn.whatsapp {
+            background: #25d366;
+        }
+
+        .share-mini-btn.telegram {
+            background: #0088cc;
+        }
+
+        .how-it-works-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .how-it-works-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .how-it-works-step {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-input);
+            border-radius: 12px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-fire);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .step-content p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .filter-tab:hover {
+            background: var(--bg-card);
+        }
+
+        .filter-tab.active {
+            background: var(--fire-orange);
+            color: white;
+            border-color: var(--fire-orange);
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Admin - Configurações</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">Fenix <span style="color: var(--danger); font-size: 0.6rem;">ADMIN</span></span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar Admin -->
+        <aside class="sidebar admin-sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h2>Fenix <span style="font-size: 0.7rem; color: var(--danger);">ADMIN</span></h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                    Dashboard
+                </a>
+                <a href="afiliados.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    Afiliados
+                </a>
+                <a href="casas.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+                    Casas de Apostas
+                </a>
+                <a href="cpa.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Configurar CPA
+                </a>
+                <a href="links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/></svg>
+                    Links Master
+                </a>
+                <a href="saques.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/></svg>
+                    Saques
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                    Relatórios
+                </a>
+                <a href="configuracoes.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+                    Configurações
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button onclick="AdminAuth.logout()" class="btn btn-secondary" style="width: 100%;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Sair
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <button class="theme-toggle" style="position: fixed; top: 20px; right: 20px;">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg>
+            </button>
+
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>Configurações</h1>
+                    <p>Configure o sistema de afiliados</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px;">
+                <!-- General Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Configurações Gerais</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="generalSettingsForm" class="auth-form">
+                            <div class="form-group">
+                                <label>Nome da Plataforma</label>
+                                <input type="text" name="platformName" value="Fenix Afiliados">
+                            </div>
+                            <div class="form-group">
+                                <label>Saque Mínimo (R$)</label>
+                                <input type="number" step="0.01" name="minWithdrawal" value="50">
+                            </div>
+                            <div class="form-group">
+                                <label>Aprovação Automática de Afiliados</label>
+                                <select name="autoApprove">
+                                    <option value="false">Não - Requer aprovação manual</option>
+                                    <option value="true">Sim - Aprovar automaticamente</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- API Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Configurações de API</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label>URL do Postback</label>
+                            <div style="display: flex; gap: 12px;">
+                                <input type="text" id="postbackUrl" value="https://seusite.com/api/postback?affiliate={AFFILIATE}&subid={SUBID}" readonly style="flex: 1;">
+                                <button class="btn btn-secondary" onclick="Clipboard.copy(document.getElementById('postbackUrl').value)">Copiar</button>
+                            </div>
+                            <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 8px; display: block;">
+                                Configure esta URL nas casas de apostas para receber notificações de conversão.
+                            </small>
+                        </div>
+
+                        <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-top: 20px;">
+                            <h4 style="margin-bottom: 12px; font-size: 0.9rem;">Parâmetros disponíveis:</h4>
+                            <ul style="font-size: 0.8rem; color: var(--text-muted); list-style: disc; padding-left: 20px;">
+                                <li><code>{AFFILIATE}</code> - Código do afiliado</li>
+                                <li><code>{SUBID}</code> - SubID do link</li>
+                                <li><code>{AMOUNT}</code> - Valor da conversão</li>
+                                <li><code>{EVENT}</code> - Tipo de evento (register, deposit, etc)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Superbet API -->
+                <div class="card" style="border-top: 3px solid #FFD700;">
+                    <div class="card-header">
+                        <h3>API Superbet</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="superbetApiForm" class="auth-form">
+                            <div class="form-group">
+                                <label>API Key</label>
+                                <input type="password" name="apiKey" placeholder="Sua API Key da Superbet">
+                            </div>
+                            <div class="form-group">
+                                <label>API Secret</label>
+                                <input type="password" name="apiSecret" placeholder="Seu API Secret">
+                            </div>
+                            <div class="form-group">
+                                <label>Affiliate ID</label>
+                                <input type="text" name="affiliateId" placeholder="Seu ID de afiliado master">
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span class="status-badge pending"><span class="status-dot"></span>Não configurado</span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Salvar e Testar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Sportingbet API -->
+                <div class="card" style="border-top: 3px solid #00A651;">
+                    <div class="card-header">
+                        <h3>API Sportingbet</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="sportingbetApiForm" class="auth-form">
+                            <div class="form-group">
+                                <label>API Key</label>
+                                <input type="password" name="apiKey" placeholder="Sua API Key da Sportingbet">
+                            </div>
+                            <div class="form-group">
+                                <label>API Secret</label>
+                                <input type="password" name="apiSecret" placeholder="Seu API Secret">
+                            </div>
+                            <div class="form-group">
+                                <label>Affiliate ID</label>
+                                <input type="text" name="affiliateId" placeholder="Seu ID de afiliado master">
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span class="status-badge pending"><span class="status-dot"></span>Não configurado</span>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Salvar e Testar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Admin Account -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Conta do Administrador</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="adminAccountForm" class="auth-form">
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input type="text" name="name" id="adminName">
+                            </div>
+                            <div class="form-group">
+                                <label>E-mail</label>
+                                <input type="email" name="email" id="adminEmail" disabled style="opacity: 0.6;">
+                            </div>
+                            <div class="form-group">
+                                <label>Nova Senha (deixe em branco para manter)</label>
+                                <input type="password" name="newPassword" placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Atualizar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="card" style="border: 1px solid var(--danger);">
+                    <div class="card-header">
+                        <h3 style="color: var(--danger);">Zona de Perigo</h3>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 20px;">
+                            Ações irreversíveis. Use com extremo cuidado.
+                        </p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                            <button class="btn btn-secondary" style="border-color: var(--warning); color: var(--warning);" onclick="resetDemoData()">
+                                Resetar Dados Demo
+                            </button>
+                            <button class="btn btn-secondary" style="border-color: var(--danger); color: var(--danger);" onclick="clearAllData()">
+                                Limpar TODOS os Dados
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!AdminAuth.requireAuth()) return;
+            loadAdminData();
+        });
+
+        function loadAdminData() {
+            if (AdminAuth.currentAdmin) {
+                document.getElementById('adminName').value = AdminAuth.currentAdmin.name;
+                document.getElementById('adminEmail').value = AdminAuth.currentAdmin.email;
+            }
+        }
+
+        document.getElementById('generalSettingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            Toast.success('Configurações salvas!');
+        });
+
+        document.getElementById('superbetApiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            Toast.info('API da Superbet será configurada quando as credenciais forem fornecidas.');
+        });
+
+        document.getElementById('sportingbetApiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            Toast.info('API da Sportingbet será configurada quando as credenciais forem fornecidas.');
+        });
+
+        document.getElementById('adminAccountForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            const admins = Storage.get('admins') || [];
+            const index = admins.findIndex(a => a.id === AdminAuth.currentAdmin.id);
+
+            if (index !== -1) {
+                admins[index].name = formData.get('name');
+
+                const newPassword = formData.get('newPassword');
+                if (newPassword && newPassword.length >= 6) {
+                    admins[index].password = newPassword;
+                }
+
+                Storage.set('admins', admins);
+                AdminAuth.currentAdmin = admins[index];
+                Storage.set('currentAdmin', AdminAuth.currentAdmin);
+
+                Toast.success('Conta atualizada!');
+            }
+        });
+
+        function resetDemoData() {
+            if (confirm('Isso irá resetar todos os dados para o estado inicial. Continuar?')) {
+                Storage.clear();
+                Toast.success('Dados resetados! Recarregando...');
+                setTimeout(() => location.reload(), 1500);
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('ATENÇÃO: Isso irá excluir TODOS os dados permanentemente. Esta ação NÃO pode ser desfeita. Tem certeza?')) {
+                if (confirm('Última chance! Realmente deseja excluir tudo?')) {
+                    localStorage.clear();
+                    Toast.success('Todos os dados foram excluídos!');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .admin-sidebar { border-right-color: var(--danger) !important; }
+    </style>
+</body>
+</html>

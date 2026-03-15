@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Afiliados - Relatórios</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">Fenix</span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h2>Fenix</h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                    </svg>
+                    Meus Links
+                </a>
+                <a href="relatorios.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 20V10M12 20V4M6 20v-6"/>
+                    </svg>
+                    Relatórios
+                </a>
+                <a href="perfil.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Perfil
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">U</div>
+                    <div class="user-details">
+                        <h4 class="user-name">Usuário</h4>
+                        <p class="user-email">email@exemplo.com</p>
+                    </div>
+                </div>
+                <button onclick="Auth.logout()" class="btn btn-secondary" style="width: 100%; margin-top: 12px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+                    </svg>
+                    Sair
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Theme Toggle -->
+            <button class="theme-toggle" style="position: absolute; top: 20px; right: 20px;">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                </svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"/>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+            </button>
+
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>Relatórios</h1>
+                    <p>Analise o desempenho dos seus links</p>
+                </div>
+                <div class="topbar-right">
+                    <select class="btn btn-secondary" style="padding: 12px 20px;" id="periodSelect">
+                        <option value="7d">Últimos 7 dias</option>
+                        <option value="30d">Últimos 30 dias</option>
+                        <option value="90d">Últimos 90 dias</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="exportReport()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                            <polyline points="7,10 12,15 17,10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Exportar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Summary Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon orange">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                            </svg>
+                        </div>
+                        <span class="stat-change positive">+12.5%</span>
+                    </div>
+                    <div class="stat-value" id="reportEarnings">R$ 0,00</div>
+                    <div class="stat-label">Ganhos no Período</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </div>
+                        <span class="stat-change positive">+8.2%</span>
+                    </div>
+                    <div class="stat-value" id="reportClicks">0</div>
+                    <div class="stat-label">Cliques no Período</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                <polyline points="22,4 12,14.01 9,11.01"/>
+                            </svg>
+                        </div>
+                        <span class="stat-change positive">+15.3%</span>
+                    </div>
+                    <div class="stat-value" id="reportConversions">0</div>
+                    <div class="stat-label">Conversões no Período</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon red">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                <circle cx="8.5" cy="7" r="4"/>
+                                <path d="M20 8v6M23 11h-6"/>
+                            </svg>
+                        </div>
+                        <span class="stat-change negative">-2.1%</span>
+                    </div>
+                    <div class="stat-value" id="reportConversionRate">0%</div>
+                    <div class="stat-label">Taxa de Conversão</div>
+                </div>
+            </div>
+
+            <!-- Performance Chart Placeholder -->
+            <div class="card" style="margin-bottom: 32px;">
+                <div class="card-header">
+                    <h3>Desempenho ao Longo do Tempo</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="display: flex; align-items: center; justify-content: center; height: 300px; background: var(--bg-input); border-radius: 12px;">
+                        <div style="text-align: center; color: var(--text-muted);">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 12px; opacity: 0.5;">
+                                <path d="M18 20V10M12 20V4M6 20v-6"/>
+                            </svg>
+                            <p>Gráfico de desempenho</p>
+                            <p style="font-size: 0.75rem; margin-top: 8px;">Integre com Chart.js para visualização completa</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Detalhes por Link</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Link</th>
+                                    <th>Cliques</th>
+                                    <th>Conversões</th>
+                                    <th>Taxa</th>
+                                    <th>Ganhos</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsTableBody">
+                                <!-- Data será carregada via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Load report data
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReportStats();
+        });
+
+        function loadReportStats() {
+            const links = Links.getAll();
+            const totalEarnings = links.reduce((sum, l) => sum + l.earnings, 0);
+            const totalClicks = links.reduce((sum, l) => sum + l.clicks, 0);
+            const totalConversions = links.reduce((sum, l) => sum + l.conversions, 0);
+            const conversionRate = totalClicks > 0 ? (totalConversions / totalClicks * 100) : 0;
+
+            document.getElementById('reportEarnings').textContent = Format.currency(totalEarnings);
+            document.getElementById('reportClicks').textContent = Format.number(totalClicks);
+            document.getElementById('reportConversions').textContent = Format.number(totalConversions);
+            document.getElementById('reportConversionRate').textContent = Format.percentage(conversionRate);
+        }
+
+        function exportReport() {
+            const links = Links.getAll();
+
+            // Create CSV content
+            let csv = 'Link,Cliques,Conversões,Taxa,Ganhos,Status\n';
+            links.forEach(link => {
+                const rate = link.clicks > 0 ? (link.conversions / link.clicks * 100).toFixed(1) + '%' : '0%';
+                csv += `"${link.name}",${link.clicks},${link.conversions},${rate},${link.earnings},${link.status}\n`;
+            });
+
+            // Download CSV
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'relatorio-fenix-afiliados.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+
+            Toast.success('Relatório exportado com sucesso!');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

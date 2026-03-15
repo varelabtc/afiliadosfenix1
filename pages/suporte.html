@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Afiliados - Suporte</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">FENIX</span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h2>Fenix</h2>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 19l-7-7 7-7M18 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                    Dashboard
+                </a>
+                <a href="meus-links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                    Meus Links
+                </a>
+                <a href="minha-equipe.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Minha Equipe
+                </a>
+                <a href="minha-rede.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><path d="M12 8v4M6 15a3 3 0 100 6 3 3 0 000-6zM18 15a3 3 0 100 6 3 3 0 000-6z"/><path d="M12 12l-6 6M12 12l6 6"/></svg>
+                    Minha Rede
+                </a>
+                <a href="financeiro.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Financeiro
+                </a>
+                <a href="comissoes.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Comissões
+                </a>
+                <a href="materiais.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                    Materiais
+                </a>
+                <a href="suporte.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+                    Suporte
+                </a>
+                <a href="perfil.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Meu Perfil
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="../index.html" class="nav-item" onclick="Auth.logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Sair
+                </a>
+            </nav>
+
+            <!-- Platform Selector -->
+            <div class="platform-selector">
+                <div class="platform-label">Plataforma</div>
+                <div class="platform-buttons">
+                    <button class="platform-btn active" onclick="selectPlatform('superbet')">
+                        <img src="../img/superbet-logo.png" alt="Superbet">
+                    </button>
+                    <button class="platform-btn" onclick="selectPlatform('sportingbet')">
+                        <img src="../img/sportingbet-logo.png" alt="Sportingbet">
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">C</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Carregando...</div>
+                        <div class="user-role">Afiliado</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Suporte</h1>
+                    <p>Estamos aqui para ajudar</p>
+                </div>
+
+                <!-- Contact Cards -->
+                <div class="support-contact-grid">
+                    <div class="support-contact-card whatsapp">
+                        <div class="support-contact-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                        </div>
+                        <div class="support-contact-info">
+                            <h3>Grupo WhatsApp</h3>
+                            <p>Entre no nosso grupo exclusivo para afiliados</p>
+                            <a href="https://chat.whatsapp.com/exemplo" target="_blank" class="btn btn-white">
+                                Entrar no Grupo
+                            </a>
+                        </div>
+                    </div>
+                    <div class="support-contact-card telegram">
+                        <div class="support-contact-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                        </div>
+                        <div class="support-contact-info">
+                            <h3>Canal Telegram</h3>
+                            <p>Receba novidades e atualizações</p>
+                            <a href="https://t.me/fenixafiliados" target="_blank" class="btn btn-white">
+                                Seguir Canal
+                            </a>
+                        </div>
+                    </div>
+                    <div class="support-contact-card email">
+                        <div class="support-contact-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </div>
+                        <div class="support-contact-info">
+                            <h3>E-mail</h3>
+                            <p>suporte@fenixafiliados.com</p>
+                            <a href="mailto:suporte@fenixafiliados.com" class="btn btn-white">
+                                Enviar E-mail
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Perguntas Frequentes (FAQ)</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="faq-list">
+                            <div class="faq-item" onclick="toggleFaq(this)">
+                                <div class="faq-question">
+                                    <span>Como funciona o sistema de CPA?</span>
+                                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>CPA (Custo Por Aquisição) é o valor que você recebe por cada novo jogador que se cadastra através do seu link e faz o primeiro depósito (FTD). O valor do CPA varia de acordo com a casa de apostas.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" onclick="toggleFaq(this)">
+                                <div class="faq-question">
+                                    <span>Quando recebo minhas comissões?</span>
+                                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>As comissões são fechadas quinzenalmente (dias 1 e 15 de cada mês). Após o fechamento, você pode solicitar o saque do saldo disponível. O prazo para pagamento é de até 5 dias úteis.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" onclick="toggleFaq(this)">
+                                <div class="faq-question">
+                                    <span>Qual o valor mínimo para saque?</span>
+                                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>O valor mínimo para solicitar um saque é de R$ 100,00. Os pagamentos são realizados exclusivamente via PIX.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" onclick="toggleFaq(this)">
+                                <div class="faq-question">
+                                    <span>Como funciona o RevShare?</span>
+                                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>RevShare (Revenue Share) é uma porcentagem da receita líquida (NGR) gerada pelos jogadores que você indicou. Diferente do CPA que é um pagamento único, o RevShare é recorrente enquanto o jogador estiver ativo.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" onclick="toggleFaq(this)">
+                                <div class="faq-question">
+                                    <span>Como funciona a comissão em Cascata?</span>
+                                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>A comissão em cascata permite que você ganhe uma porcentagem das comissões dos afiliados que você indicou. São 3 níveis: 5% do Nível 1, 3% do Nível 2 e 2% do Nível 3.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" onclick="toggleFaq(this)">
+                                <div class="faq-question">
+                                    <span>Posso divulgar em qualquer lugar?</span>
+                                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Existem regras de compliance que devem ser seguidas. Consulte a página de Materiais para ver as regras completas. Em resumo: não é permitido spam, promessas de ganhos garantidos, direcionamento para menores de 18 anos, ou tráfego fraudulento.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" onclick="toggleFaq(this)">
+                                <div class="faq-question">
+                                    <span>Como sei se minhas conversões estão sendo contabilizadas?</span>
+                                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Todas as conversões são exibidas em tempo real no seu dashboard e na página de Comissões. Você pode acompanhar cliques, registros, FTDs e valores gerados.</p>
+                                </div>
+                            </div>
+                            <div class="faq-item" onclick="toggleFaq(this)">
+                                <div class="faq-question">
+                                    <span>O que acontece se eu violar as regras?</span>
+                                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </div>
+                                <div class="faq-answer">
+                                    <p>Violações das regras podem resultar em advertência, suspensão temporária ou banimento permanente da plataforma. Em casos graves de fraude, os valores pendentes não serão pagos.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Ticket -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Abrir Chamado</h3>
+                        <p>Não encontrou sua resposta? Envie-nos uma mensagem</p>
+                    </div>
+                    <div class="card-body">
+                        <form id="supportForm" onsubmit="submitTicket(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Assunto</label>
+                                    <select name="subject" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="pagamento">Pagamento/Saque</option>
+                                        <option value="comissoes">Comissões</option>
+                                        <option value="links">Links</option>
+                                        <option value="tecnico">Problema Técnico</option>
+                                        <option value="outro">Outro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Prioridade</label>
+                                    <select name="priority" required>
+                                        <option value="baixa">Baixa</option>
+                                        <option value="media">Média</option>
+                                        <option value="alta">Alta</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Mensagem</label>
+                                <textarea name="message" rows="5" placeholder="Descreva seu problema ou dúvida em detalhes..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                </svg>
+                                Enviar Chamado
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!Auth.requireAuth()) return;
+            loadUserInfo();
+        });
+
+        function loadUserInfo() {
+            const user = Auth.currentUser;
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            }
+        }
+
+        function toggleFaq(element) {
+            const wasOpen = element.classList.contains('open');
+
+            // Close all FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('open');
+            });
+
+            // Open clicked one if it was closed
+            if (!wasOpen) {
+                element.classList.add('open');
+            }
+        }
+
+        function submitTicket(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            // Would send to API
+            Toast.success('Chamado enviado com sucesso! Responderemos em breve.');
+            e.target.reset();
+        }
+
+        function selectPlatform(platform) {
+            document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.platform-btn.${platform}`).classList.add('active');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
+
+    <style>
+        .support-contact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .support-contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .support-contact-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 32px 24px;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .support-contact-card.whatsapp {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+        }
+
+        .support-contact-card.telegram {
+            background: linear-gradient(135deg, #0088cc, #229ed9);
+        }
+
+        .support-contact-card.email {
+            background: var(--gradient-fire);
+        }
+
+        .support-contact-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            margin-bottom: 16px;
+        }
+
+        .support-contact-info h3 {
+            margin-bottom: 8px;
+        }
+
+        .support-contact-info p {
+            opacity: 0.9;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        .btn-white {
+            background: white;
+            color: #333;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background: var(--bg-input);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .faq-arrow {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.open .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+        }
+
+        .faq-answer p {
+            padding: 0 20px 18px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+    </style>
+</body>
+</html>

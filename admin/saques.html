@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Admin - Saques</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">Fenix <span style="color: var(--danger); font-size: 0.6rem;">ADMIN</span></span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar Admin -->
+        <aside class="sidebar admin-sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h2>Fenix <span style="font-size: 0.7rem; color: var(--danger);">ADMIN</span></h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                    Dashboard
+                </a>
+                <a href="afiliados.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    Afiliados
+                </a>
+                <a href="casas.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+                    Casas de Apostas
+                </a>
+                <a href="cpa.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Configurar CPA
+                </a>
+                <a href="links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/></svg>
+                    Links Master
+                </a>
+                <a href="saques.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/></svg>
+                    Saques
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                    Relatórios
+                </a>
+                <a href="configuracoes.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+                    Configurações
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button onclick="AdminAuth.logout()" class="btn btn-secondary" style="width: 100%;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Sair
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <button class="theme-toggle" style="position: fixed; top: 20px; right: 20px;">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg>
+            </button>
+
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>Gerenciar Saques</h1>
+                    <p>Aprove ou rejeite solicitações de saque dos afiliados</p>
+                </div>
+                <div class="topbar-right">
+                    <select id="statusFilter" class="btn btn-secondary" style="padding: 12px 20px;">
+                        <option value="all">Todos</option>
+                        <option value="pending">Pendentes</option>
+                        <option value="approved">Aprovados</option>
+                        <option value="paid">Pagos</option>
+                        <option value="rejected">Rejeitados</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="stat-card" style="border-left: 3px solid var(--warning);">
+                    <div class="stat-value" id="pendingAmount" style="color: var(--warning);">R$ 0</div>
+                    <div class="stat-label">Pendente</div>
+                </div>
+                <div class="stat-card" style="border-left: 3px solid var(--info);">
+                    <div class="stat-value" id="approvedAmount" style="color: var(--info);">R$ 0</div>
+                    <div class="stat-label">Aprovado</div>
+                </div>
+                <div class="stat-card" style="border-left: 3px solid var(--success);">
+                    <div class="stat-value" id="paidAmount" style="color: var(--success);">R$ 0</div>
+                    <div class="stat-label">Total Pago</div>
+                </div>
+                <div class="stat-card" style="border-left: 3px solid var(--danger);">
+                    <div class="stat-value" id="rejectedAmount" style="color: var(--danger);">R$ 0</div>
+                    <div class="stat-label">Rejeitado</div>
+                </div>
+            </div>
+
+            <!-- Withdrawals Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Solicitações de Saque</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Afiliado</th>
+                                    <th>Valor</th>
+                                    <th>Chave PIX</th>
+                                    <th>Data</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="withdrawalsTableBody">
+                                <!-- Withdrawals will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!AdminAuth.requireAuth()) return;
+            loadWithdrawals();
+
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                currentFilter = this.value;
+                loadWithdrawals();
+            });
+        });
+
+        function loadWithdrawals() {
+            const allWithdrawals = WithdrawalManager.getAll();
+
+            // Update stats
+            document.getElementById('pendingAmount').textContent = Format.currency(
+                allWithdrawals.filter(w => w.status === 'pending').reduce((sum, w) => sum + w.amount, 0)
+            );
+            document.getElementById('approvedAmount').textContent = Format.currency(
+                allWithdrawals.filter(w => w.status === 'approved').reduce((sum, w) => sum + w.amount, 0)
+            );
+            document.getElementById('paidAmount').textContent = Format.currency(
+                allWithdrawals.filter(w => w.status === 'paid').reduce((sum, w) => sum + w.amount, 0)
+            );
+            document.getElementById('rejectedAmount').textContent = Format.currency(
+                allWithdrawals.filter(w => w.status === 'rejected').reduce((sum, w) => sum + w.amount, 0)
+            );
+
+            // Filter
+            let filtered = allWithdrawals;
+            if (currentFilter !== 'all') {
+                filtered = allWithdrawals.filter(w => w.status === currentFilter);
+            }
+
+            const tbody = document.getElementById('withdrawalsTableBody');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            Nenhuma solicitação de saque encontrada
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(w => {
+                const statusClass = w.status === 'pending' ? 'pending' :
+                                   w.status === 'approved' ? 'active' :
+                                   w.status === 'paid' ? 'active' : 'inactive';
+                const statusText = w.status === 'pending' ? 'Pendente' :
+                                  w.status === 'approved' ? 'Aprovado' :
+                                  w.status === 'paid' ? 'Pago' : 'Rejeitado';
+
+                return `
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div class="user-avatar">${w.userName?.charAt(0) || 'U'}</div>
+                                <div>
+                                    <div style="font-weight: 600;">${w.userName || 'N/A'}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="font-size: 1.125rem; font-weight: 700; color: var(--accent-primary);">${Format.currency(w.amount)}</td>
+                        <td>
+                            <div>
+                                <code style="background: var(--bg-input); padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">${w.pixKey}</code>
+                                <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Tipo: ${w.pixType?.toUpperCase() || 'N/A'}</div>
+                            </div>
+                        </td>
+                        <td>${Format.dateTime(w.createdAt)}</td>
+                        <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusText}</span></td>
+                        <td>
+                            ${w.status === 'pending' ? `
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-sm btn-primary" onclick="approveWithdrawal(${w.id})">Aprovar</button>
+                                    <button class="btn btn-sm btn-secondary" style="color: var(--danger);" onclick="rejectWithdrawal(${w.id})">Rejeitar</button>
+                                </div>
+                            ` : w.status === 'approved' ? `
+                                <button class="btn btn-sm btn-primary" onclick="markAsPaid(${w.id})">Marcar como Pago</button>
+                            ` : `
+                                <span style="color: var(--text-muted); font-size: 0.8rem;">-</span>
+                            `}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function approveWithdrawal(id) {
+            if (WithdrawalManager.approve(id)) {
+                Toast.success('Saque aprovado!');
+                loadWithdrawals();
+            }
+        }
+
+        function rejectWithdrawal(id) {
+            const reason = prompt('Motivo da rejeição (opcional):');
+            if (WithdrawalManager.reject(id, reason || '')) {
+                Toast.success('Saque rejeitado. Saldo devolvido ao afiliado.');
+                loadWithdrawals();
+            }
+        }
+
+        function markAsPaid(id) {
+            if (confirm('Confirmar que o pagamento foi realizado?')) {
+                if (WithdrawalManager.markAsPaid(id)) {
+                    Toast.success('Saque marcado como pago!');
+                    loadWithdrawals();
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .admin-sidebar { border-right-color: var(--danger) !important; }
+    </style>
+</body>
+</html>

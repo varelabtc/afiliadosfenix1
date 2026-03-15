@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Admin - Configurar CPA</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">Fenix <span style="color: var(--danger); font-size: 0.6rem;">ADMIN</span></span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar Admin -->
+        <aside class="sidebar admin-sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h2>Fenix <span style="font-size: 0.7rem; color: var(--danger);">ADMIN</span></h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                    Dashboard
+                </a>
+                <a href="afiliados.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                    Afiliados
+                </a>
+                <a href="casas.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+                    Casas de Apostas
+                </a>
+                <a href="cpa.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Configurar CPA
+                </a>
+                <a href="links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/></svg>
+                    Links Master
+                </a>
+                <a href="saques.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/></svg>
+                    Saques
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                    Relatórios
+                </a>
+                <a href="configuracoes.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+                    Configurações
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button onclick="AdminAuth.logout()" class="btn btn-secondary" style="width: 100%;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Sair
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <button class="theme-toggle" style="position: fixed; top: 20px; right: 20px;">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg>
+            </button>
+
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>Configurar CPA</h1>
+                    <p>Defina os valores de CPA padrão e por afiliado</p>
+                </div>
+            </div>
+
+            <!-- Info Card -->
+            <div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--info);">
+                <div class="card-body" style="display: flex; gap: 16px; align-items: center;">
+                    <div style="font-size: 2rem;">💡</div>
+                    <div>
+                        <h4 style="margin-bottom: 4px;">O que é CPA?</h4>
+                        <p style="color: var(--text-muted); font-size: 0.875rem;">
+                            CPA (Custo Por Aquisição) é o valor pago ao afiliado por cada novo jogador que se cadastra e faz o primeiro depósito através do link dele.
+                            Você pode definir um CPA padrão por casa ou valores personalizados por afiliado.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Default CPA Settings -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <h3>CPA Padrão por Casa</h3>
+                </div>
+                <div class="card-body">
+                    <form id="defaultCPAForm">
+                        <div id="houseCPAList" style="display: grid; gap: 16px;">
+                            <!-- Houses CPA will be loaded here -->
+                        </div>
+                        <div style="margin-top: 24px;">
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Individual CPA Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>CPA Individualizado por Afiliado</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Afiliados com CPA diferente do padrão</p>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Afiliado</th>
+                                    <th>Casa</th>
+                                    <th>CPA Padrão</th>
+                                    <th>CPA Atual</th>
+                                    <th>Diferença</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="individualCPABody">
+                                <!-- Individual CPA will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulation Card -->
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <h3>Simular Conversão (Teste)</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Use para testar o sistema de CPA</p>
+                </div>
+                <div class="card-body">
+                    <form id="simulateForm" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 16px; align-items: end;">
+                        <div class="form-group" style="margin: 0;">
+                            <label>Afiliado</label>
+                            <select name="affiliateId" id="simAffiliateSelect" required>
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label>Casa de Apostas</label>
+                            <select name="houseId" id="simHouseSelect" required>
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simular Conversão</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!AdminAuth.requireAuth()) return;
+            loadCPASettings();
+            loadIndividualCPA();
+            loadSimulationSelects();
+        });
+
+        function loadCPASettings() {
+            const houses = BettingHouses.getAll();
+            const container = document.getElementById('houseCPAList');
+
+            container.innerHTML = houses.map(house => `
+                <div style="display: grid; grid-template-columns: auto 1fr auto auto; gap: 16px; align-items: center; padding: 16px; background: var(--bg-input); border-radius: 12px; border-left: 4px solid ${house.color};">
+                    <div style="font-size: 2rem;">${house.logo}</div>
+                    <div>
+                        <h4>${house.name}</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Rev Share: ${house.revShare}% | Depósito Mín: ${Format.currency(house.minDeposit)}</p>
+                    </div>
+                    <div class="form-group" style="margin: 0; min-width: 150px;">
+                        <label style="font-size: 0.75rem;">CPA (R$)</label>
+                        <input type="number" step="0.01" name="cpa_${house.id}" value="${house.cpa}" style="text-align: center; font-weight: 700;">
+                    </div>
+                    <div class="form-group" style="margin: 0; min-width: 100px;">
+                        <label style="font-size: 0.75rem;">Rev Share (%)</label>
+                        <input type="number" name="revShare_${house.id}" value="${house.revShare}" style="text-align: center; font-weight: 700;">
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadIndividualCPA() {
+            const users = AffiliateManager.getAll().filter(u => u.customCPA && Object.keys(u.customCPA).length > 0);
+            const houses = BettingHouses.getAll();
+            const tbody = document.getElementById('individualCPABody');
+
+            if (users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            Nenhum afiliado com CPA personalizado
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let rows = [];
+            users.forEach(user => {
+                Object.entries(user.customCPA).forEach(([houseId, cpa]) => {
+                    const house = houses.find(h => h.id === parseInt(houseId));
+                    if (house) {
+                        const diff = cpa - house.cpa;
+                        rows.push(`
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <div class="user-avatar">${user.name.charAt(0)}</div>
+                                        <div>
+                                            <div style="font-weight: 600;">${user.name}</div>
+                                            <div style="font-size: 0.75rem; color: var(--text-muted);">${user.affiliateCode}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>${house.logo} ${house.name}</td>
+                                <td>${Format.currency(house.cpa)}</td>
+                                <td style="font-weight: 700; color: var(--accent-primary);">${Format.currency(cpa)}</td>
+                                <td style="color: ${diff >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight: 600;">
+                                    ${diff >= 0 ? '+' : ''}${Format.currency(diff)}
+                                </td>
+                                <td>
+                                    <button class="btn-icon" onclick="resetCPA(${user.id}, ${house.id})" title="Resetar para padrão">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/>
+                                            <path d="M21 3v5h-5"/>
+                                            <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/>
+                                            <path d="M3 21v-5h5"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                    }
+                });
+            });
+
+            tbody.innerHTML = rows.join('');
+        }
+
+        function loadSimulationSelects() {
+            const users = AffiliateManager.getApproved();
+            const houses = BettingHouses.getAll();
+
+            document.getElementById('simAffiliateSelect').innerHTML = `
+                <option value="">Selecione...</option>
+                ${users.map(u => `<option value="${u.id}">${u.name} (${u.affiliateCode})</option>`).join('')}
+            `;
+
+            document.getElementById('simHouseSelect').innerHTML = `
+                <option value="">Selecione...</option>
+                ${houses.map(h => `<option value="${h.id}">${h.logo} ${h.name}</option>`).join('')}
+            `;
+        }
+
+        document.getElementById('defaultCPAForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const houses = BettingHouses.getAll();
+
+            houses.forEach(house => {
+                const cpaInput = this.querySelector(`[name="cpa_${house.id}"]`);
+                const revShareInput = this.querySelector(`[name="revShare_${house.id}"]`);
+
+                BettingHouses.update(house.id, {
+                    cpa: parseFloat(cpaInput.value),
+                    revShare: parseInt(revShareInput.value)
+                });
+            });
+
+            Toast.success('CPA padrão atualizado!');
+            loadIndividualCPA();
+        });
+
+        document.getElementById('simulateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const affiliateId = parseInt(this.querySelector('[name="affiliateId"]').value);
+            const houseId = parseInt(this.querySelector('[name="houseId"]').value);
+
+            if (PostbackSimulator.simulateConversion(affiliateId, houseId)) {
+                const cpa = CPAConfig.getForAffiliate(affiliateId, houseId);
+                Toast.success(`Conversão simulada! CPA: ${Format.currency(cpa)}`);
+            } else {
+                Toast.error('Erro ao simular conversão');
+            }
+        });
+
+        function resetCPA(userId, houseId) {
+            if (confirm('Resetar CPA deste afiliado para o valor padrão?')) {
+                const users = Storage.get('users') || [];
+                const index = users.findIndex(u => u.id === userId);
+
+                if (index !== -1 && users[index].customCPA) {
+                    delete users[index].customCPA[houseId];
+                    if (Object.keys(users[index].customCPA).length === 0) {
+                        delete users[index].customCPA;
+                    }
+                    Storage.set('users', users);
+                    Toast.success('CPA resetado');
+                    loadIndividualCPA();
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .admin-sidebar { border-right-color: var(--danger) !important; }
+    </style>
+</body>
+</html>

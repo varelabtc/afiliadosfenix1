@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Afiliados - Comissões</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">FENIX</span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h2>Fenix</h2>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 19l-7-7 7-7M18 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                    Dashboard
+                </a>
+                <a href="meus-links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                    Meus Links
+                </a>
+                <a href="minha-equipe.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Minha Equipe
+                </a>
+                <a href="minha-rede.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><path d="M12 8v4M6 15a3 3 0 100 6 3 3 0 000-6zM18 15a3 3 0 100 6 3 3 0 000-6z"/><path d="M12 12l-6 6M12 12l6 6"/></svg>
+                    Minha Rede
+                </a>
+                <a href="financeiro.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Financeiro
+                </a>
+                <a href="comissoes.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Comissões
+                </a>
+                <a href="materiais.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                    Materiais
+                </a>
+                <a href="suporte.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+                    Suporte
+                </a>
+                <a href="perfil.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Meu Perfil
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="../index.html" class="nav-item" onclick="Auth.logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Sair
+                </a>
+            </nav>
+
+            <!-- Platform Selector -->
+            <div class="platform-selector">
+                <div class="platform-label">Plataforma</div>
+                <div class="platform-buttons">
+                    <button class="platform-btn active" onclick="selectPlatform('superbet')">
+                        <img src="../img/superbet-logo.png" alt="Superbet">
+                    </button>
+                    <button class="platform-btn" onclick="selectPlatform('sportingbet')">
+                        <img src="../img/sportingbet-logo.png" alt="Sportingbet">
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">C</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Carregando...</div>
+                        <div class="user-role">Afiliado</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Comissões</h1>
+                    <p>Histórico completo das suas comissões</p>
+                </div>
+
+                <!-- Commission Stats -->
+                <div class="commission-stats-grid">
+                    <div class="commission-stat-card cpa">
+                        <div class="commission-stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                            </svg>
+                        </div>
+                        <div class="commission-stat-info">
+                            <div class="commission-stat-value" id="totalCPA">R$ 0,00</div>
+                            <div class="commission-stat-label">Total CPA</div>
+                        </div>
+                    </div>
+                    <div class="commission-stat-card revshare">
+                        <div class="commission-stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 20V10M12 20V4M6 20v-6"/>
+                            </svg>
+                        </div>
+                        <div class="commission-stat-info">
+                            <div class="commission-stat-value" id="totalRevShare">R$ 0,00</div>
+                            <div class="commission-stat-label">Total RevShare</div>
+                        </div>
+                    </div>
+                    <div class="commission-stat-card cascata">
+                        <div class="commission-stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="5" r="3"/>
+                                <path d="M12 8v4"/>
+                                <circle cx="6" cy="18" r="3"/>
+                                <circle cx="18" cy="18" r="3"/>
+                                <path d="M12 12l-6 6M12 12l6 6"/>
+                            </svg>
+                        </div>
+                        <div class="commission-stat-info">
+                            <div class="commission-stat-value" id="totalCascata">R$ 0,00</div>
+                            <div class="commission-stat-label">Total Cascata</div>
+                        </div>
+                    </div>
+                    <div class="commission-stat-card total">
+                        <div class="commission-stat-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                <line x1="1" y1="10" x2="23" y2="10"/>
+                            </svg>
+                        </div>
+                        <div class="commission-stat-info">
+                            <div class="commission-stat-value" id="totalCommissions">R$ 0,00</div>
+                            <div class="commission-stat-label">Total Geral</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Filtros</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="filters-row">
+                            <div class="filter-tabs-large">
+                                <button class="filter-tab-lg active" onclick="filterCommissions('all')">
+                                    Todos
+                                </button>
+                                <button class="filter-tab-lg" onclick="filterCommissions('cpa')">
+                                    CPA
+                                </button>
+                                <button class="filter-tab-lg" onclick="filterCommissions('revshare')">
+                                    RevShare
+                                </button>
+                                <button class="filter-tab-lg" onclick="filterCommissions('cascata')">
+                                    Cascata
+                                </button>
+                            </div>
+                            <div class="date-filter">
+                                <input type="date" id="startDate" class="date-input">
+                                <span>até</span>
+                                <input type="date" id="endDate" class="date-input">
+                                <button class="btn btn-secondary btn-sm" onclick="applyDateFilter()">Filtrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commissions Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Histórico de Comissões</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="exportCommissions()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            Exportar
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="commissionsTable">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                                </svg>
+                                <h3>Nenhuma comissão ainda</h3>
+                                <p>Suas comissões aparecerão aqui quando você fizer conversões</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commission Types Info -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Tipos de Comissão</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="commission-types-grid">
+                            <div class="commission-type-card">
+                                <div class="commission-type-icon cpa">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                                    </svg>
+                                </div>
+                                <div class="commission-type-info">
+                                    <h4>CPA (Custo Por Aquisição)</h4>
+                                    <p>Valor fixo recebido por cada novo jogador que faz o primeiro depósito (FTD)</p>
+                                    <div class="commission-type-example">
+                                        Ex: R$ 35,00 por FTD na Superbet
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="commission-type-card">
+                                <div class="commission-type-icon revshare">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 20V10M12 20V4M6 20v-6"/>
+                                    </svg>
+                                </div>
+                                <div class="commission-type-info">
+                                    <h4>RevShare (Revenue Share)</h4>
+                                    <p>Porcentagem da receita líquida gerada pelos jogadores que você indicou</p>
+                                    <div class="commission-type-example">
+                                        Ex: 25% do NGR dos seus jogadores
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="commission-type-card">
+                                <div class="commission-type-icon cascata">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="5" r="3"/>
+                                        <path d="M12 8v4"/>
+                                        <circle cx="6" cy="18" r="3"/>
+                                        <circle cx="18" cy="18" r="3"/>
+                                        <path d="M12 12l-6 6M12 12l6 6"/>
+                                    </svg>
+                                </div>
+                                <div class="commission-type-info">
+                                    <h4>Cascata (Multi-nível)</h4>
+                                    <p>Porcentagem das comissões geradas pelos afiliados da sua rede</p>
+                                    <div class="commission-type-example">
+                                        Ex: 5% Nível 1, 3% Nível 2, 2% Nível 3
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        let currentFilter = 'all';
+        let currentPlatform = 'superbet';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!Auth.requireAuth()) return;
+            loadUserInfo();
+            loadCommissions();
+            setDefaultDates();
+        });
+
+        function loadUserInfo() {
+            const user = Auth.currentUser;
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            }
+        }
+
+        function setDefaultDates() {
+            const today = new Date();
+            const monthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+            document.getElementById('startDate').value = monthAgo.toISOString().split('T')[0];
+        }
+
+        function loadCommissions() {
+            const commissions = getCommissions();
+
+            // Calculate totals
+            const totalCPA = commissions.filter(c => c.type === 'cpa').reduce((sum, c) => sum + c.amount, 0);
+            const totalRevShare = commissions.filter(c => c.type === 'revshare').reduce((sum, c) => sum + c.amount, 0);
+            const totalCascata = commissions.filter(c => c.type === 'cascata').reduce((sum, c) => sum + c.amount, 0);
+            const total = totalCPA + totalRevShare + totalCascata;
+
+            document.getElementById('totalCPA').textContent = Format.currency(totalCPA);
+            document.getElementById('totalRevShare').textContent = Format.currency(totalRevShare);
+            document.getElementById('totalCascata').textContent = Format.currency(totalCascata);
+            document.getElementById('totalCommissions').textContent = Format.currency(total);
+
+            // Filter commissions
+            let filtered = commissions;
+            if (currentFilter !== 'all') {
+                filtered = commissions.filter(c => c.type === currentFilter);
+            }
+
+            renderCommissionsTable(filtered);
+        }
+
+        function getCommissions() {
+            // Get from links data or generate demo
+            const links = Links.getAll();
+            let commissions = [];
+
+            links.forEach(link => {
+                if (link.conversions > 0) {
+                    // CPA commission
+                    commissions.push({
+                        id: link.id,
+                        type: 'cpa',
+                        platform: link.platform || 'superbet',
+                        description: `CPA - ${link.name}`,
+                        amount: link.earnings || 0,
+                        date: link.createdAt,
+                        status: 'paid'
+                    });
+                }
+            });
+
+            // Add demo data if empty
+            if (commissions.length === 0) {
+                commissions = Storage.get('commissions') || [];
+            }
+
+            return commissions;
+        }
+
+        function renderCommissionsTable(commissions) {
+            const container = document.getElementById('commissionsTable');
+
+            if (commissions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                        </svg>
+                        <h3>Nenhuma comissão ${currentFilter !== 'all' ? 'deste tipo' : ''}</h3>
+                        <p>Suas comissões aparecerão aqui quando você fizer conversões</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Descrição</th>
+                                <th>Plataforma</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${commissions.map(c => {
+                                const typeClass = c.type === 'cpa' ? 'cpa' :
+                                                 c.type === 'revshare' ? 'revshare' : 'cascata';
+                                const typeLabel = c.type === 'cpa' ? 'CPA' :
+                                                 c.type === 'revshare' ? 'RevShare' : 'Cascata';
+                                const statusClass = c.status === 'paid' ? 'active' :
+                                                   c.status === 'pending' ? 'pending' : 'inactive';
+                                const statusLabel = c.status === 'paid' ? 'Pago' :
+                                                   c.status === 'pending' ? 'Pendente' : 'Cancelado';
+                                return `
+                                    <tr>
+                                        <td>${Format.date(c.date)}</td>
+                                        <td>
+                                            <span class="commission-type-badge ${typeClass}">${typeLabel}</span>
+                                        </td>
+                                        <td>${c.description}</td>
+                                        <td>
+                                            <span class="platform-badge ${c.platform}">
+                                                ${c.platform === 'superbet' ? 'Superbet' : 'Sportingbet'}
+                                            </span>
+                                        </td>
+                                        <td style="font-weight: 700; color: var(--success);">${Format.currency(c.amount)}</td>
+                                        <td>
+                                            <span class="status-badge ${statusClass}">
+                                                <span class="status-dot"></span>
+                                                ${statusLabel}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function filterCommissions(type) {
+            currentFilter = type;
+            document.querySelectorAll('.filter-tab-lg').forEach(tab => tab.classList.remove('active'));
+            event.target.closest('.filter-tab-lg').classList.add('active');
+            loadCommissions();
+        }
+
+        function applyDateFilter() {
+            // Would filter by date range
+            Toast.info('Filtro de data aplicado!');
+            loadCommissions();
+        }
+
+        function exportCommissions() {
+            Toast.success('Exportando comissões...');
+            // Would generate CSV/Excel
+        }
+
+        function selectPlatform(platform) {
+            currentPlatform = platform;
+            document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.platform-btn.${platform}`).classList.add('active');
+            loadCommissions();
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
+
+    <style>
+        .commission-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .commission-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .commission-stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .commission-stat-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            border-left: 4px solid;
+        }
+
+        .commission-stat-card.cpa {
+            border-left-color: var(--fire-red);
+        }
+
+        .commission-stat-card.revshare {
+            border-left-color: var(--fire-orange);
+        }
+
+        .commission-stat-card.cascata {
+            border-left-color: var(--fire-gold);
+        }
+
+        .commission-stat-card.total {
+            border-left-color: var(--fire-ember);
+        }
+
+        .commission-stat-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .commission-stat-card.cpa .commission-stat-icon {
+            background: rgba(230, 57, 70, 0.2);
+            color: var(--fire-red);
+        }
+
+        .commission-stat-card.revshare .commission-stat-icon {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--fire-orange);
+        }
+
+        .commission-stat-card.cascata .commission-stat-icon {
+            background: rgba(255, 182, 39, 0.2);
+            color: var(--fire-gold);
+        }
+
+        .commission-stat-card.total .commission-stat-icon {
+            background: rgba(214, 40, 40, 0.2);
+            color: var(--fire-ember);
+        }
+
+        .commission-stat-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .commission-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .commission-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .filters-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tabs-large {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-tab-lg {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .filter-tab-lg:hover {
+            background: var(--bg-card);
+        }
+
+        .filter-tab-lg.active {
+            background: var(--gradient-fire);
+            color: white;
+            border-color: transparent;
+        }
+
+        .filter-icon {
+            font-size: 1.1rem;
+        }
+
+        .date-filter {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .date-input {
+            padding: 10px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .date-filter span {
+            color: var(--text-muted);
+        }
+
+        .commission-type-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .commission-type-badge.cpa {
+            background: rgba(230, 57, 70, 0.2);
+            color: var(--fire-red);
+        }
+
+        .commission-type-badge.revshare {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--fire-orange);
+        }
+
+        .commission-type-badge.cascata {
+            background: rgba(255, 182, 39, 0.2);
+            color: var(--fire-gold);
+        }
+
+        .platform-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .platform-badge.superbet {
+            background: rgba(220, 38, 38, 0.1);
+            color: #dc2626;
+        }
+
+        .platform-badge.sportingbet {
+            background: rgba(5, 150, 105, 0.1);
+            color: #059669;
+        }
+
+        .commission-types-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .commission-types-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .commission-type-card {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-input);
+            border-radius: 12px;
+        }
+
+        .commission-type-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .commission-type-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .commission-type-icon.cpa {
+            background: rgba(232, 89, 12, 0.15);
+            color: var(--accent);
+        }
+
+        .commission-type-icon.revshare {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22C55E;
+        }
+
+        .commission-type-icon.cascata {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3B82F6;
+        }
+
+        .commission-type-info h4 {
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .commission-type-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .commission-type-example {
+            font-size: 0.8rem;
+            padding: 8px 12px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .filter-tabs-large {
+                flex-wrap: wrap;
+            }
+
+            .date-filter {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</body>
+</html>

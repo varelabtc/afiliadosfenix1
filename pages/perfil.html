@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Afiliados - Meu Perfil</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">FENIX</span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h2>Fenix</h2>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 19l-7-7 7-7M18 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                    Dashboard
+                </a>
+                <a href="meus-links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                    Meus Links
+                </a>
+                <a href="minha-equipe.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Minha Equipe
+                </a>
+                <a href="minha-rede.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><path d="M12 8v4M6 15a3 3 0 100 6 3 3 0 000-6zM18 15a3 3 0 100 6 3 3 0 000-6z"/><path d="M12 12l-6 6M12 12l6 6"/></svg>
+                    Minha Rede
+                </a>
+                <a href="financeiro.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Financeiro
+                </a>
+                <a href="comissoes.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Comissões
+                </a>
+                <a href="materiais.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                    Materiais
+                </a>
+                <a href="suporte.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+                    Suporte
+                </a>
+                <a href="perfil.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Meu Perfil
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="../index.html" class="nav-item" onclick="Auth.logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Sair
+                </a>
+            </nav>
+
+            <!-- Platform Selector -->
+            <div class="platform-selector">
+                <div class="platform-label">Plataforma</div>
+                <div class="platform-buttons">
+                    <button class="platform-btn active" onclick="selectPlatform('superbet')">
+                        <img src="../img/superbet-logo.png" alt="Superbet">
+                    </button>
+                    <button class="platform-btn" onclick="selectPlatform('sportingbet')">
+                        <img src="../img/sportingbet-logo.png" alt="Sportingbet">
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">C</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Carregando...</div>
+                        <div class="user-role">Afiliado</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Meu Perfil</h1>
+                    <p>Gerencie suas informações</p>
+                </div>
+
+                <!-- Profile Header -->
+                <div class="profile-header-card">
+                    <div class="profile-header-info">
+                        <div class="profile-avatar-lg" id="profileAvatar">C</div>
+                        <div class="profile-details">
+                            <h2 id="profileName">Carregando...</h2>
+                            <p id="profileEmail">email@exemplo.com</p>
+                            <div class="profile-badges">
+                                <span class="profile-badge">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                        <polyline points="22 4 12 14.01 9 11.01"/>
+                                    </svg>
+                                    Verificado
+                                </span>
+                                <span class="profile-badge affiliate-code" id="profileCode">FENIX001</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-header-stats">
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value" id="profileLinks">0</div>
+                            <div class="profile-stat-label">Links</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value" id="profileConversions">0</div>
+                            <div class="profile-stat-label">Conversões</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value" id="profileEarnings">R$ 0</div>
+                            <div class="profile-stat-label">Total Ganho</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Tabs -->
+                <div class="profile-tabs">
+                    <button class="profile-tab active" onclick="switchTab('cadastrais')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Dados Cadastrais
+                    </button>
+                    <button class="profile-tab" onclick="switchTab('empresariais')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                            <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+                        </svg>
+                        Dados Empresariais
+                    </button>
+                    <button class="profile-tab" onclick="switchTab('acordo')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                        </svg>
+                        Meu Acordo
+                    </button>
+                    <button class="profile-tab" onclick="switchTab('pagamento')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                            <line x1="1" y1="10" x2="23" y2="10"/>
+                        </svg>
+                        Dados de Pagamento
+                    </button>
+                    <button class="profile-tab" onclick="switchTab('historico')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Histórico
+                    </button>
+                </div>
+
+                <!-- Tab Contents -->
+                <div class="tab-content" id="tab-cadastrais">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Dados Pessoais</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="personalDataForm" onsubmit="savePersonalData(event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Nome Completo</label>
+                                        <input type="text" name="name" id="inputName" placeholder="Seu nome completo">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>CPF</label>
+                                        <input type="text" name="cpf" id="inputCpf" placeholder="000.000.000-00">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>E-mail</label>
+                                        <input type="email" name="email" id="inputEmail" placeholder="seu@email.com" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Telefone</label>
+                                        <input type="tel" name="phone" id="inputPhone" placeholder="(00) 00000-0000">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Data de Nascimento</label>
+                                        <input type="date" name="birthdate" id="inputBirthdate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Gênero</label>
+                                        <select name="gender" id="inputGender">
+                                            <option value="">Selecione...</option>
+                                            <option value="male">Masculino</option>
+                                            <option value="female">Feminino</option>
+                                            <option value="other">Outro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Endereço</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="addressForm" onsubmit="saveAddress(event)">
+                                <div class="form-row">
+                                    <div class="form-group" style="flex: 0.3;">
+                                        <label>CEP</label>
+                                        <input type="text" name="cep" id="inputCep" placeholder="00000-000">
+                                    </div>
+                                    <div class="form-group" style="flex: 0.7;">
+                                        <label>Rua</label>
+                                        <input type="text" name="street" id="inputStreet" placeholder="Nome da rua">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group" style="flex: 0.2;">
+                                        <label>Número</label>
+                                        <input type="text" name="number" id="inputNumber" placeholder="123">
+                                    </div>
+                                    <div class="form-group" style="flex: 0.4;">
+                                        <label>Complemento</label>
+                                        <input type="text" name="complement" id="inputComplement" placeholder="Apto, sala...">
+                                    </div>
+                                    <div class="form-group" style="flex: 0.4;">
+                                        <label>Bairro</label>
+                                        <input type="text" name="neighborhood" id="inputNeighborhood" placeholder="Bairro">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Cidade</label>
+                                        <input type="text" name="city" id="inputCity" placeholder="Cidade">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Estado</label>
+                                        <select name="state" id="inputState">
+                                            <option value="">Selecione...</option>
+                                            <option value="AC">Acre</option>
+                                            <option value="AL">Alagoas</option>
+                                            <option value="AP">Amapá</option>
+                                            <option value="AM">Amazonas</option>
+                                            <option value="BA">Bahia</option>
+                                            <option value="CE">Ceará</option>
+                                            <option value="DF">Distrito Federal</option>
+                                            <option value="ES">Espírito Santo</option>
+                                            <option value="GO">Goiás</option>
+                                            <option value="MA">Maranhão</option>
+                                            <option value="MT">Mato Grosso</option>
+                                            <option value="MS">Mato Grosso do Sul</option>
+                                            <option value="MG">Minas Gerais</option>
+                                            <option value="PA">Pará</option>
+                                            <option value="PB">Paraíba</option>
+                                            <option value="PR">Paraná</option>
+                                            <option value="PE">Pernambuco</option>
+                                            <option value="PI">Piauí</option>
+                                            <option value="RJ">Rio de Janeiro</option>
+                                            <option value="RN">Rio Grande do Norte</option>
+                                            <option value="RS">Rio Grande do Sul</option>
+                                            <option value="RO">Rondônia</option>
+                                            <option value="RR">Roraima</option>
+                                            <option value="SC">Santa Catarina</option>
+                                            <option value="SP">São Paulo</option>
+                                            <option value="SE">Sergipe</option>
+                                            <option value="TO">Tocantins</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Endereço</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-empresariais" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Dados da Empresa</h3>
+                            <p>Preencha se você opera como pessoa jurídica</p>
+                        </div>
+                        <div class="card-body">
+                            <form id="companyForm" onsubmit="saveCompanyData(event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Razão Social</label>
+                                        <input type="text" name="companyName" id="inputCompanyName" placeholder="Nome da empresa">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>CNPJ</label>
+                                        <input type="text" name="cnpj" id="inputCnpj" placeholder="00.000.000/0000-00">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Nome Fantasia</label>
+                                        <input type="text" name="tradeName" id="inputTradeName" placeholder="Nome fantasia">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Inscrição Estadual</label>
+                                        <input type="text" name="stateRegistration" id="inputStateRegistration" placeholder="Inscrição estadual">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Dados Empresariais</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-acordo" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Meu Acordo de Afiliação</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="agreement-summary">
+                                <div class="agreement-item">
+                                    <div class="agreement-label">Modelo de Comissão</div>
+                                    <div class="agreement-value">CPA + RevShare + Cascata</div>
+                                </div>
+                                <div class="agreement-item">
+                                    <div class="agreement-label">Data de Início</div>
+                                    <div class="agreement-value" id="agreementStartDate">-</div>
+                                </div>
+                                <div class="agreement-item">
+                                    <div class="agreement-label">Status</div>
+                                    <div class="agreement-value">
+                                        <span class="status-badge active">
+                                            <span class="status-dot"></span>
+                                            Ativo
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="agreement-details">
+                                <h4>Comissões por Plataforma</h4>
+                                <div class="commission-table">
+                                    <div class="commission-row header">
+                                        <span>Plataforma</span>
+                                        <span>CPA</span>
+                                        <span>RevShare</span>
+                                    </div>
+                                    <div class="commission-row">
+                                        <span>Superbet</span>
+                                        <span>R$ 35,00</span>
+                                        <span>25%</span>
+                                    </div>
+                                    <div class="commission-row">
+                                        <span>Sportingbet</span>
+                                        <span>R$ 30,00</span>
+                                        <span>20%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="agreement-details">
+                                <h4>Comissões em Cascata</h4>
+                                <div class="cascade-summary">
+                                    <div class="cascade-item">
+                                        <span class="cascade-level">Nível 1</span>
+                                        <span class="cascade-percent">5%</span>
+                                    </div>
+                                    <div class="cascade-item">
+                                        <span class="cascade-level">Nível 2</span>
+                                        <span class="cascade-percent">3%</span>
+                                    </div>
+                                    <div class="cascade-item">
+                                        <span class="cascade-level">Nível 3</span>
+                                        <span class="cascade-percent">2%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-pagamento" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Dados PIX</h3>
+                            <p>Configure sua chave PIX para receber pagamentos</p>
+                        </div>
+                        <div class="card-body">
+                            <form id="pixForm" onsubmit="savePixData(event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Tipo de Chave</label>
+                                        <select name="pixType" id="inputPixType" required>
+                                            <option value="">Selecione...</option>
+                                            <option value="cpf">CPF</option>
+                                            <option value="email">E-mail</option>
+                                            <option value="phone">Telefone</option>
+                                            <option value="random">Chave Aleatória</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Chave PIX</label>
+                                        <input type="text" name="pixKey" id="inputPixKey" placeholder="Digite sua chave PIX" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nome do Titular</label>
+                                    <input type="text" name="pixHolder" id="inputPixHolder" placeholder="Nome completo do titular da conta">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Dados PIX</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Alterar Senha</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="passwordForm" onsubmit="changePassword(event)">
+                                <div class="form-group">
+                                    <label>Senha Atual</label>
+                                    <input type="password" name="currentPassword" placeholder="Digite sua senha atual" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Nova Senha</label>
+                                        <input type="password" name="newPassword" placeholder="Digite a nova senha" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Confirmar Nova Senha</label>
+                                        <input type="password" name="confirmPassword" placeholder="Confirme a nova senha" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Alterar Senha</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-historico" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Histórico de Atividades</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="activityHistory">
+                                <div class="activity-timeline">
+                                    <div class="activity-item">
+                                        <div class="activity-icon login">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/>
+                                            </svg>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-title">Login realizado</div>
+                                            <div class="activity-time">Agora</div>
+                                        </div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-icon success">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                                <polyline points="22 4 12 14.01 9 11.01"/>
+                                            </svg>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-title">Conta verificada</div>
+                                            <div class="activity-time" id="verifiedDate">-</div>
+                                        </div>
+                                    </div>
+                                    <div class="activity-item">
+                                        <div class="activity-icon create">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                                <circle cx="8.5" cy="7" r="4"/>
+                                                <line x1="20" y1="8" x2="20" y2="14"/>
+                                                <line x1="23" y1="11" x2="17" y2="11"/>
+                                            </svg>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-title">Conta criada</div>
+                                            <div class="activity-time" id="createdDate">-</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        let currentTab = 'cadastrais';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!Auth.requireAuth()) return;
+            loadUserInfo();
+            loadProfileData();
+        });
+
+        function loadUserInfo() {
+            const user = Auth.currentUser;
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+                document.getElementById('profileName').textContent = user.name;
+                document.getElementById('profileEmail').textContent = user.email;
+                document.getElementById('profileAvatar').textContent = user.name.charAt(0).toUpperCase();
+                document.getElementById('profileCode').textContent = user.affiliateCode || 'FENIX001';
+            }
+        }
+
+        function loadProfileData() {
+            const user = Auth.currentUser;
+            if (!user) return;
+
+            // Stats
+            const links = Links.getAll();
+            const totalConversions = links.reduce((sum, l) => sum + (l.conversions || 0), 0);
+            const totalEarnings = links.reduce((sum, l) => sum + (l.earnings || 0), 0);
+
+            document.getElementById('profileLinks').textContent = links.length;
+            document.getElementById('profileConversions').textContent = totalConversions;
+            document.getElementById('profileEarnings').textContent = Format.currency(totalEarnings);
+
+            // Form data
+            document.getElementById('inputName').value = user.name || '';
+            document.getElementById('inputEmail').value = user.email || '';
+            document.getElementById('inputPhone').value = user.phone || '';
+            document.getElementById('inputCpf').value = user.cpf || '';
+
+            // PIX data
+            if (user.pixData) {
+                document.getElementById('inputPixType').value = user.pixData.type || '';
+                document.getElementById('inputPixKey').value = user.pixData.key || '';
+                document.getElementById('inputPixHolder').value = user.pixData.holder || '';
+            }
+
+            // Agreement dates
+            document.getElementById('agreementStartDate').textContent = Format.date(user.createdAt);
+            document.getElementById('createdDate').textContent = Format.date(user.createdAt);
+            document.getElementById('verifiedDate').textContent = Format.date(user.createdAt);
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+
+            // Update tab buttons
+            document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+            event.target.closest('.profile-tab').classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+            document.getElementById(`tab-${tab}`).style.display = 'block';
+        }
+
+        function savePersonalData(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const user = Auth.currentUser;
+
+            const users = Storage.get('users') || [];
+            const index = users.findIndex(u => u.id === user.id);
+
+            if (index !== -1) {
+                users[index].name = formData.get('name');
+                users[index].phone = formData.get('phone');
+                users[index].cpf = formData.get('cpf');
+                users[index].birthdate = formData.get('birthdate');
+                users[index].gender = formData.get('gender');
+                Storage.set('users', users);
+                Toast.success('Dados pessoais salvos!');
+                loadUserInfo();
+            }
+        }
+
+        function saveAddress(e) {
+            e.preventDefault();
+            Toast.success('Endereço salvo!');
+        }
+
+        function saveCompanyData(e) {
+            e.preventDefault();
+            Toast.success('Dados empresariais salvos!');
+        }
+
+        function savePixData(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const user = Auth.currentUser;
+
+            const users = Storage.get('users') || [];
+            const index = users.findIndex(u => u.id === user.id);
+
+            if (index !== -1) {
+                users[index].pixData = {
+                    type: formData.get('pixType'),
+                    key: formData.get('pixKey'),
+                    holder: formData.get('pixHolder')
+                };
+                Storage.set('users', users);
+                Toast.success('Dados PIX salvos!');
+            }
+        }
+
+        function changePassword(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+
+            if (formData.get('newPassword') !== formData.get('confirmPassword')) {
+                Toast.error('As senhas não coincidem');
+                return;
+            }
+
+            if (formData.get('newPassword').length < 6) {
+                Toast.error('A senha deve ter pelo menos 6 caracteres');
+                return;
+            }
+
+            Toast.success('Senha alterada com sucesso!');
+            e.target.reset();
+        }
+
+        function selectPlatform(platform) {
+            document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.platform-btn.${platform}`).classList.add('active');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
+
+    <style>
+        .profile-header-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 32px;
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-input));
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header-card {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+        }
+
+        .profile-header-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header-info {
+                flex-direction: column;
+            }
+        }
+
+        .profile-avatar-lg {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-fire);
+            border-radius: 50%;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .profile-details h2 {
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .profile-details p {
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .profile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .profile-badge.affiliate-code {
+            background: var(--fire-orange);
+            color: white;
+        }
+
+        .profile-header-stats {
+            display: flex;
+            gap: 32px;
+        }
+
+        .profile-stat-item {
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .profile-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .profile-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .profile-tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .profile-tab:hover {
+            background: var(--bg-input);
+        }
+
+        .profile-tab.active {
+            background: var(--gradient-fire);
+            color: white;
+            border-color: transparent;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .agreement-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            background: var(--bg-input);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .agreement-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .agreement-item {
+            text-align: center;
+        }
+
+        .agreement-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .agreement-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .agreement-details {
+            margin-top: 24px;
+        }
+
+        .agreement-details h4 {
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .commission-table {
+            background: var(--bg-input);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .commission-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .commission-row:last-child {
+            border-bottom: none;
+        }
+
+        .commission-row.header {
+            background: var(--bg-card);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .cascade-summary {
+            display: flex;
+            gap: 16px;
+        }
+
+        .cascade-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            background: var(--bg-input);
+            border-radius: 12px;
+        }
+
+        .cascade-level {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .cascade-percent {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .activity-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .activity-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .activity-icon.login {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .activity-icon.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .activity-icon.create {
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</body>
+</html>

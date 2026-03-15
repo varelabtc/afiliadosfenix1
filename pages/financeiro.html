@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Afiliados - Financeiro</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">FENIX</span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h2>Fenix</h2>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 19l-7-7 7-7M18 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                    Dashboard
+                </a>
+                <a href="meus-links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                    Meus Links
+                </a>
+                <a href="minha-equipe.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Minha Equipe
+                </a>
+                <a href="minha-rede.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><path d="M12 8v4M6 15a3 3 0 100 6 3 3 0 000-6zM18 15a3 3 0 100 6 3 3 0 000-6z"/><path d="M12 12l-6 6M12 12l6 6"/></svg>
+                    Minha Rede
+                </a>
+                <a href="financeiro.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Financeiro
+                </a>
+                <a href="comissoes.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Comissões
+                </a>
+                <a href="materiais.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                    Materiais
+                </a>
+                <a href="suporte.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+                    Suporte
+                </a>
+                <a href="perfil.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Meu Perfil
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="../index.html" class="nav-item" onclick="Auth.logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Sair
+                </a>
+            </nav>
+
+            <!-- Platform Selector -->
+            <div class="platform-selector">
+                <div class="platform-label">Plataforma</div>
+                <div class="platform-buttons">
+                    <button class="platform-btn active" onclick="selectPlatform('superbet')">
+                        <img src="../img/superbet-logo.png" alt="Superbet">
+                    </button>
+                    <button class="platform-btn" onclick="selectPlatform('sportingbet')">
+                        <img src="../img/sportingbet-logo.png" alt="Sportingbet">
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">C</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Carregando...</div>
+                        <div class="user-role">Afiliado</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Financeiro</h1>
+                    <p>Acompanhe seus ganhos e solicite saques</p>
+                </div>
+
+                <!-- Balance Card -->
+                <div class="balance-main-card">
+                    <div class="balance-info">
+                        <div class="balance-label">Saldo Disponível para Saque</div>
+                        <div class="balance-value" id="availableBalance">R$ 0,00</div>
+                        <div class="balance-meta">
+                            <span>Saque mínimo: <strong>R$ 100,00</strong></span>
+                            <span>•</span>
+                            <span>Próximo fechamento: <strong id="nextClosing">15/04</strong></span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-lg" onclick="openWithdrawModal()" id="withdrawBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                            <line x1="1" y1="10" x2="23" y2="10"/>
+                        </svg>
+                        Solicitar Saque
+                    </button>
+                </div>
+
+                <!-- Period Cards -->
+                <div class="periods-grid">
+                    <div class="period-card current">
+                        <div class="period-header">
+                            <span class="period-badge current">Período Atual</span>
+                            <span class="period-dates">01/03 - 15/03</span>
+                        </div>
+                        <div class="period-amount" id="currentPeriodAmount">R$ 0,00</div>
+                        <div class="period-status">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                            Em andamento
+                        </div>
+                    </div>
+                    <div class="period-card">
+                        <div class="period-header">
+                            <span class="period-badge">Período Anterior</span>
+                            <span class="period-dates">15/02 - 28/02</span>
+                        </div>
+                        <div class="period-amount" id="previousPeriodAmount">R$ 0,00</div>
+                        <div class="period-status success">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            Fechado
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CPA Goals -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Meta de CPA</h3>
+                        <p>Alcance metas e aumente seus ganhos</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="cpa-goals-grid">
+                            <div class="cpa-goal">
+                                <div class="cpa-goal-header">
+                                    <span class="cpa-goal-title">Meta Bronze</span>
+                                    <span class="cpa-goal-bonus">+R$ 100</span>
+                                </div>
+                                <div class="cpa-goal-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="bronzeProgress" style="width: 0%"></div>
+                                    </div>
+                                    <span class="progress-text"><span id="bronzeCurrent">0</span>/10 FTDs</span>
+                                </div>
+                            </div>
+                            <div class="cpa-goal">
+                                <div class="cpa-goal-header">
+                                    <span class="cpa-goal-title">Meta Prata</span>
+                                    <span class="cpa-goal-bonus">+R$ 300</span>
+                                </div>
+                                <div class="cpa-goal-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="silverProgress" style="width: 0%"></div>
+                                    </div>
+                                    <span class="progress-text"><span id="silverCurrent">0</span>/25 FTDs</span>
+                                </div>
+                            </div>
+                            <div class="cpa-goal">
+                                <div class="cpa-goal-header">
+                                    <span class="cpa-goal-title">Meta Ouro</span>
+                                    <span class="cpa-goal-bonus">+R$ 500</span>
+                                </div>
+                                <div class="cpa-goal-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="goldProgress" style="width: 0%"></div>
+                                    </div>
+                                    <span class="progress-text"><span id="goldCurrent">0</span>/50 FTDs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PIX Data -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Dados PIX</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="openPixModal()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Editar
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="pix-info-grid">
+                            <div class="pix-info-item">
+                                <div class="pix-info-label">Tipo de Chave</div>
+                                <div class="pix-info-value" id="pixType">CPF</div>
+                            </div>
+                            <div class="pix-info-item">
+                                <div class="pix-info-label">Chave PIX</div>
+                                <div class="pix-info-value" id="pixKey">•••.•••.•••-••</div>
+                            </div>
+                            <div class="pix-info-item">
+                                <div class="pix-info-label">Titular</div>
+                                <div class="pix-info-value" id="pixHolder">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Withdrawal History -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Histórico de Saques</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="withdrawalHistory">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                    <line x1="1" y1="10" x2="23" y2="10"/>
+                                </svg>
+                                <h3>Nenhum saque ainda</h3>
+                                <p>Seu histórico de saques aparecerá aqui</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal-overlay" id="withdrawModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Solicitar Saque</h3>
+                <button class="modal-close" onclick="closeWithdrawModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="withdrawForm" onsubmit="submitWithdraw(event)">
+                <div class="modal-body">
+                    <div class="withdraw-balance-info">
+                        <span>Saldo disponível:</span>
+                        <strong id="modalBalance">R$ 0,00</strong>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor do Saque</label>
+                        <input type="number" name="amount" min="100" step="0.01" placeholder="Mínimo R$ 100,00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar Chave PIX</label>
+                        <input type="text" name="pixKey" id="modalPixKey" readonly>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeWithdrawModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Solicitar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PIX Modal -->
+    <div class="modal-overlay" id="pixModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Dados PIX</h3>
+                <button class="modal-close" onclick="closePixModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="pixForm" onsubmit="savePixData(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tipo de Chave</label>
+                        <select name="pixType" required>
+                            <option value="cpf">CPF</option>
+                            <option value="email">E-mail</option>
+                            <option value="phone">Telefone</option>
+                            <option value="random">Chave Aleatória</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Chave PIX</label>
+                        <input type="text" name="pixKey" placeholder="Digite sua chave PIX" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome do Titular</label>
+                        <input type="text" name="pixHolder" placeholder="Nome completo" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closePixModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!Auth.requireAuth()) return;
+            loadUserInfo();
+            loadFinancialData();
+        });
+
+        function loadUserInfo() {
+            const user = Auth.currentUser;
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            }
+        }
+
+        function loadFinancialData() {
+            const user = Auth.currentUser;
+            const balance = user?.balance || 0;
+            const pixData = user?.pixData || {};
+
+            // Balance
+            document.getElementById('availableBalance').textContent = Format.currency(balance);
+            document.getElementById('modalBalance').textContent = Format.currency(balance);
+
+            // Disable withdraw button if balance < 100
+            const withdrawBtn = document.getElementById('withdrawBtn');
+            if (balance < 100) {
+                withdrawBtn.disabled = true;
+                withdrawBtn.style.opacity = '0.5';
+            }
+
+            // PIX Data
+            if (pixData.key) {
+                document.getElementById('pixType').textContent = pixData.type?.toUpperCase() || 'CPF';
+                document.getElementById('pixKey').textContent = maskPixKey(pixData.key);
+                document.getElementById('pixHolder').textContent = pixData.holder || '-';
+                document.getElementById('modalPixKey').value = pixData.key;
+            }
+
+            // Next closing date
+            const today = new Date();
+            const nextClose = today.getDate() <= 15 ? 15 : new Date(today.getFullYear(), today.getMonth() + 1, 1).getDate();
+            document.getElementById('nextClosing').textContent = `${nextClose}/${String(today.getMonth() + 1).padStart(2, '0')}`;
+
+            // Period amounts
+            const links = Links.getAll();
+            const totalEarnings = links.reduce((sum, l) => sum + (l.earnings || 0), 0);
+            document.getElementById('currentPeriodAmount').textContent = Format.currency(totalEarnings);
+            document.getElementById('previousPeriodAmount').textContent = Format.currency(totalEarnings * 0.8);
+
+            // CPA Goals
+            const ftds = links.reduce((sum, l) => sum + (l.conversions || 0), 0);
+            updateGoalProgress(ftds);
+
+            // Withdrawal history
+            loadWithdrawalHistory();
+        }
+
+        function updateGoalProgress(ftds) {
+            // Bronze: 10 FTDs
+            const bronzeProgress = Math.min(100, (ftds / 10) * 100);
+            document.getElementById('bronzeProgress').style.width = bronzeProgress + '%';
+            document.getElementById('bronzeCurrent').textContent = Math.min(ftds, 10);
+
+            // Silver: 25 FTDs
+            const silverProgress = Math.min(100, (ftds / 25) * 100);
+            document.getElementById('silverProgress').style.width = silverProgress + '%';
+            document.getElementById('silverCurrent').textContent = Math.min(ftds, 25);
+
+            // Gold: 50 FTDs
+            const goldProgress = Math.min(100, (ftds / 50) * 100);
+            document.getElementById('goldProgress').style.width = goldProgress + '%';
+            document.getElementById('goldCurrent').textContent = Math.min(ftds, 50);
+        }
+
+        function maskPixKey(key) {
+            if (!key) return '•••.•••.•••-••';
+            if (key.includes('@')) {
+                const [user, domain] = key.split('@');
+                return user.substring(0, 3) + '***@' + domain;
+            }
+            if (key.length === 11) {
+                return `•••.•••.${key.substring(6, 9)}-••`;
+            }
+            return key.substring(0, 4) + '****' + key.substring(key.length - 4);
+        }
+
+        function loadWithdrawalHistory() {
+            const user = Auth.currentUser;
+            const withdrawals = (Storage.get('withdrawals') || []).filter(w => w.userId === user?.id);
+            const container = document.getElementById('withdrawalHistory');
+
+            if (withdrawals.length === 0) return;
+
+            container.innerHTML = `
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${withdrawals.map(w => {
+                                const statusClass = w.status === 'paid' ? 'active' :
+                                                   w.status === 'approved' ? 'active' :
+                                                   w.status === 'pending' ? 'pending' : 'inactive';
+                                const statusText = w.status === 'paid' ? 'Pago' :
+                                                  w.status === 'approved' ? 'Aprovado' :
+                                                  w.status === 'pending' ? 'Pendente' : 'Rejeitado';
+                                return `
+                                    <tr>
+                                        <td>${Format.date(w.createdAt)}</td>
+                                        <td style="font-weight: 600;">${Format.currency(w.amount)}</td>
+                                        <td>
+                                            <span class="status-badge ${statusClass}">
+                                                <span class="status-dot"></span>
+                                                ${statusText}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function openWithdrawModal() {
+            document.getElementById('withdrawModal').classList.add('active');
+        }
+
+        function closeWithdrawModal() {
+            document.getElementById('withdrawModal').classList.remove('active');
+        }
+
+        function openPixModal() {
+            document.getElementById('pixModal').classList.add('active');
+        }
+
+        function closePixModal() {
+            document.getElementById('pixModal').classList.remove('active');
+        }
+
+        function submitWithdraw(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const amount = parseFloat(formData.get('amount'));
+            const user = Auth.currentUser;
+
+            if (amount > user.balance) {
+                Toast.error('Saldo insuficiente');
+                return;
+            }
+
+            if (amount < 100) {
+                Toast.error('Valor mínimo: R$ 100,00');
+                return;
+            }
+
+            // Create withdrawal request
+            const withdrawal = {
+                id: Date.now(),
+                userId: user.id,
+                userName: user.name,
+                amount: amount,
+                pixKey: formData.get('pixKey'),
+                pixType: user.pixData?.type || 'cpf',
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+
+            const withdrawals = Storage.get('withdrawals') || [];
+            withdrawals.push(withdrawal);
+            Storage.set('withdrawals', withdrawals);
+
+            // Update user balance
+            const users = Storage.get('users') || [];
+            const userIndex = users.findIndex(u => u.id === user.id);
+            if (userIndex !== -1) {
+                users[userIndex].balance -= amount;
+                Storage.set('users', users);
+            }
+
+            Toast.success('Saque solicitado com sucesso!');
+            closeWithdrawModal();
+            loadFinancialData();
+        }
+
+        function savePixData(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const user = Auth.currentUser;
+
+            const pixData = {
+                type: formData.get('pixType'),
+                key: formData.get('pixKey'),
+                holder: formData.get('pixHolder')
+            };
+
+            // Update user
+            const users = Storage.get('users') || [];
+            const userIndex = users.findIndex(u => u.id === user.id);
+            if (userIndex !== -1) {
+                users[userIndex].pixData = pixData;
+                Storage.set('users', users);
+            }
+
+            Toast.success('Dados PIX atualizados!');
+            closePixModal();
+            loadFinancialData();
+        }
+
+        function selectPlatform(platform) {
+            document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.platform-btn.${platform}`).classList.add('active');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
+
+    <style>
+        .balance-main-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px;
+            background: var(--bg-glass);
+            backdrop-filter: var(--blur-glass);
+            -webkit-backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .balance-main-card {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+        }
+
+        .balance-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .balance-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .balance-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .balance-meta strong {
+            color: var(--text-secondary);
+        }
+
+        .periods-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .periods-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .period-card {
+            padding: 22px;
+            background: var(--bg-glass);
+            backdrop-filter: var(--blur-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            transition: var(--transition-fast);
+        }
+
+        .period-card:hover {
+            border-color: var(--border-light);
+        }
+
+        .period-card.current {
+            border-color: rgba(255, 159, 10, 0.3);
+            background: linear-gradient(135deg, rgba(255, 159, 10, 0.08) 0%, rgba(255, 69, 58, 0.04) 100%);
+        }
+
+        .period-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .period-badge {
+            padding: 5px 12px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .period-badge.current {
+            background: var(--fire-orange);
+            color: #000;
+        }
+
+        .period-dates {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .period-amount {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .period-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .period-status.success {
+            color: var(--success);
+        }
+
+        .cpa-goals-grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        .cpa-goal {
+            padding: 18px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-glass);
+        }
+
+        .cpa-goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .cpa-goal-title {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+        }
+
+        .cpa-goal-bonus {
+            padding: 5px 12px;
+            background: rgba(48, 209, 88, 0.15);
+            color: var(--success);
+            border-radius: var(--radius-full);
+            font-size: 0.8125rem;
+            font-weight: 700;
+        }
+
+        .cpa-goal-progress {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-card);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-fire);
+            border-radius: var(--radius-full);
+            transition: width 0.4s ease;
+        }
+
+        .progress-text {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .pix-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .pix-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pix-info-item {
+            padding: 18px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-glass);
+        }
+
+        .pix-info-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .pix-info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .withdraw-balance-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+            border: 1px solid var(--border-glass);
+        }
+
+        .withdraw-balance-info span {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .withdraw-balance-info strong {
+            font-size: 1.25rem;
+            color: var(--success);
+        }
+    </style>
+</body>
+</html>

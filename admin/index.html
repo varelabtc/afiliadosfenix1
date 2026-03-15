@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Admin - Login</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23EF4444' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="admin-login-container">
+        <div class="admin-login-card">
+            <div class="admin-login-header">
+                <div class="admin-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h1>Fenix</h1>
+                <span class="admin-badge">PAINEL MASTER</span>
+                <p>Acesso restrito a administradores</p>
+            </div>
+
+            <form id="adminLoginForm" class="admin-login-form">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <div class="input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <div class="input-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0110 0v4"/>
+                        </svg>
+                        <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword()">
+                            <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            <svg class="eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
+                                <line x1="1" y1="1" x2="23" y2="23"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-admin-login">
+                    <span>Entrar no Painel</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </form>
+
+            <div class="admin-login-footer">
+                <a href="../index.html">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Voltar para Afiliados
+                </a>
+            </div>
+
+            <div class="demo-credentials">
+                <span class="demo-label">Credenciais</span>
+                <div class="demo-info">
+                    <p><strong>E-mail:</strong> admin@fenix.com</p>
+                    <p><strong>Senha:</strong> admin123</p>
+                </div>
+                <button type="button" class="btn-fill-demo" onclick="fillDemo()">Preencher</button>
+                <button type="button" class="btn-reset" onclick="resetAdminData()">Resetar</button>
+            </div>
+
+            <div class="admin-platforms">
+                <p>Plataformas gerenciadas</p>
+                <div class="platform-logos">
+                    <img src="../img/superbet-logo.png" alt="Superbet">
+                    <img src="../img/sportingbet-logo.png" alt="Sportingbet">
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-login-bg">
+            <div class="bg-gradient"></div>
+            <div class="bg-grid"></div>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Credenciais do admin master
+        const ADMIN_EMAIL = 'admin@fenix.com';
+        const ADMIN_PASSWORD = 'admin123';
+
+        // Garantir que admin existe
+        function ensureDefaultAdmin() {
+            let admins = [];
+            try {
+                admins = JSON.parse(localStorage.getItem('fenix_admins') || '[]');
+            } catch(e) {
+                admins = [];
+            }
+
+            const existingIndex = admins.findIndex(a => a.email === ADMIN_EMAIL);
+            if (existingIndex >= 0) {
+                admins[existingIndex].password = ADMIN_PASSWORD;
+            } else {
+                admins.push({
+                    id: 1,
+                    name: 'Administrador Master',
+                    email: ADMIN_EMAIL,
+                    password: ADMIN_PASSWORD,
+                    role: 'super_admin',
+                    createdAt: new Date().toISOString()
+                });
+            }
+            localStorage.setItem('fenix_admins', JSON.stringify(admins));
+        }
+
+        // Função de login
+        function doLogin(email, password) {
+            let admins = [];
+            try {
+                admins = JSON.parse(localStorage.getItem('fenix_admins') || '[]');
+            } catch(e) {
+                admins = [];
+            }
+
+            const admin = admins.find(a => a.email === email && a.password === password);
+
+            if (admin) {
+                const adminData = {
+                    id: admin.id,
+                    name: admin.name,
+                    email: admin.email,
+                    role: admin.role
+                };
+                localStorage.setItem('fenix_currentAdmin', JSON.stringify(adminData));
+                return { success: true, admin: adminData };
+            }
+            return { success: false, message: 'E-mail ou senha incorretos' };
+        }
+
+        // Inicializar
+        ensureDefaultAdmin();
+
+        // Verificar se já está logado
+        (function() {
+            const currentAdmin = localStorage.getItem('fenix_currentAdmin');
+            if (currentAdmin) {
+                window.location.href = 'dashboard.html';
+            }
+        })();
+
+        // Event Listener para o form
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const btn = this.querySelector('.btn-admin-login');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span>Verificando...</span>';
+            btn.disabled = true;
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            setTimeout(() => {
+                const result = doLogin(email, password);
+
+                if (result.success) {
+                    btn.innerHTML = '<span>Acesso autorizado!</span>';
+                    btn.classList.add('success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 300);
+                } else {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    alert(result.message);
+                    this.classList.add('shake');
+                    setTimeout(() => this.classList.remove('shake'), 500);
+                }
+            }, 300);
+        });
+
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const eyeOpen = document.querySelector('.eye-open');
+            const eyeClosed = document.querySelector('.eye-closed');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeOpen.style.display = 'none';
+                eyeClosed.style.display = 'block';
+            } else {
+                input.type = 'password';
+                eyeOpen.style.display = 'block';
+                eyeClosed.style.display = 'none';
+            }
+        }
+
+        function fillDemo() {
+            document.getElementById('email').value = ADMIN_EMAIL;
+            document.getElementById('password').value = ADMIN_PASSWORD;
+        }
+
+        function resetAdminData() {
+            localStorage.removeItem('fenix_admins');
+            localStorage.removeItem('fenix_currentAdmin');
+            ensureDefaultAdmin();
+            alert('Dados resetados! Credenciais: admin@fenix.com / admin123');
+            location.reload();
+        }
+    </script>
+
+    <style>
+        .admin-login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: #09090B;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-login-bg {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(239, 68, 68, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(232, 89, 12, 0.1) 0%, transparent 40%);
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .admin-login-card {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            background: linear-gradient(180deg, #18181B 0%, #0F0F12 100%);
+            border: 1px solid #27272A;
+            border-radius: 20px;
+            padding: 48px 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .admin-login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #EF4444, transparent);
+            border-radius: 0 0 4px 4px;
+        }
+
+        .admin-login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .admin-logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3);
+        }
+
+        .admin-logo svg {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        .admin-login-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #FAFAFA;
+            margin-bottom: 12px;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #EF4444;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .admin-login-header p {
+            color: #71717A;
+            font-size: 0.875rem;
+        }
+
+        .admin-login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .admin-login-form .form-group {
+            margin: 0;
+        }
+
+        .admin-login-form label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #A1A1AA;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper svg {
+            position: absolute;
+            left: 14px;
+            width: 18px;
+            height: 18px;
+            color: #52525B;
+            pointer-events: none;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 14px 14px 46px;
+            background: #09090B;
+            border: 1px solid #27272A;
+            border-radius: 10px;
+            color: #FAFAFA;
+            font-size: 0.9375rem;
+            transition: all 0.2s ease;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #EF4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+        }
+
+        .input-wrapper input::placeholder {
+            color: #52525B;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .toggle-password svg {
+            position: static;
+            width: 18px;
+            height: 18px;
+            color: #52525B;
+            pointer-events: auto;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover svg {
+            color: #A1A1AA;
+        }
+
+        .btn-admin-login {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .btn-admin-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-admin-login:active {
+            transform: translateY(0);
+        }
+
+        .btn-admin-login:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-admin-login.success {
+            background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+        }
+
+        .btn-admin-login svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .admin-login-footer {
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 1px solid #27272A;
+        }
+
+        .admin-login-footer a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #71717A;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .admin-login-footer a:hover {
+            color: #FAFAFA;
+        }
+
+        .admin-login-footer svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .admin-platforms {
+            margin-top: 28px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #27272A;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .admin-platforms p {
+            font-size: 0.75rem;
+            color: #52525B;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        .platform-logos {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .platform-logos img {
+            height: 24px;
+            opacity: 0.6;
+            filter: brightness(0) invert(1);
+            transition: opacity 0.2s;
+        }
+
+        .platform-logos img:hover {
+            opacity: 1;
+        }
+
+        .demo-credentials {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+        }
+
+        .demo-label {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 4px 12px;
+            background: #EF4444;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 4px;
+        }
+
+        .demo-info {
+            margin: 8px 0 16px;
+        }
+
+        .demo-info p {
+            font-size: 0.8rem;
+            color: #A1A1AA;
+            margin: 4px 0;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+        }
+
+        .demo-info strong {
+            color: #FAFAFA;
+        }
+
+        .btn-fill-demo {
+            padding: 8px 20px;
+            background: transparent;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 6px;
+            color: #EF4444;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-fill-demo:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #EF4444;
+        }
+
+        .btn-reset {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid #3F3F46;
+            border-radius: 6px;
+            color: #71717A;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 8px;
+        }
+
+        .btn-reset:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #A1A1AA;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @media (max-width: 480px) {
+            .admin-login-card {
+                padding: 32px 24px;
+                border-radius: 16px;
+            }
+
+            .admin-logo {
+                width: 56px;
+                height: 56px;
+            }
+
+            .admin-login-header h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</body>
+</html>

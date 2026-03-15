@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Admin - Afiliados</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">Fenix <span style="color: var(--danger); font-size: 0.6rem;">ADMIN</span></span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar Admin -->
+        <aside class="sidebar admin-sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h2>Fenix <span style="font-size: 0.7rem; color: var(--danger);">ADMIN</span></h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="afiliados.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                    </svg>
+                    Afiliados
+                </a>
+                <a href="casas.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <path d="M3 9h18M9 21V9"/>
+                    </svg>
+                    Casas de Apostas
+                </a>
+                <a href="cpa.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                    </svg>
+                    Configurar CPA
+                </a>
+                <a href="links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                    </svg>
+                    Links Master
+                </a>
+                <a href="saques.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                        <line x1="1" y1="10" x2="23" y2="10"/>
+                    </svg>
+                    Saques
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 20V10M12 20V4M6 20v-6"/>
+                    </svg>
+                    Relatórios
+                </a>
+                <a href="configuracoes.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                    </svg>
+                    Configurações
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button onclick="AdminAuth.logout()" class="btn btn-secondary" style="width: 100%;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+                    </svg>
+                    Sair
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <button class="theme-toggle" style="position: fixed; top: 20px; right: 20px;">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                </svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"/>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+            </button>
+
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>Gerenciar Afiliados</h1>
+                    <p>Aprove, rejeite e gerencie todos os afiliados</p>
+                </div>
+                <div class="topbar-right">
+                    <select id="statusFilter" class="btn btn-secondary" style="padding: 12px 20px;">
+                        <option value="all">Todos</option>
+                        <option value="pending">Pendentes</option>
+                        <option value="approved">Aprovados</option>
+                        <option value="rejected">Rejeitados</option>
+                        <option value="blocked">Bloqueados</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCount">0</div>
+                    <div class="stat-label">Total de Afiliados</div>
+                </div>
+                <div class="stat-card" style="border-left: 3px solid var(--warning);">
+                    <div class="stat-value" id="pendingCount" style="color: var(--warning);">0</div>
+                    <div class="stat-label">Pendentes</div>
+                </div>
+                <div class="stat-card" style="border-left: 3px solid var(--success);">
+                    <div class="stat-value" id="approvedCount" style="color: var(--success);">0</div>
+                    <div class="stat-label">Aprovados</div>
+                </div>
+                <div class="stat-card" style="border-left: 3px solid var(--danger);">
+                    <div class="stat-value" id="blockedCount" style="color: var(--danger);">0</div>
+                    <div class="stat-label">Bloqueados</div>
+                </div>
+            </div>
+
+            <!-- Affiliates Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Lista de Afiliados</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Afiliado</th>
+                                    <th>Código</th>
+                                    <th>Cliques</th>
+                                    <th>Conversões</th>
+                                    <th>Ganhos</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="affiliatesTableBody">
+                                <!-- Affiliates will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Affiliate Details Modal -->
+    <div class="modal-overlay" id="affiliateModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3>Detalhes do Afiliado</h3>
+                <button class="modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="affiliateDetails">
+                <!-- Details will be loaded here -->
+            </div>
+            <div class="modal-footer" id="affiliateActions">
+                <!-- Actions will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CPA Modal -->
+    <div class="modal-overlay" id="cpaModal">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3>Configurar CPA Individual</h3>
+                <button class="modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="cpaForm">
+                <div class="modal-body">
+                    <input type="hidden" id="cpaUserId">
+                    <div id="cpaFields">
+                        <!-- CPA fields will be loaded here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal-close>Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!AdminAuth.requireAuth()) return;
+
+            loadAffiliates();
+
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                currentFilter = this.value;
+                loadAffiliates();
+            });
+        });
+
+        function loadAffiliates() {
+            const allUsers = AffiliateManager.getAll();
+
+            // Update stats
+            document.getElementById('totalCount').textContent = allUsers.length;
+            document.getElementById('pendingCount').textContent = allUsers.filter(u => u.status === 'pending').length;
+            document.getElementById('approvedCount').textContent = allUsers.filter(u => u.status === 'approved' || !u.status).length;
+            document.getElementById('blockedCount').textContent = allUsers.filter(u => u.status === 'blocked').length;
+
+            // Filter users
+            let filteredUsers = allUsers;
+            if (currentFilter !== 'all') {
+                if (currentFilter === 'approved') {
+                    filteredUsers = allUsers.filter(u => u.status === 'approved' || !u.status);
+                } else {
+                    filteredUsers = allUsers.filter(u => u.status === currentFilter);
+                }
+            }
+
+            const tbody = document.getElementById('affiliatesTableBody');
+
+            if (filteredUsers.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            Nenhum afiliado encontrado
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filteredUsers.map(user => {
+                const stats = AffiliateManager.getStats(user.id);
+                const statusClass = user.status === 'pending' ? 'pending' :
+                                   user.status === 'rejected' ? 'inactive' :
+                                   user.status === 'blocked' ? 'inactive' : 'active';
+                const statusText = user.status === 'pending' ? 'Pendente' :
+                                  user.status === 'rejected' ? 'Rejeitado' :
+                                  user.status === 'blocked' ? 'Bloqueado' : 'Aprovado';
+
+                return `
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div class="user-avatar">${user.name.charAt(0)}</div>
+                                <div>
+                                    <div style="font-weight: 600;">${user.name}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">${user.email}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><code style="background: var(--bg-input); padding: 4px 8px; border-radius: 4px;">${user.affiliateCode || 'N/A'}</code></td>
+                        <td>${Format.number(stats.totalClicks)}</td>
+                        <td>${Format.number(stats.totalConversions)}</td>
+                        <td style="color: var(--success); font-weight: 600;">${Format.currency(stats.totalEarnings)}</td>
+                        <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusText}</span></td>
+                        <td>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn-icon" onclick="viewAffiliate(${user.id})" title="Ver detalhes">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                                <button class="btn-icon" onclick="openCPAModal(${user.id})" title="Configurar CPA">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                                    </svg>
+                                </button>
+                                ${user.status === 'pending' ? `
+                                    <button class="btn-icon" style="color: var(--success);" onclick="approveAffiliate(${user.id})" title="Aprovar">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M20 6L9 17l-5-5"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-icon" style="color: var(--danger);" onclick="rejectAffiliate(${user.id})" title="Rejeitar">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M18 6L6 18M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                ` : user.status === 'blocked' ? `
+                                    <button class="btn-icon" style="color: var(--success);" onclick="unblockAffiliate(${user.id})" title="Desbloquear">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                            <path d="M7 11V7a5 5 0 019.9-1"/>
+                                        </svg>
+                                    </button>
+                                ` : `
+                                    <button class="btn-icon" style="color: var(--danger);" onclick="blockAffiliate(${user.id})" title="Bloquear">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                            <path d="M7 11V7a5 5 0 0110 0v4"/>
+                                        </svg>
+                                    </button>
+                                `}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function viewAffiliate(userId) {
+            const users = AffiliateManager.getAll();
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const stats = AffiliateManager.getStats(userId);
+
+            document.getElementById('affiliateDetails').innerHTML = `
+                <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 24px;">
+                    <div class="profile-avatar" style="width: 80px; height: 80px; font-size: 2rem;">${user.name.charAt(0)}</div>
+                    <div>
+                        <h2 style="margin-bottom: 4px;">${user.name}</h2>
+                        <p style="color: var(--text-muted);">${user.email}</p>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Tel: ${user.phone || 'Não informado'}</p>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px;">
+                    <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">${Format.number(stats.totalClicks)}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Total Cliques</div>
+                    </div>
+                    <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--success);">${Format.number(stats.totalConversions)}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Conversões</div>
+                    </div>
+                    <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">${Format.currency(stats.totalEarnings)}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Total Ganho</div>
+                    </div>
+                    <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--info);">${Format.currency(user.balance || 0)}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Saldo Atual</div>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
+                    <h4 style="margin-bottom: 12px;">Informações</h4>
+                    <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Código:</strong> ${user.affiliateCode || 'N/A'}</p>
+                    <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Cadastro:</strong> ${Format.dateTime(user.createdAt)}</p>
+                    <p style="font-size: 0.875rem;"><strong>Status:</strong> ${user.status || 'Aprovado'}</p>
+                </div>
+            `;
+
+            Modal.open('affiliateModal');
+        }
+
+        function openCPAModal(userId) {
+            document.getElementById('cpaUserId').value = userId;
+
+            const houses = BettingHouses.getAll();
+            const users = AffiliateManager.getAll();
+            const user = users.find(u => u.id === userId);
+
+            document.getElementById('cpaFields').innerHTML = houses.map(house => {
+                const currentCPA = user?.customCPA?.[house.id] || house.cpa;
+                return `
+                    <div class="form-group">
+                        <label>${house.logo} ${house.name}</label>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <input type="number" step="0.01" name="cpa_${house.id}" value="${currentCPA}" style="flex: 1;">
+                            <span style="color: var(--text-muted); font-size: 0.8rem;">Padrão: R$ ${house.cpa.toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            Modal.open('cpaModal');
+        }
+
+        document.getElementById('cpaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userId = parseInt(document.getElementById('cpaUserId').value);
+            const houses = BettingHouses.getAll();
+
+            houses.forEach(house => {
+                const input = this.querySelector(`[name="cpa_${house.id}"]`);
+                if (input) {
+                    const value = parseFloat(input.value);
+                    if (value !== house.cpa) {
+                        AffiliateManager.updateCPA(userId, house.id, value);
+                    }
+                }
+            });
+
+            Toast.success('CPA atualizado com sucesso!');
+            Modal.close('cpaModal');
+        });
+
+        function approveAffiliate(userId) {
+            if (AffiliateManager.approve(userId)) {
+                Toast.success('Afiliado aprovado!');
+                loadAffiliates();
+            }
+        }
+
+        function rejectAffiliate(userId) {
+            const reason = prompt('Motivo da rejeição (opcional):');
+            if (AffiliateManager.reject(userId, reason || '')) {
+                Toast.success('Afiliado rejeitado');
+                loadAffiliates();
+            }
+        }
+
+        function blockAffiliate(userId) {
+            if (confirm('Tem certeza que deseja bloquear este afiliado?')) {
+                if (AffiliateManager.block(userId)) {
+                    Toast.success('Afiliado bloqueado');
+                    loadAffiliates();
+                }
+            }
+        }
+
+        function unblockAffiliate(userId) {
+            if (AffiliateManager.unblock(userId)) {
+                Toast.success('Afiliado desbloqueado');
+                loadAffiliates();
+            }
+        }
+    </script>
+
+    <style>
+        .admin-sidebar { border-right-color: var(--danger) !important; }
+    </style>
+</body>
+</html>

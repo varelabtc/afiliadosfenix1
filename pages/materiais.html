@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Afiliados - Materiais</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">FENIX</span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h2>Fenix</h2>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 19l-7-7 7-7M18 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                    Dashboard
+                </a>
+                <a href="meus-links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                    Meus Links
+                </a>
+                <a href="minha-equipe.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Minha Equipe
+                </a>
+                <a href="minha-rede.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><path d="M12 8v4M6 15a3 3 0 100 6 3 3 0 000-6zM18 15a3 3 0 100 6 3 3 0 000-6z"/><path d="M12 12l-6 6M12 12l6 6"/></svg>
+                    Minha Rede
+                </a>
+                <a href="financeiro.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Financeiro
+                </a>
+                <a href="comissoes.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Comissões
+                </a>
+                <a href="materiais.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                    Materiais
+                </a>
+                <a href="suporte.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+                    Suporte
+                </a>
+                <a href="perfil.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Meu Perfil
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="../index.html" class="nav-item" onclick="Auth.logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Sair
+                </a>
+            </nav>
+
+            <!-- Platform Selector -->
+            <div class="platform-selector">
+                <div class="platform-label">Plataforma</div>
+                <div class="platform-buttons">
+                    <button class="platform-btn active" onclick="selectPlatform('superbet')">
+                        <img src="../img/superbet-logo.png" alt="Superbet">
+                    </button>
+                    <button class="platform-btn" onclick="selectPlatform('sportingbet')">
+                        <img src="../img/sportingbet-logo.png" alt="Sportingbet">
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">C</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Carregando...</div>
+                        <div class="user-role">Afiliado</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-content">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Materiais</h1>
+                    <p>Regras de compliance e materiais de divulgação</p>
+                </div>
+
+                <!-- Compliance Warning -->
+                <div class="compliance-warning">
+                    <div class="compliance-warning-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </div>
+                    <div class="compliance-warning-content">
+                        <h3>Importante: Regras de Compliance</h3>
+                        <p>Leia atentamente todas as regras abaixo. O descumprimento pode resultar em suspensão ou banimento da plataforma.</p>
+                    </div>
+                </div>
+
+                <!-- Compliance Rules -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Regras de Compliance</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="compliance-rules">
+                            <div class="compliance-rule">
+                                <div class="rule-number">1</div>
+                                <div class="rule-content">
+                                    <h4>Proibido Promessas de Ganhos</h4>
+                                    <p>Não é permitido prometer ganhos ou retornos financeiros garantidos aos jogadores. Apostas envolvem riscos.</p>
+                                </div>
+                            </div>
+                            <div class="compliance-rule">
+                                <div class="rule-number">2</div>
+                                <div class="rule-content">
+                                    <h4>Proibido Menores de 18 Anos</h4>
+                                    <p>É estritamente proibido direcionar publicidade para menores de idade. Todo conteúdo deve incluir aviso "+18".</p>
+                                </div>
+                            </div>
+                            <div class="compliance-rule">
+                                <div class="rule-number">3</div>
+                                <div class="rule-content">
+                                    <h4>Proibido Spam</h4>
+                                    <p>Não envie mensagens em massa não solicitadas. Isso pode resultar em banimento imediato.</p>
+                                </div>
+                            </div>
+                            <div class="compliance-rule">
+                                <div class="rule-number">4</div>
+                                <div class="rule-content">
+                                    <h4>Proibido Tráfego Fraudulento</h4>
+                                    <p>Bots, cliques falsos e qualquer forma de fraude são monitorados e resultarão em banimento sem pagamento.</p>
+                                </div>
+                            </div>
+                            <div class="compliance-rule">
+                                <div class="rule-number">5</div>
+                                <div class="rule-content">
+                                    <h4>Proibido Uso de Marca Indevido</h4>
+                                    <p>Não crie sites, perfis ou materiais que possam ser confundidos com as plataformas oficiais.</p>
+                                </div>
+                            </div>
+                            <div class="compliance-rule">
+                                <div class="rule-number">6</div>
+                                <div class="rule-content">
+                                    <h4>Proibido Incentivo ao Vício</h4>
+                                    <p>Não incentive comportamentos de jogo problemático. Promova sempre o jogo responsável.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- What You Can Do -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>O Que Você Pode Fazer</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="allowed-actions">
+                            <div class="allowed-action">
+                                <div class="allowed-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </div>
+                                <span>Compartilhar seu link em suas redes sociais pessoais</span>
+                            </div>
+                            <div class="allowed-action">
+                                <div class="allowed-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </div>
+                                <span>Criar conteúdo informativo sobre apostas esportivas</span>
+                            </div>
+                            <div class="allowed-action">
+                                <div class="allowed-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </div>
+                                <span>Indicar amigos e familiares maiores de 18 anos</span>
+                            </div>
+                            <div class="allowed-action">
+                                <div class="allowed-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </div>
+                                <span>Usar os materiais oficiais fornecidos pela plataforma</span>
+                            </div>
+                            <div class="allowed-action">
+                                <div class="allowed-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </div>
+                                <span>Divulgar bônus e promoções reais das casas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Materials Download -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Materiais de Divulgação</h3>
+                        <p>Baixe materiais oficiais para usar em suas campanhas</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="materials-grid">
+                            <div class="material-card">
+                                <div class="material-preview superbet">
+                                    <span class="material-letter">S</span>
+                                    <strong>SUPERBET</strong>
+                                </div>
+                                <div class="material-info">
+                                    <h4>Banners Superbet</h4>
+                                    <p>Pack com 10 banners em diferentes tamanhos</p>
+                                    <button class="btn btn-primary btn-sm" onclick="downloadMaterial('superbet-banners')">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                        </svg>
+                                        Baixar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <div class="material-preview sportingbet">
+                                    <span class="material-letter">SP</span>
+                                    <strong>SPORTINGBET</strong>
+                                </div>
+                                <div class="material-info">
+                                    <h4>Banners Sportingbet</h4>
+                                    <p>Pack com 10 banners em diferentes tamanhos</p>
+                                    <button class="btn btn-primary btn-sm" onclick="downloadMaterial('sportingbet-banners')">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                        </svg>
+                                        Baixar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <div class="material-preview stories">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                                        <line x1="12" y1="18" x2="12.01" y2="18"/>
+                                    </svg>
+                                    <strong>STORIES</strong>
+                                </div>
+                                <div class="material-info">
+                                    <h4>Stories Instagram</h4>
+                                    <p>Templates prontos para stories</p>
+                                    <button class="btn btn-primary btn-sm" onclick="downloadMaterial('stories')">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                        </svg>
+                                        Baixar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <div class="material-preview videos">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="5 3 19 12 5 21 5 3"/>
+                                    </svg>
+                                    <strong>VIDEOS</strong>
+                                </div>
+                                <div class="material-info">
+                                    <h4>Videos Promocionais</h4>
+                                    <p>Videos curtos para redes sociais</p>
+                                    <button class="btn btn-primary btn-sm" onclick="downloadMaterial('videos')">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                        </svg>
+                                        Baixar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Responsible Gaming -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Jogo Responsável</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="responsible-gaming">
+                            <div class="responsible-gaming-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                            </div>
+                            <div class="responsible-gaming-content">
+                                <h4>Promova o Jogo Responsável</h4>
+                                <p>Sempre inclua avisos de jogo responsável em seus materiais:</p>
+                                <ul>
+                                    <li>"+18 - Proibido para menores de 18 anos"</li>
+                                    <li>"Jogue com responsabilidade"</li>
+                                    <li>"Apostas podem causar dependência"</li>
+                                    <li>"Defina limites para seus gastos"</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!Auth.requireAuth()) return;
+            loadUserInfo();
+        });
+
+        function loadUserInfo() {
+            const user = Auth.currentUser;
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            }
+        }
+
+        function downloadMaterial(type) {
+            Toast.info(`Download do material "${type}" iniciado!`);
+            // Would trigger actual download
+        }
+
+        function selectPlatform(platform) {
+            document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.platform-btn.${platform}`).classList.add('active');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
+
+    <style>
+        .compliance-warning {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .compliance-warning-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--danger);
+            border-radius: 12px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .compliance-warning-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .compliance-warning-content h3 {
+            color: var(--danger);
+            margin-bottom: 8px;
+        }
+
+        .compliance-warning-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .compliance-rules {
+            display: grid;
+            gap: 16px;
+        }
+
+        .compliance-rule {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-input);
+            border-radius: 12px;
+            border-left: 4px solid var(--danger);
+        }
+
+        .rule-number {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .rule-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .rule-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .allowed-actions {
+            display: grid;
+            gap: 12px;
+        }
+
+        .allowed-action {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 10px;
+        }
+
+        .allowed-icon {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--success);
+            border-radius: 50%;
+            color: white;
+        }
+
+        .allowed-icon svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .allowed-action span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 1024px) {
+            .materials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .material-card {
+            background: var(--bg-input);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .material-preview {
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: white;
+        }
+
+        .material-preview .material-letter {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .material-preview svg {
+            opacity: 0.9;
+        }
+
+        .material-preview strong {
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .material-preview.superbet {
+            background: linear-gradient(135deg, #dc2626, #f97316);
+        }
+
+        .material-preview.sportingbet {
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+
+        .material-preview.stories {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        }
+
+        .material-preview.videos {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        }
+
+        .material-info {
+            padding: 16px;
+        }
+
+        .material-info h4 {
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .material-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .responsible-gaming {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: var(--gradient-subtle);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 12px;
+        }
+
+        .responsible-gaming-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--fire-orange);
+            border-radius: 12px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .responsible-gaming-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .responsible-gaming-content h4 {
+            color: var(--fire-orange);
+            margin-bottom: 12px;
+        }
+
+        .responsible-gaming-content p {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+
+        .responsible-gaming-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .responsible-gaming-content li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .responsible-gaming-content li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--fire-orange);
+            font-weight: 700;
+        }
+    </style>
+</body>
+</html>

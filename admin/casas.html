@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Admin - Casas de Apostas</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <span class="mobile-logo">Fenix <span style="color: var(--danger); font-size: 0.6rem;">ADMIN</span></span>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar Admin -->
+        <aside class="sidebar admin-sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h2>Fenix <span style="font-size: 0.7rem; color: var(--danger);">ADMIN</span></h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+                    Dashboard
+                </a>
+                <a href="afiliados.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Afiliados
+                </a>
+                <a href="casas.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9"/></svg>
+                    Casas de Apostas
+                </a>
+                <a href="cpa.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Configurar CPA
+                </a>
+                <a href="links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                    Links Master
+                </a>
+                <a href="saques.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Saques
+                </a>
+                <a href="relatorios.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                    Relatórios
+                </a>
+                <a href="configuracoes.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+                    Configurações
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button onclick="AdminAuth.logout()" class="btn btn-secondary" style="width: 100%;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Sair
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <button class="theme-toggle" style="position: fixed; top: 20px; right: 20px;">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            </button>
+
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>Casas de Apostas</h1>
+                    <p>Gerencie as casas de apostas parceiras</p>
+                </div>
+                <div class="topbar-right">
+                    <button class="btn btn-primary" onclick="Modal.open('addHouseModal')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        Adicionar Casa
+                    </button>
+                </div>
+            </div>
+
+            <!-- Houses Grid -->
+            <div id="housesGrid" class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
+                <!-- Houses will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Add House Modal -->
+    <div class="modal-overlay" id="addHouseModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>Adicionar Casa de Apostas</h3>
+                <button class="modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="addHouseForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nome da Casa</label>
+                        <input type="text" name="name" placeholder="Ex: Betano" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Slug (URL)</label>
+                        <input type="text" name="slug" placeholder="Ex: betano" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Emoji/Logo</label>
+                        <input type="text" name="logo" placeholder="Ex: 🎰" value="🎲" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cor da Marca (Hex)</label>
+                        <input type="color" name="color" value="#f97316" style="height: 50px;">
+                    </div>
+                    <div class="form-group">
+                        <label>URL Base</label>
+                        <input type="url" name="baseUrl" placeholder="https://exemplo.com" required>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label>CPA Padrão (R$)</label>
+                            <input type="number" step="0.01" name="cpa" value="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Rev Share (%)</label>
+                            <input type="number" name="revShare" value="25" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Depósito Mínimo (R$)</label>
+                        <input type="number" step="0.01" name="minDeposit" value="20" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal-close>Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit House Modal -->
+    <div class="modal-overlay" id="editHouseModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>Editar Casa de Apostas</h3>
+                <button class="modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="editHouseForm">
+                <input type="hidden" name="id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nome da Casa</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Emoji/Logo</label>
+                        <input type="text" name="logo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cor da Marca</label>
+                        <input type="color" name="color" style="height: 50px;">
+                    </div>
+                    <div class="form-group">
+                        <label>URL Base</label>
+                        <input type="url" name="baseUrl" required>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="form-group">
+                            <label>CPA Padrão (R$)</label>
+                            <input type="number" step="0.01" name="cpa" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Rev Share (%)</label>
+                            <input type="number" name="revShare" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Depósito Mínimo (R$)</label>
+                        <input type="number" step="0.01" name="minDeposit" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="active">Ativo</option>
+                            <option value="inactive">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal-close>Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!AdminAuth.requireAuth()) return;
+            loadHouses();
+        });
+
+        function loadHouses() {
+            const houses = BettingHouses.getAll();
+            const container = document.getElementById('housesGrid');
+
+            container.innerHTML = houses.map(house => `
+                <div class="card" style="border-top: 4px solid ${house.color};">
+                    <div class="card-body">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="font-size: 3rem;">${house.logo}</div>
+                                <div>
+                                    <h3 style="font-size: 1.5rem; margin-bottom: 4px;">${house.name}</h3>
+                                    <span class="status-badge ${house.status === 'active' ? 'active' : 'inactive'}">
+                                        <span class="status-dot"></span>
+                                        ${house.status === 'active' ? 'Ativo' : 'Inativo'}
+                                    </span>
+                                </div>
+                            </div>
+                            <button class="btn-icon" onclick="editHouse(${house.id})" title="Editar">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                    <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px;">
+                            <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">${Format.currency(house.cpa)}</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">CPA</div>
+                            </div>
+                            <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; text-align: center;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--info);">${house.revShare}%</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Rev Share</div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.25rem; font-weight: 600;">${house.totalAffiliates}</div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted);">Afiliados</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.25rem; font-weight: 600;">${Format.number(house.totalClicks)}</div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted);">Cliques</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.25rem; font-weight: 600; color: var(--success);">${Format.number(house.totalConversions)}</div>
+                                <div style="font-size: 0.7rem; color: var(--text-muted);">Conversões</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">
+                                <strong>Total Pago:</strong>
+                                <span style="color: var(--success); font-weight: 600;">${Format.currency(house.totalPaid)}</span>
+                            </p>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+                                <strong>Depósito Mín:</strong> ${Format.currency(house.minDeposit)}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editHouse(houseId) {
+            const house = BettingHouses.getById(houseId);
+            if (!house) return;
+
+            const form = document.getElementById('editHouseForm');
+            form.querySelector('[name="id"]').value = house.id;
+            form.querySelector('[name="name"]').value = house.name;
+            form.querySelector('[name="logo"]').value = house.logo;
+            form.querySelector('[name="color"]').value = house.color;
+            form.querySelector('[name="baseUrl"]').value = house.baseUrl;
+            form.querySelector('[name="cpa"]').value = house.cpa;
+            form.querySelector('[name="revShare"]').value = house.revShare;
+            form.querySelector('[name="minDeposit"]').value = house.minDeposit;
+            form.querySelector('[name="status"]').value = house.status;
+
+            Modal.open('editHouseModal');
+        }
+
+        document.getElementById('addHouseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            BettingHouses.add({
+                name: formData.get('name'),
+                slug: formData.get('slug'),
+                logo: formData.get('logo'),
+                color: formData.get('color'),
+                baseUrl: formData.get('baseUrl'),
+                cpa: parseFloat(formData.get('cpa')),
+                revShare: parseInt(formData.get('revShare')),
+                minDeposit: parseFloat(formData.get('minDeposit'))
+            });
+
+            Toast.success('Casa adicionada com sucesso!');
+            Modal.close('addHouseModal');
+            this.reset();
+            loadHouses();
+        });
+
+        document.getElementById('editHouseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const id = parseInt(formData.get('id'));
+
+            BettingHouses.update(id, {
+                name: formData.get('name'),
+                logo: formData.get('logo'),
+                color: formData.get('color'),
+                baseUrl: formData.get('baseUrl'),
+                cpa: parseFloat(formData.get('cpa')),
+                revShare: parseInt(formData.get('revShare')),
+                minDeposit: parseFloat(formData.get('minDeposit')),
+                status: formData.get('status')
+            });
+
+            Toast.success('Casa atualizada com sucesso!');
+            Modal.close('editHouseModal');
+            loadHouses();
+        });
+    </script>
+
+    <style>
+        .admin-sidebar { border-right-color: var(--danger) !important; }
+    </style>
+</body>
+</html>
