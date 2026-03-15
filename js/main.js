@@ -209,50 +209,84 @@ const Modal = {
 };
 
 // Sidebar Mobile Toggle
-var _sidebarLastTap = 0;
+var _sidebarOpen = false;
+var _sidebarBusy = false;
 const Sidebar = {
     init() {
-        document.addEventListener('touchstart', function(e) {
-            if (e.target.closest('.mobile-menu-btn')) {
-                e.preventDefault();
-                _sidebarLastTap = Date.now();
-                Sidebar.toggle();
-            } else if (e.target.closest('.sidebar-toggle')) {
-                e.preventDefault();
-                _sidebarLastTap = Date.now();
-                Sidebar.close();
-            } else if (e.target.closest('.sidebar-overlay')) {
-                _sidebarLastTap = Date.now();
-                Sidebar.close();
-            }
-        }, {passive: false});
+        var self = this;
 
-        document.addEventListener('click', function(e) {
-            // Skip if touchstart already handled this
-            if (Date.now() - _sidebarLastTap < 500) return;
+        // Direct binding to all menu buttons found in DOM
+        document.querySelectorAll('.mobile-menu-btn').forEach(function(btn) {
+            btn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                if (!_sidebarBusy) {
+                    _sidebarBusy = true;
+                    self.toggle();
+                    setTimeout(function() { _sidebarBusy = false; }, 400);
+                }
+            }, {passive: false});
 
-            if (e.target.closest('.mobile-menu-btn')) {
-                Sidebar.toggle();
-            } else if (e.target.closest('.sidebar-toggle')) {
-                Sidebar.close();
-            } else if (e.target.closest('.sidebar-overlay')) {
-                Sidebar.close();
-            }
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                if (!_sidebarBusy) {
+                    _sidebarBusy = true;
+                    self.toggle();
+                    setTimeout(function() { _sidebarBusy = false; }, 400);
+                }
+            });
+        });
+
+        document.querySelectorAll('.sidebar-toggle').forEach(function(btn) {
+            btn.addEventListener('touchstart', function(e) { e.preventDefault(); self.close(); }, {passive: false});
+            btn.addEventListener('click', function(e) { e.preventDefault(); self.close(); });
+        });
+
+        document.querySelectorAll('.sidebar-overlay').forEach(function(el) {
+            el.addEventListener('touchstart', function() { self.close(); }, {passive: true});
+            el.addEventListener('click', function() { self.close(); });
         });
     },
 
     toggle() {
         var s = document.getElementById('sidebar') || document.querySelector('.sidebar');
         var o = document.querySelector('.sidebar-overlay');
-        if (s) s.classList.toggle('open');
-        if (o) o.classList.toggle('active');
+        _sidebarOpen = !_sidebarOpen;
+
+        if (s) {
+            if (_sidebarOpen) {
+                s.style.transform = 'translateX(0)';
+                s.style.zIndex = '150';
+            } else {
+                s.style.transform = 'translateX(-100%)';
+                s.style.zIndex = '';
+            }
+        }
+        if (o) {
+            if (_sidebarOpen) {
+                o.style.display = 'block';
+                o.style.zIndex = '140';
+            } else {
+                o.style.display = 'none';
+                o.style.zIndex = '';
+            }
+        }
     },
 
     close() {
         var s = document.getElementById('sidebar') || document.querySelector('.sidebar');
         var o = document.querySelector('.sidebar-overlay');
-        if (s) s.classList.remove('open');
-        if (o) o.classList.remove('active');
+        _sidebarOpen = false;
+
+        if (s) {
+            s.style.transform = 'translateX(-100%)';
+            s.style.zIndex = '';
+        }
+        if (o) {
+            o.style.display = 'none';
+            o.style.zIndex = '';
+        }
     }
 };
 
