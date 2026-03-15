@@ -115,7 +115,31 @@
             <div class="page-content">
                 <div class="page-header">
                     <h1>Materiais</h1>
-                    <p>Materiais obrigatórios para divulgação</p>
+                    <p>Avisos importantes e materiais de compliance</p>
+                </div>
+
+                <!-- Aviso Compliance -->
+                <div class="compliance-banner">
+                    <div class="compliance-banner-header">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        <strong>Aviso importante - Compliance Fenix</strong>
+                    </div>
+                    <p class="compliance-text">Foram detectadas práticas irregulares por parte de alguns afiliados, como forçar CPA, divulgação enganosa e violação das normas do mercado regulado. Reforçamos que todos devem seguir rigorosamente as diretrizes abaixo:</p>
+
+                    <div class="compliance-rules-list">
+                        <div class="cr-item forbidden"><span class="cr-icon">&#10005;</span> Nenhuma promessa de ganho garantido ou "dinheiro fácil"</div>
+                        <div class="cr-item required"><span class="cr-icon">&#10003;</span> Comunicação responsável, deixando claro que apostas envolvem risco</div>
+                        <div class="cr-item required"><span class="cr-icon">&#10003;</span> Respeito às normas do CONAR e diretrizes da SPA / Ministério da Fazenda</div>
+                        <div class="cr-item required"><span class="cr-icon">&#10003;</span> Uso correto de links, tags e materiais oficiais fornecidos</div>
+                    </div>
+
+                    <div class="compliance-alert">Qualquer tentativa de burlar as regras ou colocar a operação em risco resultará em bloqueio imediato da conta, sem aviso prévio.</div>
+
+                    <p class="compliance-closing">Valorizamos parceiros comprometidos, que trabalham de forma séria para crescer junto com a gente.</p>
+                    <p class="compliance-sign">— Equipe Fenix</p>
                 </div>
 
                 <!-- Materiais -->
@@ -214,6 +238,90 @@
     </script>
 
     <style>
+        .compliance-banner {
+            background: linear-gradient(145deg, #dc2626 0%, #b91c1c 40%, #1a1a1a 100%);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .compliance-banner-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            color: #fff;
+        }
+
+        .compliance-banner-header svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .compliance-banner-header strong {
+            font-size: 1rem;
+        }
+
+        .compliance-text {
+            color: rgba(255,255,255,0.85) !important;
+            font-size: 0.8125rem !important;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .compliance-rules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .cr-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8125rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .cr-icon {
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            width: 18px;
+            text-align: center;
+        }
+
+        .cr-item.forbidden .cr-icon {
+            color: #fca5a5;
+        }
+
+        .cr-item.required .cr-icon {
+            color: #86efac;
+        }
+
+        .compliance-alert {
+            background: rgba(255,255,255,0.15);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 18px;
+        }
+
+        .compliance-closing {
+            color: rgba(255,255,255,0.7) !important;
+            font-size: 0.8125rem !important;
+            font-style: italic;
+            margin-bottom: 4px;
+        }
+
+        .compliance-sign {
+            color: rgba(255,255,255,0.5) !important;
+            font-size: 0.8125rem !important;
+        }
+
         .mat-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
