@@ -209,21 +209,35 @@ const Modal = {
 };
 
 // Sidebar Mobile Toggle
+var _sidebarLastTap = 0;
 const Sidebar = {
     init() {
-        // Use multiple event types for maximum mobile compatibility
-        ['click', 'touchend'].forEach(function(evt) {
-            document.addEventListener(evt, function(e) {
-                if (e.target.closest('.mobile-menu-btn')) {
-                    e.preventDefault();
-                    Sidebar.toggle();
-                } else if (e.target.closest('.sidebar-toggle')) {
-                    e.preventDefault();
-                    Sidebar.close();
-                } else if (e.target.closest('.sidebar-overlay')) {
-                    Sidebar.close();
-                }
-            });
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.closest('.mobile-menu-btn')) {
+                e.preventDefault();
+                _sidebarLastTap = Date.now();
+                Sidebar.toggle();
+            } else if (e.target.closest('.sidebar-toggle')) {
+                e.preventDefault();
+                _sidebarLastTap = Date.now();
+                Sidebar.close();
+            } else if (e.target.closest('.sidebar-overlay')) {
+                _sidebarLastTap = Date.now();
+                Sidebar.close();
+            }
+        }, {passive: false});
+
+        document.addEventListener('click', function(e) {
+            // Skip if touchstart already handled this
+            if (Date.now() - _sidebarLastTap < 500) return;
+
+            if (e.target.closest('.mobile-menu-btn')) {
+                Sidebar.toggle();
+            } else if (e.target.closest('.sidebar-toggle')) {
+                Sidebar.close();
+            } else if (e.target.closest('.sidebar-overlay')) {
+                Sidebar.close();
+            }
         });
     },
 
