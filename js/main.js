@@ -966,7 +966,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Page Detection and Initialization
     const path = window.location.pathname;
+    const isAdmin = path.includes('/admin/');
     const page = path.split('/').pop().replace('.html', '') || 'index';
+
+    // Skip page init for admin pages - admin.js handles those
+    if (isAdmin) return;
 
     switch (page) {
         case 'index':
