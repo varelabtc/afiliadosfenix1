@@ -2,6 +2,24 @@
 // FENIX AFILIADOS - JAVASCRIPT PRINCIPAL
 // ========================================
 
+// Global menu toggle - must be defined before DOMContentLoaded
+// Uses window-level function for maximum iOS Safari compatibility
+window.toggleMenu = function() {
+    var s = document.getElementById('sidebar');
+    var o = document.querySelector('.sidebar-overlay');
+    if (!s) return;
+    if (s.dataset.open === '1') {
+        s.style.transform = 'translateX(-100%)';
+        s.dataset.open = '0';
+        if (o) o.style.display = 'none';
+    } else {
+        s.style.transform = 'translateX(0)';
+        s.dataset.open = '1';
+        if (o) { o.style.display = 'block'; o.style.zIndex = '140'; }
+        s.style.zIndex = '150';
+    }
+};
+
 // Theme Management
 const ThemeManager = {
     init() {

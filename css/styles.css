@@ -711,12 +711,17 @@ tbody tr:hover { background: var(--bg-2); }
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
-    border: none;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     color: var(--text-1);
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: rgba(232, 89, 12, 0.3);
     touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .mobile-menu-btn:active {
@@ -728,7 +733,6 @@ tbody tr:hover { background: var(--bg-2); }
     height: 24px !important;
     max-width: 24px !important;
     min-width: 24px;
-    pointer-events: none;
     display: block !important;
 }
 

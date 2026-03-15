@@ -14,13 +14,13 @@
     <div class="dashboard">
         <!-- Mobile Header -->
         <div class="mobile-header">
-            <button class="mobile-menu-btn" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');if(s.dataset.open==='1'){s.style.transform='translateX(-100%)';s.dataset.open='0';if(o)o.style.display='none';}else{s.style.transform='translateX(0)';s.dataset.open='1';if(o){o.style.display='block';o.style.zIndex='140';}s.style.zIndex='150';}">
+            <div class="mobile-menu-btn" ontouchstart="event.stopPropagation();event.preventDefault();toggleMenu()" onclick="toggleMenu()" role="button">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="3" y1="12" x2="21" y2="12"/>
                     <line x1="3" y1="6" x2="21" y2="6"/>
                     <line x1="3" y1="18" x2="21" y2="18"/>
                 </svg>
-            </button>
+            </div>
             <span class="mobile-logo">Fenix <span style="color: var(--red); font-size: 0.6rem;">ADMIN</span></span>
             <div style="width: 40px;"></div>
         </div>
