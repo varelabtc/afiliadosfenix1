@@ -211,35 +211,42 @@ const Modal = {
 // Sidebar Mobile Toggle
 const Sidebar = {
     init() {
-        const sidebar = document.querySelector('.sidebar');
-        let overlay = document.querySelector('.sidebar-overlay');
-
-        // Only create overlay if it doesn't exist
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.className = 'sidebar-overlay';
-            document.body.appendChild(overlay);
-        }
-
-        // Setup overlay click
-        if (overlay) {
-            overlay.addEventListener('click', () => {
-                if (sidebar) sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-            });
-        }
+        // Bind ALL mobile menu buttons via event delegation on document
+        document.addEventListener('click', function(e) {
+            var btn = e.target.closest('.mobile-menu-btn');
+            if (btn) {
+                e.preventDefault();
+                e.stopPropagation();
+                Sidebar.toggle();
+                return;
+            }
+            var toggle = e.target.closest('.sidebar-toggle');
+            if (toggle) {
+                e.preventDefault();
+                e.stopPropagation();
+                Sidebar.close();
+                return;
+            }
+            var overlay = e.target.closest('.sidebar-overlay');
+            if (overlay) {
+                Sidebar.close();
+                return;
+            }
+        }, true);
     },
 
     toggle() {
-        const sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
-        const overlay = document.querySelector('.sidebar-overlay');
+        var sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
+        var overlay = document.querySelector('.sidebar-overlay');
+        if (sidebar) sidebar.classList.toggle('open');
+        if (overlay) overlay.classList.toggle('active');
+    },
 
-        if (sidebar) {
-            sidebar.classList.toggle('open');
-        }
-        if (overlay) {
-            overlay.classList.toggle('active');
-        }
+    close() {
+        var sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
+        var overlay = document.querySelector('.sidebar-overlay');
+        if (sidebar) sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('active');
     }
 };
 
@@ -247,8 +254,6 @@ const Sidebar = {
 function toggleSidebar() {
     Sidebar.toggle();
 }
-
-// Make it available globally
 window.toggleSidebar = toggleSidebar;
 
 // Data Formatting
