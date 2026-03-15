@@ -211,49 +211,41 @@ const Modal = {
 // Sidebar Mobile Toggle
 const Sidebar = {
     init() {
-        // Bind ALL mobile menu buttons via event delegation on document
         document.addEventListener('click', function(e) {
-            var btn = e.target.closest('.mobile-menu-btn');
-            if (btn) {
-                e.preventDefault();
-                e.stopPropagation();
+            // Open/close sidebar via hamburger button
+            if (e.target.closest('.mobile-menu-btn')) {
                 Sidebar.toggle();
                 return;
             }
-            var toggle = e.target.closest('.sidebar-toggle');
-            if (toggle) {
-                e.preventDefault();
-                e.stopPropagation();
+            // Close sidebar via X button inside sidebar
+            if (e.target.closest('.sidebar-toggle')) {
                 Sidebar.close();
                 return;
             }
-            var overlay = e.target.closest('.sidebar-overlay');
-            if (overlay) {
+            // Close sidebar via overlay background
+            if (e.target.closest('.sidebar-overlay')) {
                 Sidebar.close();
                 return;
             }
-        }, true);
+        });
     },
 
     toggle() {
-        var sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
-        var overlay = document.querySelector('.sidebar-overlay');
-        if (sidebar) sidebar.classList.toggle('open');
-        if (overlay) overlay.classList.toggle('active');
+        var s = document.getElementById('sidebar') || document.querySelector('.sidebar');
+        var o = document.querySelector('.sidebar-overlay');
+        if (s) s.classList.toggle('open');
+        if (o) o.classList.toggle('active');
     },
 
     close() {
-        var sidebar = document.getElementById('sidebar') || document.querySelector('.sidebar');
-        var overlay = document.querySelector('.sidebar-overlay');
-        if (sidebar) sidebar.classList.remove('open');
-        if (overlay) overlay.classList.remove('active');
+        var s = document.getElementById('sidebar') || document.querySelector('.sidebar');
+        var o = document.querySelector('.sidebar-overlay');
+        if (s) s.classList.remove('open');
+        if (o) o.classList.remove('active');
     }
 };
 
-// Global function for onclick handlers
-function toggleSidebar() {
-    Sidebar.toggle();
-}
+function toggleSidebar() { Sidebar.toggle(); }
 window.toggleSidebar = toggleSidebar;
 
 // Data Formatting

@@ -14,7 +14,7 @@
     <div class="dashboard">
         <!-- Mobile Header -->
         <div class="mobile-header">
-            <button class="mobile-menu-btn" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active');">
+            <button class="mobile-menu-btn">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="3" y1="12" x2="21" y2="12"/>
                     <line x1="3" y1="6" x2="21" y2="6"/>
@@ -26,7 +26,7 @@
         </div>
 
         <!-- Sidebar Overlay -->
-        <div class="sidebar-overlay" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active');"></div>
+        <div class="sidebar-overlay"></div>
 
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
@@ -39,7 +39,7 @@
                     </div>
                     <h2>Fenix</h2>
                 </div>
-                <button class="sidebar-toggle" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active');">
+                <button class="sidebar-toggle">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12"/>
                     </svg>
@@ -326,10 +326,6 @@
             window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`, '_blank');
         }
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.querySelector('.sidebar-overlay').classList.toggle('active');
-        }
     </script>
 
     <style>

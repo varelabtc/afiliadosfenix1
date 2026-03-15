@@ -10,7 +10,7 @@
 <body>
     <div class="dashboard">
         <div class="mobile-header">
-            <button class="mobile-menu-btn" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active');">
+            <button class="mobile-menu-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
                 </svg>
@@ -19,7 +19,7 @@
             <div style="width: 40px;"></div>
         </div>
 
-        <div class="sidebar-overlay" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active');"></div>
+        <div class="sidebar-overlay"></div>
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -31,7 +31,7 @@
                     </div>
                     <h2>Fenix</h2>
                 </div>
-                <button class="sidebar-toggle" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active');">
+                <button class="sidebar-toggle">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12"/>
                     </svg>
@@ -294,10 +294,6 @@
             event.target.classList.add('active');
         }
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.querySelector('.sidebar-overlay').classList.toggle('active');
-        }
 
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', function() {
