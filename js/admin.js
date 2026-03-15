@@ -72,7 +72,12 @@ const AdminAuth = {
     logout() {
         this.currentAdmin = null;
         localStorage.removeItem('fenix_currentAdmin');
-        window.location.href = '../index.html';
+        // Detecta se está na pasta admin ou na raiz
+        if (window.location.pathname.includes('/admin/')) {
+            window.location.href = '../index.html';
+        } else {
+            window.location.href = 'index.html';
+        }
     },
 
     isAuthenticated() {
@@ -91,7 +96,11 @@ const AdminAuth = {
 
     requireAuth() {
         if (!this.isAuthenticated()) {
-            window.location.href = '../index.html';
+            if (window.location.pathname.includes('/admin/')) {
+                window.location.href = '../index.html';
+            } else {
+                window.location.href = 'index.html';
+            }
             return false;
         }
         return true;
