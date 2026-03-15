@@ -83,7 +83,7 @@
 }
 
 /* SVG Default - prevent oversized icons */
-svg:not(.mobile-menu-btn svg) {
+svg {
     max-width: 100%;
     height: auto;
     display: inline-block;

@@ -14,7 +14,7 @@
     <div class="dashboard">
         <!-- Mobile Header -->
         <div class="mobile-header">
-            <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <button class="mobile-menu-btn" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active');">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="3" y1="12" x2="21" y2="12"/>
                     <line x1="3" y1="6" x2="21" y2="6"/>
@@ -26,7 +26,7 @@
         </div>
 
         <!-- Sidebar Overlay -->
-        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+        <div class="sidebar-overlay" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');if(s)s.classList.toggle('open');if(o)o.classList.toggle('active');"></div>
 
         <!-- Admin Sidebar -->
         <aside class="sidebar admin-sidebar" id="sidebar">
