@@ -211,22 +211,19 @@ const Modal = {
 // Sidebar Mobile Toggle
 const Sidebar = {
     init() {
-        document.addEventListener('click', function(e) {
-            // Open/close sidebar via hamburger button
-            if (e.target.closest('.mobile-menu-btn')) {
-                Sidebar.toggle();
-                return;
-            }
-            // Close sidebar via X button inside sidebar
-            if (e.target.closest('.sidebar-toggle')) {
-                Sidebar.close();
-                return;
-            }
-            // Close sidebar via overlay background
-            if (e.target.closest('.sidebar-overlay')) {
-                Sidebar.close();
-                return;
-            }
+        // Use multiple event types for maximum mobile compatibility
+        ['click', 'touchend'].forEach(function(evt) {
+            document.addEventListener(evt, function(e) {
+                if (e.target.closest('.mobile-menu-btn')) {
+                    e.preventDefault();
+                    Sidebar.toggle();
+                } else if (e.target.closest('.sidebar-toggle')) {
+                    e.preventDefault();
+                    Sidebar.close();
+                } else if (e.target.closest('.sidebar-overlay')) {
+                    Sidebar.close();
+                }
+            });
         });
     },
 
