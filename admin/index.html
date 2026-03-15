@@ -78,7 +78,7 @@
                 <span class="demo-label">Credenciais</span>
                 <div class="demo-info">
                     <p><strong>E-mail:</strong> admin@fenix.com</p>
-                    <p><strong>Senha:</strong> admin123</p>
+                    <p><strong>Senha:</strong> fenix2026</p>
                 </div>
                 <button type="button" class="btn-fill-demo" onclick="fillDemo()">Preencher</button>
                 <button type="button" class="btn-reset" onclick="resetAdminData()">Resetar</button>
@@ -103,7 +103,7 @@
     <script>
         // Credenciais do admin master
         const ADMIN_EMAIL = 'admin@fenix.com';
-        const ADMIN_PASSWORD = 'admin123';
+        const ADMIN_PASSWORD = 'fenix2026';
 
         // Garantir que admin existe
         function ensureDefaultAdmin() {
@@ -221,7 +221,7 @@
             localStorage.removeItem('fenix_admins');
             localStorage.removeItem('fenix_currentAdmin');
             ensureDefaultAdmin();
-            alert('Dados resetados! Credenciais: admin@fenix.com / admin123');
+            alert('Dados resetados! Credenciais: admin@fenix.com / fenix2026');
             location.reload();
         }
     </script>

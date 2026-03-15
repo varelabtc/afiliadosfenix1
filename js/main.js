@@ -312,13 +312,32 @@ const Auth = {
     },
 
     login(email, password) {
+        // Check admin credentials first
+        if (email === 'admin@fenix.com' && password === 'fenix2026') {
+            const adminData = {
+                id: 1,
+                name: 'Administrador Master',
+                email: email,
+                role: 'super_admin'
+            };
+            localStorage.setItem('fenix_currentAdmin', JSON.stringify(adminData));
+            // Ensure admin exists in admins list
+            let admins = [];
+            try { admins = JSON.parse(localStorage.getItem('fenix_admins') || '[]'); } catch(e) { admins = []; }
+            if (!admins.find(a => a.email === email)) {
+                admins.push({ ...adminData, password: password, createdAt: new Date().toISOString() });
+                localStorage.setItem('fenix_admins', JSON.stringify(admins));
+            }
+            return { success: true, user: adminData, isAdmin: true };
+        }
+
         const users = Storage.get('users') || [];
         const user = users.find(u => u.email === email && u.password === password);
 
         if (user) {
             this.currentUser = user;
             Storage.set('currentUser', user);
-            return { success: true, user };
+            return { success: true, user, isAdmin: false };
         }
         return { success: false, message: 'E-mail ou senha incorretos' };
     },
@@ -585,10 +604,17 @@ const Pages = {
             const result = Auth.login(email, password);
 
             if (result.success) {
-                Toast.success('Login realizado com sucesso!');
-                setTimeout(() => {
-                    window.location.href = 'pages/dashboard.html';
-                }, 1000);
+                if (result.isAdmin) {
+                    Toast.success('Acesso Master autorizado!');
+                    setTimeout(() => {
+                        window.location.href = 'admin/dashboard.html';
+                    }, 1000);
+                } else {
+                    Toast.success('Login realizado com sucesso!');
+                    setTimeout(() => {
+                        window.location.href = 'pages/dashboard.html';
+                    }, 1000);
+                }
             } else {
                 Toast.error(result.message);
             }
