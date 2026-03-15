@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fenix Afiliados - Materiais</title>
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
@@ -90,7 +87,6 @@
                 </a>
             </nav>
 
-            <!-- Platform Selector -->
             <div class="platform-selector">
                 <div class="platform-label">Plataforma</div>
                 <div class="platform-buttons">
@@ -103,7 +99,6 @@
                 </div>
             </div>
 
-            <!-- User Info -->
             <div class="sidebar-footer">
                 <div class="user-card">
                     <div class="user-avatar" id="userAvatar">C</div>
@@ -118,235 +113,79 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="page-content">
-                <!-- Page Header -->
                 <div class="page-header">
                     <h1>Materiais</h1>
-                    <p>Regras de compliance e materiais de divulgação</p>
+                    <p>Materiais obrigatórios para divulgação</p>
                 </div>
 
-                <!-- Compliance Warning -->
-                <div class="compliance-warning">
-                    <div class="compliance-warning-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-                            <line x1="12" y1="9" x2="12" y2="13"/>
-                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                <!-- Materiais -->
+                <div class="mat-grid">
+                    <!-- Compliance -->
+                    <div class="mat-item">
+                        <div class="mat-thumb">
+                            <img src="../img/compliance.png" alt="Compliance para Parceiros">
+                        </div>
+                        <div class="mat-footer">
+                            <span>Compliance para Parceiros</span>
+                            <a href="../img/compliance.png" download class="mat-download">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                </svg>
+                                Baixar
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Tag +18 -->
+                    <div class="mat-item">
+                        <div class="mat-thumb">
+                            <img src="../img/tag18.png" alt="Tag +18">
+                        </div>
+                        <div class="mat-footer">
+                            <span>Tag +18</span>
+                            <a href="../img/tag18.png" download class="mat-download">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                </svg>
+                                Baixar
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Tag +18 Branca -->
+                    <div class="mat-item">
+                        <div class="mat-thumb dark">
+                            <img src="../img/tag18-branca.png" alt="Tag +18 Branca">
+                        </div>
+                        <div class="mat-footer">
+                            <span>Tag +18 Branca</span>
+                            <a href="../img/tag18-branca.png" download class="mat-download">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                </svg>
+                                Baixar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dicas de uso -->
+                <div class="mat-tips">
+                    <div class="mat-tips-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="16" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12.01" y2="8"/>
                         </svg>
                     </div>
-                    <div class="compliance-warning-content">
-                        <h3>Importante: Regras de Compliance</h3>
-                        <p>Leia atentamente todas as regras abaixo. O descumprimento pode resultar em suspensão ou banimento da plataforma.</p>
-                    </div>
-                </div>
-
-                <!-- Compliance Rules -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Regras de Compliance</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="compliance-rules">
-                            <div class="compliance-rule">
-                                <div class="rule-number">1</div>
-                                <div class="rule-content">
-                                    <h4>Proibido Promessas de Ganhos</h4>
-                                    <p>Não é permitido prometer ganhos ou retornos financeiros garantidos aos jogadores. Apostas envolvem riscos.</p>
-                                </div>
-                            </div>
-                            <div class="compliance-rule">
-                                <div class="rule-number">2</div>
-                                <div class="rule-content">
-                                    <h4>Proibido Menores de 18 Anos</h4>
-                                    <p>É estritamente proibido direcionar publicidade para menores de idade. Todo conteúdo deve incluir aviso "+18".</p>
-                                </div>
-                            </div>
-                            <div class="compliance-rule">
-                                <div class="rule-number">3</div>
-                                <div class="rule-content">
-                                    <h4>Proibido Spam</h4>
-                                    <p>Não envie mensagens em massa não solicitadas. Isso pode resultar em banimento imediato.</p>
-                                </div>
-                            </div>
-                            <div class="compliance-rule">
-                                <div class="rule-number">4</div>
-                                <div class="rule-content">
-                                    <h4>Proibido Tráfego Fraudulento</h4>
-                                    <p>Bots, cliques falsos e qualquer forma de fraude são monitorados e resultarão em banimento sem pagamento.</p>
-                                </div>
-                            </div>
-                            <div class="compliance-rule">
-                                <div class="rule-number">5</div>
-                                <div class="rule-content">
-                                    <h4>Proibido Uso de Marca Indevido</h4>
-                                    <p>Não crie sites, perfis ou materiais que possam ser confundidos com as plataformas oficiais.</p>
-                                </div>
-                            </div>
-                            <div class="compliance-rule">
-                                <div class="rule-number">6</div>
-                                <div class="rule-content">
-                                    <h4>Proibido Incentivo ao Vício</h4>
-                                    <p>Não incentive comportamentos de jogo problemático. Promova sempre o jogo responsável.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- What You Can Do -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>O Que Você Pode Fazer</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="allowed-actions">
-                            <div class="allowed-action">
-                                <div class="allowed-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="20 6 9 17 4 12"/>
-                                    </svg>
-                                </div>
-                                <span>Compartilhar seu link em suas redes sociais pessoais</span>
-                            </div>
-                            <div class="allowed-action">
-                                <div class="allowed-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="20 6 9 17 4 12"/>
-                                    </svg>
-                                </div>
-                                <span>Criar conteúdo informativo sobre apostas esportivas</span>
-                            </div>
-                            <div class="allowed-action">
-                                <div class="allowed-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="20 6 9 17 4 12"/>
-                                    </svg>
-                                </div>
-                                <span>Indicar amigos e familiares maiores de 18 anos</span>
-                            </div>
-                            <div class="allowed-action">
-                                <div class="allowed-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="20 6 9 17 4 12"/>
-                                    </svg>
-                                </div>
-                                <span>Usar os materiais oficiais fornecidos pela plataforma</span>
-                            </div>
-                            <div class="allowed-action">
-                                <div class="allowed-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="20 6 9 17 4 12"/>
-                                    </svg>
-                                </div>
-                                <span>Divulgar bônus e promoções reais das casas</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Materials Download -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Materiais de Divulgação</h3>
-                        <p>Baixe materiais oficiais para usar em suas campanhas</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="materials-grid">
-                            <div class="material-card">
-                                <div class="material-preview superbet">
-                                    <span class="material-letter">S</span>
-                                    <strong>SUPERBET</strong>
-                                </div>
-                                <div class="material-info">
-                                    <h4>Banners Superbet</h4>
-                                    <p>Pack com 10 banners em diferentes tamanhos</p>
-                                    <button class="btn btn-primary btn-sm" onclick="downloadMaterial('superbet-banners')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                                        </svg>
-                                        Baixar
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="material-card">
-                                <div class="material-preview sportingbet">
-                                    <span class="material-letter">SP</span>
-                                    <strong>SPORTINGBET</strong>
-                                </div>
-                                <div class="material-info">
-                                    <h4>Banners Sportingbet</h4>
-                                    <p>Pack com 10 banners em diferentes tamanhos</p>
-                                    <button class="btn btn-primary btn-sm" onclick="downloadMaterial('sportingbet-banners')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                                        </svg>
-                                        Baixar
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="material-card">
-                                <div class="material-preview stories">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-                                        <line x1="12" y1="18" x2="12.01" y2="18"/>
-                                    </svg>
-                                    <strong>STORIES</strong>
-                                </div>
-                                <div class="material-info">
-                                    <h4>Stories Instagram</h4>
-                                    <p>Templates prontos para stories</p>
-                                    <button class="btn btn-primary btn-sm" onclick="downloadMaterial('stories')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                                        </svg>
-                                        Baixar
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="material-card">
-                                <div class="material-preview videos">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polygon points="5 3 19 12 5 21 5 3"/>
-                                    </svg>
-                                    <strong>VIDEOS</strong>
-                                </div>
-                                <div class="material-info">
-                                    <h4>Videos Promocionais</h4>
-                                    <p>Videos curtos para redes sociais</p>
-                                    <button class="btn btn-primary btn-sm" onclick="downloadMaterial('videos')">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                                        </svg>
-                                        Baixar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Responsible Gaming -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Jogo Responsável</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="responsible-gaming">
-                            <div class="responsible-gaming-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                </svg>
-                            </div>
-                            <div class="responsible-gaming-content">
-                                <h4>Promova o Jogo Responsável</h4>
-                                <p>Sempre inclua avisos de jogo responsável em seus materiais:</p>
-                                <ul>
-                                    <li>"+18 - Proibido para menores de 18 anos"</li>
-                                    <li>"Jogue com responsabilidade"</li>
-                                    <li>"Apostas podem causar dependência"</li>
-                                    <li>"Defina limites para seus gastos"</li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div>
+                        <strong>Dicas de uso</strong>
+                        <ul>
+                            <li>Sempre inclua a tag +18 em seus materiais de divulgação</li>
+                            <li>Use a versão branca em fundos escuros e a colorida em fundos claros</li>
+                            <li>Mantenha a proporção original da imagem ao redimensionar</li>
+                            <li>A tag deve estar visível e legível em todos os criativos</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -368,268 +207,135 @@
             }
         }
 
-        function downloadMaterial(type) {
-            Toast.info(`Download do material "${type}" iniciado!`);
-            // Would trigger actual download
-        }
-
         function selectPlatform(platform) {
             document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.platform-btn.${platform}`).classList.add('active');
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.querySelector('.sidebar-overlay').classList.toggle('active');
+            event.target.closest('.platform-btn').classList.add('active');
         }
     </script>
 
     <style>
-        .compliance-warning {
-            display: flex;
-            gap: 20px;
-            padding: 24px;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 16px;
+        .mat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
             margin-bottom: 24px;
         }
 
-        .compliance-warning-icon {
-            width: 50px;
-            height: 50px;
+        @media (max-width: 900px) {
+            .mat-grid { grid-template-columns: 1fr; }
+        }
+
+        .mat-item {
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .mat-thumb {
+            background: #f5f5f5;
+            padding: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--danger);
-            border-radius: 12px;
-            color: white;
-            flex-shrink: 0;
+            min-height: 200px;
         }
 
-        .compliance-warning-icon svg {
-            width: 24px;
-            height: 24px;
+        .mat-thumb.dark {
+            background: var(--bg-2);
         }
 
-        .compliance-warning-content h3 {
-            color: var(--danger);
-            margin-bottom: 8px;
+        .mat-thumb img {
+            max-width: 100%;
+            max-height: 260px;
+            object-fit: contain;
+            border-radius: 4px;
         }
 
-        .compliance-warning-content p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .compliance-rules {
-            display: grid;
-            gap: 16px;
-        }
-
-        .compliance-rule {
-            display: flex;
-            gap: 16px;
-            padding: 20px;
-            background: var(--bg-input);
-            border-radius: 12px;
-            border-left: 4px solid var(--danger);
-        }
-
-        .rule-number {
-            width: 36px;
-            height: 36px;
+        .mat-footer {
+            padding: 12px 16px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: var(--danger);
-            color: white;
-            border-radius: 50%;
-            font-weight: 700;
-            flex-shrink: 0;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
         }
 
-        .rule-content h4 {
-            color: var(--text-primary);
-            margin-bottom: 8px;
+        .mat-footer span {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text-1);
         }
 
-        .rule-content p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .allowed-actions {
-            display: grid;
-            gap: 12px;
-        }
-
-        .allowed-action {
+        .mat-download {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 10px;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: var(--radius);
+            border: 1px solid var(--accent);
+            transition: var(--ease);
+            text-decoration: none;
         }
 
-        .allowed-icon {
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--success);
-            border-radius: 50%;
-            color: white;
+        .mat-download:hover {
+            background: var(--accent);
+            color: #fff;
         }
 
-        .allowed-icon svg {
+        .mat-download svg {
             width: 14px;
             height: 14px;
         }
 
-        .allowed-action span {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .materials-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-        }
-
-        @media (max-width: 1024px) {
-            .materials-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .materials-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .material-card {
-            background: var(--bg-input);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .material-preview {
-            height: 120px;
+        .mat-tips {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: white;
+            gap: 14px;
+            padding: 16px 20px;
+            background: var(--bg-1);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: var(--radius);
         }
 
-        .material-preview .material-letter {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .material-preview svg {
-            opacity: 0.9;
-        }
-
-        .material-preview strong {
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-        }
-
-        .material-preview.superbet {
-            background: linear-gradient(135deg, #dc2626, #f97316);
-        }
-
-        .material-preview.sportingbet {
-            background: linear-gradient(135deg, #059669, #10b981);
-        }
-
-        .material-preview.stories {
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
-        }
-
-        .material-preview.videos {
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
-        }
-
-        .material-info {
-            padding: 16px;
-        }
-
-        .material-info h4 {
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .material-info p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-        }
-
-        .responsible-gaming {
-            display: flex;
-            gap: 20px;
-            padding: 24px;
-            background: var(--gradient-subtle);
-            border: 1px solid rgba(255, 107, 53, 0.2);
-            border-radius: 12px;
-        }
-
-        .responsible-gaming-icon {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--fire-orange);
-            border-radius: 12px;
-            color: white;
+        .mat-tips-icon {
+            color: var(--blue);
             flex-shrink: 0;
+            margin-top: 1px;
         }
 
-        .responsible-gaming-icon svg {
-            width: 24px;
-            height: 24px;
+        .mat-tips-icon svg {
+            width: 18px;
+            height: 18px;
         }
 
-        .responsible-gaming-content h4 {
-            color: var(--fire-orange);
-            margin-bottom: 12px;
+        .mat-tips strong {
+            font-size: 0.875rem;
+            color: var(--text-1);
+            display: block;
+            margin-bottom: 8px;
         }
 
-        .responsible-gaming-content p {
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-        }
-
-        .responsible-gaming-content ul {
+        .mat-tips ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
-        .responsible-gaming-content li {
+        .mat-tips li {
+            font-size: 0.8125rem;
+            color: var(--text-2);
+            padding-left: 14px;
             position: relative;
-            padding-left: 20px;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+            margin-bottom: 4px;
         }
 
-        .responsible-gaming-content li::before {
+        .mat-tips li::before {
             content: "•";
             position: absolute;
             left: 0;
-            color: var(--fire-orange);
-            font-weight: 700;
+            color: var(--text-3);
         }
     </style>
 </body>
