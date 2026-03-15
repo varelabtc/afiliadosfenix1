@@ -3,7 +3,6 @@
 // ========================================
 
 // Global menu toggle - must be defined before DOMContentLoaded
-// Uses window-level function for maximum iOS Safari compatibility
 window.toggleMenu = function() {
     var s = document.getElementById('sidebar');
     var o = document.querySelector('.sidebar-overlay');
@@ -19,6 +18,40 @@ window.toggleMenu = function() {
         s.style.zIndex = '150';
     }
 };
+
+// Document-level touch/click capture for mobile menu - cannot be blocked by any element
+document.addEventListener('touchstart', function(e) {
+    var btn = e.target.closest ? e.target.closest('.mobile-menu-btn') : null;
+    if (!btn) {
+        // Check parent elements manually for older iOS
+        var el = e.target;
+        while (el) {
+            if (el.classList && el.classList.contains('mobile-menu-btn')) { btn = el; break; }
+            el = el.parentElement;
+        }
+    }
+    if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.toggleMenu();
+    }
+}, {capture: true, passive: false});
+
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest ? e.target.closest('.mobile-menu-btn') : null;
+    if (!btn) {
+        var el = e.target;
+        while (el) {
+            if (el.classList && el.classList.contains('mobile-menu-btn')) { btn = el; break; }
+            el = el.parentElement;
+        }
+    }
+    if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.toggleMenu();
+    }
+}, {capture: true});
 
 // Theme Management
 const ThemeManager = {

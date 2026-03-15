@@ -722,6 +722,8 @@ tbody tr:hover { background: var(--bg-2); }
     touch-action: manipulation;
     user-select: none;
     -webkit-user-select: none;
+    position: relative;
+    z-index: 999;
 }
 
 .mobile-menu-btn:active {
