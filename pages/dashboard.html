@@ -10,7 +10,7 @@
 <body>
     <div class="dashboard">
         <div class="mobile-header">
-            <button class="mobile-menu-btn">
+            <button class="mobile-menu-btn" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');if(s.dataset.open==='1'){s.style.transform='translateX(-100%)';s.dataset.open='0';if(o)o.style.display='none';}else{s.style.transform='translateX(0)';s.dataset.open='1';if(o){o.style.display='block';o.style.zIndex='140';}s.style.zIndex='150';}">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
                 </svg>
@@ -19,7 +19,7 @@
             <div style="width: 40px;"></div>
         </div>
 
-        <div class="sidebar-overlay"></div>
+        <div class="sidebar-overlay" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');s.style.transform='translateX(-100%)';s.dataset.open='0';if(o)o.style.display='none';"></div>
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -31,7 +31,7 @@
                     </div>
                     <h2>Fenix</h2>
                 </div>
-                <button class="sidebar-toggle">
+                <button class="sidebar-toggle" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');s.style.transform='translateX(-100%)';s.dataset.open='0';if(o)o.style.display='none';">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12"/>
                     </svg>
