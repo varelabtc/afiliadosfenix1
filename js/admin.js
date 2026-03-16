@@ -605,10 +605,10 @@ const AdminDemoData = {
             Storage.set('users', users);
         }
 
-        // Add demo manager
+        // Add demo manager (fixed ID 99999 to match Auth.login in main.js)
         const managers = Storage.get('managers') || [];
         if (!managers.find(m => m.email === 'gerente@fenix.com')) {
-            const mgrId = Date.now() + 100;
+            const mgrId = 99999;
             managers.push({
                 id: mgrId,
                 name: 'Lucas Gerente',
@@ -775,10 +775,8 @@ const ManagerManager = {
     },
 
     getAffiliates(managerId) {
-        const manager = this.getById(managerId);
-        if (!manager) return [];
         const allUsers = Storage.get('users') || [];
-        return allUsers.filter(u => u.managerId === managerId);
+        return allUsers.filter(u => u.managerId == managerId);
     },
 
     getStats(managerId) {
@@ -810,7 +808,7 @@ const ManagerManager = {
 
     approveAffiliate(managerId, userId) {
         const users = Storage.get('users') || [];
-        const index = users.findIndex(u => u.id === userId && u.managerId === managerId);
+        const index = users.findIndex(u => u.id == userId && u.managerId == managerId);
         if (index !== -1) {
             users[index].status = 'approved';
             users[index].approvedAt = new Date().toISOString();
@@ -823,7 +821,7 @@ const ManagerManager = {
 
     rejectAffiliate(managerId, userId, reason) {
         const users = Storage.get('users') || [];
-        const index = users.findIndex(u => u.id === userId && u.managerId === managerId);
+        const index = users.findIndex(u => u.id == userId && u.managerId == managerId);
         if (index !== -1) {
             users[index].status = 'rejected';
             users[index].rejectedAt = new Date().toISOString();

@@ -324,6 +324,12 @@ const Auth = {
         const user = users.find(u => u.email === email && u.password === password);
 
         if (user) {
+            if (user.status === 'pending') {
+                return { success: false, message: 'Seu cadastro está aguardando aprovação do gerente.' };
+            }
+            if (user.status === 'rejected') {
+                return { success: false, message: 'Seu cadastro foi rejeitado. Entre em contato com o suporte.' };
+            }
             this.currentUser = user;
             Storage.set('currentUser', user);
             return { success: true, user, isAdmin: false, isManager: false };
@@ -655,10 +661,14 @@ const Pages = {
             const result = Auth.register(userData);
 
             if (result.success) {
-                Toast.success('Cadastro realizado com sucesso!');
+                if (managerId) {
+                    Toast.success('Cadastro enviado! Aguarde a aprovação do gerente para fazer login.');
+                } else {
+                    Toast.success('Cadastro realizado com sucesso!');
+                }
                 setTimeout(() => {
                     window.location.href = '../index.html';
-                }, 1500);
+                }, managerId ? 3000 : 1500);
             } else {
                 Toast.error(result.message);
             }
