@@ -333,5 +333,45 @@
     <style>
         .admin-sidebar { border-right-color: var(--danger) !important; }
     </style>
+
+    <nav class="mobile-bottom-nav">
+        <a href="dashboard.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <span>Inicio</span>
+        </a>
+        <a href="afiliados.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <span>Afiliados</span>
+        </a>
+        <a href="links.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            <span>Links</span>
+        </a>
+        <a href="saques.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <span>Saques</span>
+        </a>
+        <a href="#" class="bottom-nav-item" id="moreMenuBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+            <span>Mais</span>
+        </a>
+    </nav>
+    <div class="more-menu" id="moreMenu">
+        <a href="casas.html">Casas</a>
+        <a href="cpa.html">CPA</a>
+        <a href="relatorios.html">Relatorios</a>
+        <a href="configuracoes.html">Configuracoes</a>
+        <a href="../index.html" onclick="AdminAuth.logout()">Sair</a>
+    </div>
+    <script>
+    (function(){
+        var b=document.getElementById('moreMenuBtn');
+        var m=document.getElementById('moreMenu');
+        if(b&&m){
+            b.addEventListener('click',function(e){e.preventDefault();m.classList.toggle('show');});
+            document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target))m.classList.remove('show');});
+        }
+    })();
+    </script>
 </body>
 </html>

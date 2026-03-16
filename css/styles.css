@@ -792,33 +792,96 @@ tbody tr:hover { background: var(--bg-2); }
 }
 
 @media (max-width: 768px) {
-    .mobile-header { display: flex !important; }
-    .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
-    .sidebar-toggle-label { display: flex; }
-    .main-content { margin-left: 0; padding-top: 56px; }
-    .page-content { padding: 20px 16px; }
+    .mobile-header { display: none !important; }
+    .sidebar { display: none !important; }
+    .sidebar-overlay, .sidebar-overlay-label { display: none !important; }
+    .main-content { margin-left: 0; padding-top: 16px; padding-bottom: 80px; }
+    .page-content { padding: 16px; }
     .stats-grid { grid-template-columns: 1fr; }
     .share-grid { grid-template-columns: repeat(2, 1fr); }
 
-    /* CHECKBOX HACK - when checkbox is checked, show sidebar */
-    .menu-toggle-check:checked ~ .sidebar-overlay-label {
-        display: block !important;
+    /* Bottom Navigation Bar */
+    .mobile-bottom-nav {
+        display: flex !important;
     }
-    .menu-toggle-check:checked ~ .sidebar {
-        transform: translateX(0) !important;
-        z-index: 150;
+    .more-menu {
+        display: none;
     }
+    .more-menu.show {
+        display: flex !important;
+    }
+}
 
-    /* Animate hamburger to X when open */
-    .menu-toggle-check:checked ~ .mobile-header .mobile-menu-label span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-    }
-    .menu-toggle-check:checked ~ .mobile-header .mobile-menu-label span:nth-child(2) {
-        opacity: 0;
-    }
-    .menu-toggle-check:checked ~ .mobile-header .mobile-menu-label span:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -5px);
-    }
+/* Bottom Tab Navigation - like WhatsApp/Instagram */
+.mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: var(--bg-1);
+    border-top: 1px solid var(--border);
+    justify-content: space-around;
+    align-items: center;
+    z-index: 999;
+    padding: 0 4px;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 8px 12px;
+    color: var(--text-3);
+    text-decoration: none;
+    font-size: 0.625rem;
+    font-weight: 500;
+    min-width: 56px;
+    -webkit-tap-highlight-color: rgba(232, 89, 12, 0.2);
+}
+
+.bottom-nav-item:active {
+    color: var(--accent);
+}
+
+.bottom-nav-item svg {
+    width: 22px !important;
+    height: 22px !important;
+    max-width: 22px;
+    min-width: 22px;
+}
+
+/* "Mais" popup menu */
+.more-menu {
+    display: none;
+    position: fixed;
+    bottom: 72px;
+    right: 8px;
+    flex-direction: column;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px 0;
+    z-index: 1000;
+    min-width: 180px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+}
+
+.more-menu a {
+    display: block;
+    padding: 12px 20px;
+    color: var(--text-1);
+    text-decoration: none;
+    font-size: 0.875rem;
+    -webkit-tap-highlight-color: rgba(232, 89, 12, 0.2);
+}
+
+.more-menu a:active {
+    background: var(--bg-3);
 }
 
 /* Auth */
