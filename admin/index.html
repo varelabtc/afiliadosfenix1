@@ -15,9 +15,8 @@
         <div class="admin-login-card">
             <div class="admin-login-header">
                 <div class="admin-logo">
-                    <img src="../img/fenix-logo.png" alt="Fenix Agency">
+                    <img src="../img/fenix-logo.png" alt="Fenix">
                 </div>
-                <h1>Fenix Agency</h1>
                 <span class="admin-badge">PAINEL MASTER</span>
                 <p>Acesso restrito a administradores</p>
             </div>
@@ -296,29 +295,19 @@
         }
 
         .admin-logo {
-            width: 64px;
-            height: 64px;
+            width: 100px;
+            height: 100px;
             margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3);
+            overflow: hidden;
         }
 
-        .admin-logo svg {
-            width: 32px;
-            height: 32px;
-            color: white;
-        }
-
-        .admin-login-header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            color: #FAFAFA;
-            margin-bottom: 12px;
+        .admin-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .admin-badge {
