@@ -111,8 +111,6 @@
                         <div class="balance-label">Saldo Disponível para Saque</div>
                         <div class="balance-value" id="availableBalance">R$ 0,00</div>
                         <div class="balance-meta">
-                            <span>Saque mínimo: <strong>R$ 100,00</strong></span>
-                            <span>•</span>
                             <span>Próximo fechamento: <strong id="nextClosing">15/04</strong></span>
                         </div>
                     </div>
@@ -226,7 +224,7 @@
                     </div>
                     <div class="form-group">
                         <label>Valor do Saque</label>
-                        <input type="number" name="amount" min="100" step="0.01" placeholder="Mínimo R$ 100,00" required>
+                        <input type="number" name="amount" min="1" step="0.01" placeholder="Valor do saque" required>
                     </div>
                     <div class="form-group">
                         <label>Confirmar Chave PIX</label>
@@ -303,9 +301,9 @@
             document.getElementById('availableBalance').textContent = Format.currency(balance);
             document.getElementById('modalBalance').textContent = Format.currency(balance);
 
-            // Disable withdraw button if balance < 100
+            // Disable withdraw button if balance <= 0
             const withdrawBtn = document.getElementById('withdrawBtn');
-            if (balance < 100) {
+            if (balance <= 0) {
                 withdrawBtn.disabled = true;
                 withdrawBtn.style.opacity = '0.5';
             }
@@ -437,8 +435,8 @@
                 return;
             }
 
-            if (amount < 100) {
-                Toast.error('Valor mínimo: R$ 100,00');
+            if (amount <= 0) {
+                Toast.error('Digite um valor válido');
                 return;
             }
 
