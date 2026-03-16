@@ -169,10 +169,14 @@
             </div>
             <div class="modal-body">
                 <div class="modal-link-box">
-                    <label style="font-size: 0.75rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: block;">SEU LINK DE AFILIADO</label>
+                    <label style="font-size: 0.75rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: block;">SEU LINK FENIX (COMPARTILHE ESTE)</label>
                     <div style="display: flex; gap: 8px;">
-                        <input type="text" id="modalLinkInput" readonly style="flex: 1; padding: 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; color: var(--accent); font-family: monospace; font-size: 0.8rem;">
+                        <input type="text" id="modalLinkInput" readonly style="flex: 1; padding: 12px; background: var(--bg-2); border: 1px solid var(--accent); border-radius: 8px; color: var(--accent); font-family: monospace; font-size: 0.75rem;">
                         <button class="btn btn-primary" onclick="copyModalLink()" style="padding: 12px 20px; white-space: nowrap;">Copiar</button>
+                    </div>
+                    <div style="margin-top: 12px; padding: 10px; background: var(--bg-2); border-radius: 6px;">
+                        <label style="font-size: 0.65rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px;">LINK ORIGINAL DA CASA</label>
+                        <span id="modalRawLink" style="font-size: 0.75rem; color: var(--text-3); word-break: break-all;">-</span>
                     </div>
                 </div>
                 <div style="margin-top: 20px;">
@@ -244,7 +248,16 @@
         ];
 
         let currentModalLink = '';
+        let currentFenixLink = '';
         let currentRequestHouse = '';
+
+        function generateFenixLink(rawLink, houseSlug) {
+            const user = Auth.currentUser;
+            if (!user || !rawLink) return rawLink;
+            var encoded = btoa(rawLink);
+            var base = window.location.origin;
+            return base + '/api/go?a=' + user.id + '&h=' + houseSlug + '&url=' + encodeURIComponent(encoded);
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             if (!Auth.requireAuth()) return;
@@ -377,22 +390,23 @@
         }
 
         function openLinkModal(offerId, encodedLink, houseName) {
-            currentModalLink = decodeURIComponent(encodedLink);
+            var rawLink = decodeURIComponent(encodedLink);
+            currentFenixLink = generateFenixLink(rawLink, offerId);
+            currentModalLink = currentFenixLink;
             document.getElementById('modalTitle').textContent = 'Link - ' + houseName;
-            document.getElementById('modalLinkInput').value = currentModalLink;
+            document.getElementById('modalLinkInput').value = currentFenixLink;
+            document.getElementById('modalRawLink').textContent = rawLink;
             Modal.open('linkModal');
         }
 
         function copyModalLink() {
-            var input = document.getElementById('modalLinkInput');
-            input.select();
-            navigator.clipboard.writeText(currentModalLink).then(function() {
+            navigator.clipboard.writeText(currentFenixLink).then(function() {
                 Toast.success('Link copiado!');
             });
         }
 
         function shareLink(platform) {
-            var link = currentModalLink;
+            var link = currentFenixLink;
             var text = 'Cadastre-se agora! ' + link;
             if (platform === 'whatsapp') {
                 window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
