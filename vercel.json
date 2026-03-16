@@ -2,11 +2,22 @@
   "version": 2,
   "builds": [
     {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
       "src": "**/*",
-      "use": "@vercel/static"
+      "use": "@vercel/static",
+      "config": {
+        "excludeFiles": "api/**"
+      }
     }
   ],
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "/$1"

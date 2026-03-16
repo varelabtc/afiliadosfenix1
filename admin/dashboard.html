@@ -199,6 +199,107 @@
                     </div>
                 </div>
 
+                <!-- Superbet API - Real Data -->
+                <div class="card" id="superbetCard">
+                    <div class="card-header">
+                        <h3>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8590C" stroke-width="2" style="vertical-align: -3px; margin-right: 6px;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            Superbet — Dados da API
+                        </h3>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <select id="sbPeriod" onchange="loadSuperbetData()" style="padding: 6px 10px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); font-size: 0.8rem;">
+                                <option value="7">Últimos 7 dias</option>
+                                <option value="15">Últimos 15 dias</option>
+                                <option value="30" selected>Últimos 30 dias</option>
+                                <option value="90">Últimos 90 dias</option>
+                            </select>
+                            <button class="btn btn-secondary btn-sm" onclick="loadSuperbetData()" id="sbRefreshBtn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+                                Atualizar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="sbLoading" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            <div class="sb-spinner"></div>
+                            Carregando dados da Superbet...
+                        </div>
+                        <div id="sbError" style="display: none; text-align: center; padding: 30px; color: var(--red);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 8px;"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                            <p id="sbErrorMsg">Erro ao conectar com a API</p>
+                        </div>
+                        <div id="sbContent" style="display: none;">
+                            <!-- Stats Row -->
+                            <div class="sb-stats-row">
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">Registros</span>
+                                    <span class="sb-stat-value" id="sbRegistrations">0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">1º Depósitos</span>
+                                    <span class="sb-stat-value" id="sbFirstDeposits">0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">CPA Qualificado</span>
+                                    <span class="sb-stat-value sb-accent" id="sbQualifiedCPA">0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">CPA Total</span>
+                                    <span class="sb-stat-value" id="sbCPA">0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">Revenue Share</span>
+                                    <span class="sb-stat-value sb-green" id="sbRVS">R$ 0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">Lucro</span>
+                                    <span class="sb-stat-value sb-gold" id="sbLucro">R$ 0</span>
+                                </div>
+                            </div>
+
+                            <!-- Affiliates breakdown -->
+                            <h4 style="font-size: 0.85rem; font-weight: 700; margin: 20px 0 12px; color: var(--text-primary);">Por Afiliado</h4>
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Afiliado</th>
+                                            <th>Registros</th>
+                                            <th>1º Dep.</th>
+                                            <th>CPA Qual.</th>
+                                            <th>RVS</th>
+                                            <th>Lucro</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sbAffiliatesBody">
+                                        <tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">—</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Campaigns breakdown -->
+                            <h4 style="font-size: 0.85rem; font-weight: 700; margin: 20px 0 12px; color: var(--text-primary);">Por Campanha</h4>
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Campanha</th>
+                                            <th>Registros</th>
+                                            <th>1º Dep.</th>
+                                            <th>CPA Qual.</th>
+                                            <th>RVS</th>
+                                            <th>Lucro</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sbCampaignsBody">
+                                        <tr><td colspan="6" style="text-align: center; padding: 20px; color: var(--text-muted);">—</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Recent Activity -->
                 <div class="card">
                     <div class="card-header">
@@ -365,6 +466,120 @@
                 loadDashboard();
             }
         }
+
+        // ── Superbet API Integration ──
+        function getDateRange(days) {
+            var end = new Date();
+            var start = new Date();
+            start.setDate(start.getDate() - days);
+            var fmt = function(d) {
+                return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+            };
+            return { startDate: fmt(start), endDate: fmt(end) };
+        }
+
+        async function loadSuperbetData() {
+            var loading = document.getElementById('sbLoading');
+            var error = document.getElementById('sbError');
+            var content = document.getElementById('sbContent');
+            var refreshBtn = document.getElementById('sbRefreshBtn');
+
+            loading.style.display = 'block';
+            error.style.display = 'none';
+            content.style.display = 'none';
+            refreshBtn.disabled = true;
+
+            var days = parseInt(document.getElementById('sbPeriod').value) || 30;
+            var range = getDateRange(days);
+
+            try {
+                // Fetch totals (no groupBy), by affiliate, and by campaign in parallel
+                var base = '/api/superbet?action=results&startDate=' + range.startDate + '&endDate=' + range.endDate;
+
+                var [totalRes, affRes, campRes] = await Promise.all([
+                    fetch(base + '&limit=100'),
+                    fetch(base + '&groupBy=affiliate&limit=100'),
+                    fetch(base + '&groupBy=campaign&limit=100')
+                ]);
+
+                if (!totalRes.ok || !affRes.ok || !campRes.ok) {
+                    var errData = await totalRes.json().catch(function() { return {}; });
+                    throw new Error(errData.message || errData.error || 'Erro ' + totalRes.status);
+                }
+
+                var totalData = await totalRes.json();
+                var affData = await affRes.json();
+                var campData = await campRes.json();
+
+                // Calculate totals from granular data
+                var totals = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, lucro_tipster: 0 };
+                (totalData.data || []).forEach(function(r) {
+                    totals.registrations += (r.registrations || 0);
+                    totals.first_deposits += (r.first_deposits || 0);
+                    totals.qualified_cpa += (r.qualified_cpa || 0);
+                    totals.cpa += (r.cpa || 0);
+                    totals.rvs += (r.rvs || 0);
+                    totals.lucro_tipster += (r.lucro_tipster || 0);
+                });
+
+                // Update stats
+                document.getElementById('sbRegistrations').textContent = Math.round(totals.registrations);
+                document.getElementById('sbFirstDeposits').textContent = Math.round(totals.first_deposits);
+                document.getElementById('sbQualifiedCPA').textContent = Math.round(totals.qualified_cpa);
+                document.getElementById('sbCPA').textContent = Math.round(totals.cpa);
+                document.getElementById('sbRVS').textContent = Format.currency(totals.rvs);
+                document.getElementById('sbLucro').textContent = Format.currency(totals.lucro_tipster);
+
+                // Affiliates table
+                var affBody = document.getElementById('sbAffiliatesBody');
+                var affRows = (affData.data || []);
+                if (affRows.length === 0) {
+                    affBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">Nenhum dado no período</td></tr>';
+                } else {
+                    affBody.innerHTML = affRows.map(function(r) {
+                        return '<tr>' +
+                            '<td><strong>' + (r.label || r.id || '-') + '</strong></td>' +
+                            '<td>' + Math.round(r.registrations || 0) + '</td>' +
+                            '<td>' + Math.round(r.first_deposits || 0) + '</td>' +
+                            '<td style="color:var(--fire-orange);font-weight:700;">' + Math.round(r.qualified_cpa || 0) + '</td>' +
+                            '<td>' + Format.currency(r.rvs || 0) + '</td>' +
+                            '<td style="font-weight:700;color:var(--success);">' + Format.currency(r.lucro_tipster || 0) + '</td>' +
+                        '</tr>';
+                    }).join('');
+                }
+
+                // Campaigns table
+                var campBody = document.getElementById('sbCampaignsBody');
+                var campRows = (campData.data || []);
+                if (campRows.length === 0) {
+                    campBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">Nenhum dado no período</td></tr>';
+                } else {
+                    campBody.innerHTML = campRows.map(function(r) {
+                        return '<tr>' +
+                            '<td><strong>' + (r.label || r.id || '-') + '</strong></td>' +
+                            '<td>' + Math.round(r.registrations || 0) + '</td>' +
+                            '<td>' + Math.round(r.first_deposits || 0) + '</td>' +
+                            '<td style="color:var(--fire-orange);font-weight:700;">' + Math.round(r.qualified_cpa || 0) + '</td>' +
+                            '<td>' + Format.currency(r.rvs || 0) + '</td>' +
+                            '<td style="font-weight:700;color:var(--success);">' + Format.currency(r.lucro_tipster || 0) + '</td>' +
+                        '</tr>';
+                    }).join('');
+                }
+
+                loading.style.display = 'none';
+                content.style.display = 'block';
+
+            } catch (err) {
+                loading.style.display = 'none';
+                error.style.display = 'block';
+                document.getElementById('sbErrorMsg').textContent = err.message || 'Erro ao conectar com a API';
+            }
+
+            refreshBtn.disabled = false;
+        }
+
+        // Auto-load Superbet data on page load
+        setTimeout(loadSuperbetData, 500);
 
     </script>
 
@@ -558,6 +773,67 @@
             font-size: 1.125rem;
             font-weight: 700;
             color: var(--fire-orange);
+        }
+
+        /* Superbet API Section */
+        .sb-stats-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+        }
+
+        .sb-stat {
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .sb-stat-label {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .sb-stat-value {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .sb-accent { color: var(--fire-orange) !important; }
+        .sb-green { color: var(--success) !important; }
+        .sb-gold { color: #EAB308 !important; }
+
+        .sb-spinner {
+            width: 28px;
+            height: 28px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--fire-orange);
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            animation: sbSpin 0.8s linear infinite;
+        }
+
+        @keyframes sbSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .sb-stats-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sb-stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 1024px) {
