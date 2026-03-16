@@ -343,14 +343,16 @@ const Auth = {
             total_conversions: 0
         };
 
-        // Add traffic_sources if provided
-        if (userData.trafficSources && userData.trafficSources.length > 0) {
-            newUser.traffic_sources = userData.trafficSources;
-        }
-
         var result = await SupabaseDB.createUser(newUser);
         if (result.error) {
             return { success: false, message: 'Erro ao criar conta. Tente novamente.' };
+        }
+
+        // Try to save traffic_sources separately (column may not exist yet)
+        if (userData.trafficSources && userData.trafficSources.length > 0 && result.data) {
+            try {
+                await SupabaseDB.updateUser(result.data.id, { traffic_sources: userData.trafficSources });
+            } catch(e) { /* column may not exist yet, ignore */ }
         }
 
         return { success: true, user: result.data };
