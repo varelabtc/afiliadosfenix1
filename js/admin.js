@@ -544,13 +544,16 @@ const AdminDemoData = {
         // Initialize master links
         MasterLinks.getAll();
 
-        // Add some pending affiliates for demo
+        // Add demo affiliates only once (check by email to avoid duplicates)
         const users = Storage.get('users') || [];
+        const demoEmails = ['joao@teste.com', 'maria@teste.com', 'carlos@teste.com'];
+        const hasDemoUsers = demoEmails.some(email => users.find(u => u.email === email));
 
-        if (users.length < 5) {
+        if (!hasDemoUsers && users.length < 3) {
+            const carlosId = 900001;
             const demoUsers = [
                 {
-                    id: Date.now() + 1,
+                    id: 900002,
                     name: 'João Silva',
                     email: 'joao@teste.com',
                     password: '123456',
@@ -561,7 +564,7 @@ const AdminDemoData = {
                     createdAt: new Date().toISOString()
                 },
                 {
-                    id: Date.now() + 2,
+                    id: 900003,
                     name: 'Maria Santos',
                     email: 'maria@teste.com',
                     password: '123456',
@@ -572,7 +575,7 @@ const AdminDemoData = {
                     createdAt: new Date().toISOString()
                 },
                 {
-                    id: Date.now() + 3,
+                    id: carlosId,
                     name: 'Carlos Oliveira',
                     email: 'carlos@teste.com',
                     password: '123456',
@@ -586,20 +589,22 @@ const AdminDemoData = {
             ];
 
             // Add demo links for Carlos
-            Storage.set(`links_${demoUsers[2].id}`, [
-                {
-                    id: 1,
-                    name: 'Superbet - Promo Verão',
-                    houseId: 1,
-                    houseName: 'Superbet',
-                    shortCode: 'sbpromo1',
-                    clicks: 580,
-                    conversions: 8,
-                    earnings: 1200.00,
-                    status: 'active',
-                    createdAt: new Date().toISOString()
-                }
-            ]);
+            if (!Storage.get(`links_${carlosId}`)) {
+                Storage.set(`links_${carlosId}`, [
+                    {
+                        id: 1,
+                        name: 'Superbet - Promo Verão',
+                        houseId: 1,
+                        houseName: 'Superbet',
+                        shortCode: 'sbpromo1',
+                        clicks: 580,
+                        conversions: 8,
+                        earnings: 1200.00,
+                        status: 'active',
+                        createdAt: new Date().toISOString()
+                    }
+                ]);
+            }
 
             users.push(...demoUsers);
             Storage.set('users', users);
