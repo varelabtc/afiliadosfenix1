@@ -630,10 +630,13 @@ const AdminDemoData = {
             });
             Storage.set('managers', managers);
 
-            // Add some affiliates linked to this manager
-            const mgrAffiliates = [
-                {
-                    id: Date.now() + 201,
+            // Add some affiliates linked to this manager (fixed IDs, check by email)
+            const currentUsers = Storage.get('users') || [];
+            const mgrAffiliates = [];
+
+            if (!currentUsers.find(u => u.email === 'pedro@teste.com')) {
+                mgrAffiliates.push({
+                    id: 900004,
                     name: 'Pedro Costa',
                     email: 'pedro@teste.com',
                     password: '123456',
@@ -643,9 +646,12 @@ const AdminDemoData = {
                     managerId: mgrId,
                     balance: 0,
                     createdAt: new Date().toISOString()
-                },
-                {
-                    id: Date.now() + 202,
+                });
+            }
+
+            if (!currentUsers.find(u => u.email === 'ana@teste.com')) {
+                mgrAffiliates.push({
+                    id: 900005,
                     name: 'Ana Lima',
                     email: 'ana@teste.com',
                     password: '123456',
@@ -656,26 +662,31 @@ const AdminDemoData = {
                     balance: 200,
                     totalEarnings: 600,
                     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
-                }
-            ];
-            users.push(...mgrAffiliates);
-            Storage.set('users', users);
+                });
 
-            // Add demo links for Ana
-            Storage.set('links_' + mgrAffiliates[1].id, [
-                {
-                    id: 1,
-                    name: 'Superbet Link',
-                    houseId: 1,
-                    houseName: 'Superbet',
-                    shortCode: 'analima1',
-                    clicks: 320,
-                    conversions: 4,
-                    earnings: 600,
-                    status: 'active',
-                    createdAt: new Date().toISOString()
+                // Add demo links for Ana
+                if (!Storage.get('links_900005')) {
+                    Storage.set('links_900005', [
+                        {
+                            id: 1,
+                            name: 'Superbet Link',
+                            houseId: 1,
+                            houseName: 'Superbet',
+                            shortCode: 'analima1',
+                            clicks: 320,
+                            conversions: 4,
+                            earnings: 600,
+                            status: 'active',
+                            createdAt: new Date().toISOString()
+                        }
+                    ]);
                 }
-            ]);
+            }
+
+            if (mgrAffiliates.length > 0) {
+                currentUsers.push(...mgrAffiliates);
+                Storage.set('users', currentUsers);
+            }
         }
 
         // Add demo withdrawals
