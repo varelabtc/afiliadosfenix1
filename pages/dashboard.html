@@ -8,38 +8,16 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
-<script>
-// Inline menu toggle - does not depend on main.js
-if (!window.toggleMenu) {
-    window.toggleMenu = function() {
-        var s = document.getElementById('sidebar');
-        var o = document.querySelector('.sidebar-overlay');
-        if (!s) return;
-        if (s.dataset.open === '1') {
-            s.style.transform = 'translateX(-100%)';
-            s.dataset.open = '0';
-            if (o) o.style.display = 'none';
-        } else {
-            s.style.transform = 'translateX(0)';
-            s.dataset.open = '1';
-            if (o) { o.style.display = 'block'; o.style.zIndex = '140'; }
-            s.style.zIndex = '150';
-        }
-    };
-}
-</script>
-    <div class="dashboard">
+<div class="dashboard">
+        <input type="checkbox" id="menu-toggle" class="menu-toggle-check">
         <div class="mobile-header">
-            <div class="mobile-menu-btn" ontouchstart="event.stopPropagation();event.preventDefault();toggleMenu()" onclick="toggleMenu()" role="button">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
-                </svg>
-            </div>
+            <label for="menu-toggle" class="mobile-menu-label">
+                <span></span><span></span><span></span>
+            </label>
             <span class="mobile-logo">Fenix</span>
-            <div style="width: 40px;"></div>
+            <div style="width: 44px;"></div>
         </div>
-
-        <div class="sidebar-overlay" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');s.style.transform='translateX(-100%)';s.dataset.open='0';if(o)o.style.display='none';"></div>
+        <label for="menu-toggle" class="sidebar-overlay-label"></label>
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -51,11 +29,7 @@ if (!window.toggleMenu) {
                     </div>
                     <h2>Fenix</h2>
                 </div>
-                <button class="sidebar-toggle" onclick="var s=document.getElementById('sidebar');var o=document.querySelector('.sidebar-overlay');s.style.transform='translateX(-100%)';s.dataset.open='0';if(o)o.style.display='none';">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 6L6 18M6 6l12 12"/>
-                    </svg>
-                </button>
+                <label for="menu-toggle" class="sidebar-toggle-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></label>
             </div>
 
             <nav class="sidebar-nav">

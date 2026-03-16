@@ -689,7 +689,14 @@ tbody tr:hover { background: var(--bg-2); }
 .toast.success { border-left: 3px solid var(--green); }
 .toast.error { border-left: 3px solid var(--red); }
 
-/* Mobile */
+/* Mobile - Pure CSS checkbox menu (no JavaScript needed) */
+.menu-toggle-check {
+    display: none !important;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
 .mobile-header {
     display: none;
     position: fixed;
@@ -705,37 +712,62 @@ tbody tr:hover { background: var(--bg-2); }
     z-index: 200;
 }
 
-.mobile-menu-btn {
+/* Hamburger button - uses <label> for native iOS tap support */
+.mobile-menu-label {
     width: 44px;
     height: 44px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 5px;
     background: var(--bg-2);
     border: 1px solid var(--border);
     border-radius: 8px;
-    color: var(--text-1);
     cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
     -webkit-tap-highlight-color: rgba(232, 89, 12, 0.3);
-    touch-action: manipulation;
-    user-select: none;
-    -webkit-user-select: none;
     position: relative;
-    z-index: 999;
+    z-index: 201;
 }
 
-.mobile-menu-btn:active {
+.mobile-menu-label span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text-1);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.mobile-menu-label:active {
     opacity: 0.7;
 }
 
-.mobile-menu-btn svg {
-    width: 24px !important;
-    height: 24px !important;
-    max-width: 24px !important;
-    min-width: 24px;
-    display: block !important;
+/* Overlay - also a <label> so tapping it closes menu */
+.sidebar-overlay-label {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 140;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Close button inside sidebar */
+.sidebar-toggle-label {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--text-3);
+    cursor: pointer;
+    padding: 4px;
+    -webkit-tap-highlight-color: rgba(232, 89, 12, 0.3);
 }
 
 .mobile-logo {
@@ -744,6 +776,7 @@ tbody tr:hover { background: var(--bg-2); }
     color: var(--text-1);
 }
 
+/* Legacy overlay (keep for compatibility) */
 .sidebar-overlay {
     display: none;
     position: fixed;
@@ -761,13 +794,31 @@ tbody tr:hover { background: var(--bg-2); }
 @media (max-width: 768px) {
     .mobile-header { display: flex !important; }
     .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
-    .sidebar.open { transform: translateX(0) !important; z-index: 150; }
-    .sidebar-toggle { display: flex; }
-    .sidebar-overlay.active { display: block !important; z-index: 140; }
+    .sidebar-toggle-label { display: flex; }
     .main-content { margin-left: 0; padding-top: 56px; }
     .page-content { padding: 20px 16px; }
     .stats-grid { grid-template-columns: 1fr; }
     .share-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* CHECKBOX HACK - when checkbox is checked, show sidebar */
+    .menu-toggle-check:checked ~ .sidebar-overlay-label {
+        display: block !important;
+    }
+    .menu-toggle-check:checked ~ .sidebar {
+        transform: translateX(0) !important;
+        z-index: 150;
+    }
+
+    /* Animate hamburger to X when open */
+    .menu-toggle-check:checked ~ .mobile-header .mobile-menu-label span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    .menu-toggle-check:checked ~ .mobile-header .mobile-menu-label span:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle-check:checked ~ .mobile-header .mobile-menu-label span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
 }
 
 /* Auth */

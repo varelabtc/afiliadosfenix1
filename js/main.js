@@ -2,56 +2,7 @@
 // FENIX AFILIADOS - JAVASCRIPT PRINCIPAL
 // ========================================
 
-// Global menu toggle - must be defined before DOMContentLoaded
-window.toggleMenu = function() {
-    var s = document.getElementById('sidebar');
-    var o = document.querySelector('.sidebar-overlay');
-    if (!s) return;
-    if (s.dataset.open === '1') {
-        s.style.transform = 'translateX(-100%)';
-        s.dataset.open = '0';
-        if (o) o.style.display = 'none';
-    } else {
-        s.style.transform = 'translateX(0)';
-        s.dataset.open = '1';
-        if (o) { o.style.display = 'block'; o.style.zIndex = '140'; }
-        s.style.zIndex = '150';
-    }
-};
-
-// Document-level touch/click capture for mobile menu - cannot be blocked by any element
-document.addEventListener('touchstart', function(e) {
-    var btn = e.target.closest ? e.target.closest('.mobile-menu-btn') : null;
-    if (!btn) {
-        // Check parent elements manually for older iOS
-        var el = e.target;
-        while (el) {
-            if (el.classList && el.classList.contains('mobile-menu-btn')) { btn = el; break; }
-            el = el.parentElement;
-        }
-    }
-    if (btn) {
-        e.preventDefault();
-        e.stopPropagation();
-        window.toggleMenu();
-    }
-}, {capture: true, passive: false});
-
-document.addEventListener('click', function(e) {
-    var btn = e.target.closest ? e.target.closest('.mobile-menu-btn') : null;
-    if (!btn) {
-        var el = e.target;
-        while (el) {
-            if (el.classList && el.classList.contains('mobile-menu-btn')) { btn = el; break; }
-            el = el.parentElement;
-        }
-    }
-    if (btn) {
-        e.preventDefault();
-        e.stopPropagation();
-        window.toggleMenu();
-    }
-}, {capture: true});
+// Mobile menu uses pure CSS checkbox hack - no JavaScript needed for menu toggle
 
 // Theme Management
 const ThemeManager = {
