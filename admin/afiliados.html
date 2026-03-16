@@ -182,7 +182,7 @@
 
     <!-- Affiliate Details Modal -->
     <div class="modal-overlay" id="affiliateModal">
-        <div class="modal" style="max-width: 600px;">
+        <div class="modal" style="max-width: 700px;">
             <div class="modal-header">
                 <h3>Detalhes do Afiliado</h3>
                 <button class="modal-close">
@@ -433,11 +433,41 @@
                     </div>
                 </div>
 
-                <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
+                <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
                     <h4 style="margin-bottom: 12px;">Informações</h4>
                     <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Código:</strong> ${user.affiliateCode || 'N/A'}</p>
                     <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Cadastro:</strong> ${Format.dateTime(user.createdAt)}</p>
                     <p style="font-size: 0.875rem;"><strong>Status:</strong> ${user.status || 'Aprovado'}</p>
+                </div>
+
+                <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
+                    <h4 style="margin-bottom: 12px;">Documentos de Verificacao</h4>
+                    ${user.documents ? `
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Frente</div>
+                                ${user.documents.frente
+                                    ? `<img src="${user.documents.frente}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; cursor: pointer;" onclick="window.open(this.src, '_blank')">`
+                                    : '<div style="height: 120px; display: flex; align-items: center; justify-content: center; background: var(--bg-elevated); border-radius: 8px; color: var(--text-muted); font-size: 0.8rem;">Nao enviado</div>'
+                                }
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Verso</div>
+                                ${user.documents.verso
+                                    ? `<img src="${user.documents.verso}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; cursor: pointer;" onclick="window.open(this.src, '_blank')">`
+                                    : '<div style="height: 120px; display: flex; align-items: center; justify-content: center; background: var(--bg-elevated); border-radius: 8px; color: var(--text-muted); font-size: 0.8rem;">Nao enviado</div>'
+                                }
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Selfie</div>
+                                ${user.documents.selfie
+                                    ? `<img src="${user.documents.selfie}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; cursor: pointer;" onclick="window.open(this.src, '_blank')">`
+                                    : '<div style="height: 120px; display: flex; align-items: center; justify-content: center; background: var(--bg-elevated); border-radius: 8px; color: var(--text-muted); font-size: 0.8rem;">Nao enviado</div>'
+                                }
+                            </div>
+                        </div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">Enviado em: ${Format.dateTime(user.documents.updatedAt)}</p>
+                    ` : '<p style="font-size: 0.875rem; color: var(--text-muted);">Nenhum documento enviado pelo afiliado.</p>'}
                 </div>
             `;
 

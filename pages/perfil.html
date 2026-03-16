@@ -170,6 +170,15 @@
                         </svg>
                         Dados de Pagamento
                     </button>
+                    <button class="profile-tab" onclick="switchTab('documentos')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Documentos
+                    </button>
                     <button class="profile-tab" onclick="switchTab('historico')">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"/>
@@ -463,6 +472,80 @@
                     </div>
                 </div>
 
+                <div class="tab-content" id="tab-documentos" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Verificacao de Identidade</h3>
+                            <p>Envie seus documentos para verificacao. Apenas a administracao tera acesso.</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="doc-status-bar" id="docStatusBar">
+                                <div class="doc-status-icon pending">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                </div>
+                                <span id="docStatusText">Nenhum documento enviado</span>
+                            </div>
+
+                            <div class="doc-upload-grid">
+                                <div class="doc-upload-card" id="docFrenteCard">
+                                    <div class="doc-upload-label">Documento (Frente)</div>
+                                    <div class="doc-upload-area" id="docFrenteArea" onclick="document.getElementById('docFrenteInput').click()">
+                                        <div class="doc-upload-placeholder" id="docFrentePlaceholder">
+                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                                <polyline points="21 15 16 10 5 21"/>
+                                            </svg>
+                                            <span>Clique para enviar</span>
+                                            <small>JPG, PNG (max 5MB)</small>
+                                        </div>
+                                        <img id="docFrentePreview" class="doc-preview-img" style="display:none;">
+                                    </div>
+                                    <input type="file" id="docFrenteInput" accept="image/*" style="display:none;" onchange="handleDocUpload('frente', this)">
+                                    <button class="btn btn-sm btn-danger doc-remove-btn" id="docFrenteRemove" style="display:none;" onclick="removeDoc('frente')">Remover</button>
+                                </div>
+
+                                <div class="doc-upload-card" id="docVersoCard">
+                                    <div class="doc-upload-label">Documento (Verso)</div>
+                                    <div class="doc-upload-area" id="docVersoArea" onclick="document.getElementById('docVersoInput').click()">
+                                        <div class="doc-upload-placeholder" id="docVersoPlaceholder">
+                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                                <polyline points="21 15 16 10 5 21"/>
+                                            </svg>
+                                            <span>Clique para enviar</span>
+                                            <small>JPG, PNG (max 5MB)</small>
+                                        </div>
+                                        <img id="docVersoPreview" class="doc-preview-img" style="display:none;">
+                                    </div>
+                                    <input type="file" id="docVersoInput" accept="image/*" style="display:none;" onchange="handleDocUpload('verso', this)">
+                                    <button class="btn btn-sm btn-danger doc-remove-btn" id="docVersoRemove" style="display:none;" onclick="removeDoc('verso')">Remover</button>
+                                </div>
+
+                                <div class="doc-upload-card" id="docSelfieCard">
+                                    <div class="doc-upload-label">Selfie com Documento</div>
+                                    <div class="doc-upload-area" id="docSelfieArea" onclick="document.getElementById('docSelfieInput').click()">
+                                        <div class="doc-upload-placeholder" id="docSelfiePlaceholder">
+                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                                                <circle cx="12" cy="7" r="4"/>
+                                            </svg>
+                                            <span>Clique para enviar</span>
+                                            <small>JPG, PNG (max 5MB)</small>
+                                        </div>
+                                        <img id="docSelfiePreview" class="doc-preview-img" style="display:none;">
+                                    </div>
+                                    <input type="file" id="docSelfieInput" accept="image/*" style="display:none;" onchange="handleDocUpload('selfie', this)">
+                                    <button class="btn btn-sm btn-danger doc-remove-btn" id="docSelfieRemove" style="display:none;" onclick="removeDoc('selfie')">Remover</button>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" onclick="saveDocuments()" style="margin-top: 20px;">Salvar Documentos</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="tab-content" id="tab-historico" style="display: none;">
                     <div class="card">
                         <div class="card-header">
@@ -525,6 +608,7 @@
             if (!Auth.requireAuth()) return;
             loadUserInfo();
             loadProfileData();
+            loadDocuments();
         });
 
         function loadUserInfo() {
@@ -653,6 +737,136 @@
         function selectPlatform(platform) {
             document.querySelectorAll('.platform-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`.platform-btn.${platform}`).classList.add('active');
+        }
+
+        // Document upload functions
+        function handleDocUpload(type, input) {
+            var file = input.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                Toast.error('Envie apenas imagens (JPG, PNG)');
+                input.value = '';
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                Toast.error('Arquivo muito grande. Maximo 5MB.');
+                input.value = '';
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var preview = document.getElementById('doc' + capitalize(type) + 'Preview');
+                var placeholder = document.getElementById('doc' + capitalize(type) + 'Placeholder');
+                var removeBtn = document.getElementById('doc' + capitalize(type) + 'Remove');
+
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                placeholder.style.display = 'none';
+                removeBtn.style.display = 'inline-flex';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeDoc(type) {
+            var preview = document.getElementById('doc' + capitalize(type) + 'Preview');
+            var placeholder = document.getElementById('doc' + capitalize(type) + 'Placeholder');
+            var removeBtn = document.getElementById('doc' + capitalize(type) + 'Remove');
+            var input = document.getElementById('doc' + capitalize(type) + 'Input');
+
+            preview.src = '';
+            preview.style.display = 'none';
+            placeholder.style.display = 'flex';
+            removeBtn.style.display = 'none';
+            input.value = '';
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function saveDocuments() {
+            var user = Auth.currentUser;
+            if (!user) return;
+
+            var frente = document.getElementById('docFrentePreview');
+            var verso = document.getElementById('docVersoPreview');
+            var selfie = document.getElementById('docSelfiePreview');
+
+            var docs = {};
+            if (frente.src && frente.style.display !== 'none') docs.frente = frente.src;
+            if (verso.src && verso.style.display !== 'none') docs.verso = verso.src;
+            if (selfie.src && selfie.style.display !== 'none') docs.selfie = selfie.src;
+
+            if (Object.keys(docs).length === 0) {
+                Toast.error('Envie pelo menos um documento.');
+                return;
+            }
+
+            docs.updatedAt = new Date().toISOString();
+
+            var users = Storage.get('users') || [];
+            var index = users.findIndex(function(u) { return u.id === user.id; });
+            if (index !== -1) {
+                users[index].documents = docs;
+                Storage.set('users', users);
+                Toast.success('Documentos salvos com sucesso!');
+                updateDocStatus(docs);
+            }
+        }
+
+        function loadDocuments() {
+            var user = Auth.currentUser;
+            if (!user || !user.documents) return;
+
+            var docs = user.documents;
+
+            if (docs.frente) {
+                document.getElementById('docFrentePreview').src = docs.frente;
+                document.getElementById('docFrentePreview').style.display = 'block';
+                document.getElementById('docFrentePlaceholder').style.display = 'none';
+                document.getElementById('docFrenteRemove').style.display = 'inline-flex';
+            }
+            if (docs.verso) {
+                document.getElementById('docVersoPreview').src = docs.verso;
+                document.getElementById('docVersoPreview').style.display = 'block';
+                document.getElementById('docVersoPlaceholder').style.display = 'none';
+                document.getElementById('docVersoRemove').style.display = 'inline-flex';
+            }
+            if (docs.selfie) {
+                document.getElementById('docSelfiePreview').src = docs.selfie;
+                document.getElementById('docSelfiePreview').style.display = 'block';
+                document.getElementById('docSelfiePlaceholder').style.display = 'none';
+                document.getElementById('docSelfieRemove').style.display = 'inline-flex';
+            }
+
+            updateDocStatus(docs);
+        }
+
+        function updateDocStatus(docs) {
+            var bar = document.getElementById('docStatusBar');
+            var text = document.getElementById('docStatusText');
+            var icon = bar.querySelector('.doc-status-icon');
+
+            var count = 0;
+            if (docs.frente) count++;
+            if (docs.verso) count++;
+            if (docs.selfie) count++;
+
+            if (count === 3) {
+                icon.className = 'doc-status-icon success';
+                icon.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+                text.textContent = 'Todos os documentos enviados - Em analise';
+            } else if (count > 0) {
+                icon.className = 'doc-status-icon warning';
+                icon.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+                text.textContent = count + ' de 3 documentos enviados';
+            } else {
+                icon.className = 'doc-status-icon pending';
+                text.textContent = 'Nenhum documento enviado';
+            }
         }
 
     </script>
@@ -942,6 +1156,124 @@
         .activity-time {
             font-size: 0.85rem;
             color: var(--text-muted);
+        }
+
+        /* Document Upload */
+        .doc-status-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            background: var(--bg-input);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .doc-status-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .doc-status-icon.pending {
+            background: rgba(107, 114, 128, 0.2);
+            color: #6b7280;
+        }
+
+        .doc-status-icon.warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .doc-status-icon.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .doc-upload-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .doc-upload-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .doc-upload-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .doc-upload-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .doc-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .doc-upload-area:hover {
+            border-color: var(--fire-orange);
+            background: rgba(255, 107, 0, 0.05);
+        }
+
+        .doc-upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .doc-upload-placeholder small {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .doc-preview-img {
+            width: 100%;
+            height: 100%;
+            min-height: 180px;
+            max-height: 240px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .doc-remove-btn {
+            align-self: flex-start;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .doc-remove-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
         }
     </style>
 
