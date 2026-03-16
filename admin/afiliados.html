@@ -465,6 +465,21 @@
                     <p style="font-size: 0.875rem;"><strong>Status:</strong> ${user.status || 'Aprovado'}</p>
                 </div>
 
+                <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 12px;">Fontes de Tráfego</h4>
+                    ${(function() {
+                        var ts = user.traffic_sources || [];
+                        if (typeof ts === 'string') try { ts = JSON.parse(ts); } catch(e) { ts = []; }
+                        if (!ts || ts.length === 0) return '<p style="font-size: 0.875rem; color: var(--text-muted);">Nenhuma fonte de tráfego informada.</p>';
+                        return ts.map(function(s) {
+                            return '<div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--bg-elevated); border-radius: 8px; margin-bottom: 6px;">' +
+                                '<span style="padding: 3px 10px; background: var(--blue); color: white; border-radius: 6px; font-size: 0.75rem; font-weight: 600;">' + (s.type || 'N/A') + '</span>' +
+                                '<span style="font-size: 0.85rem; color: var(--text-primary);">' + (s.url || 'Não informado') + '</span>' +
+                            '</div>';
+                        }).join('');
+                    })()}
+                </div>
+
                 <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
                     <h4 style="margin-bottom: 12px;">Documentos de Verificacao</h4>
                     ${user.documents ? `
