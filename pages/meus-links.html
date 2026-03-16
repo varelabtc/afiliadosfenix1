@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fenix Afiliados - Links</title>
+    <title>Fenix - Ofertas</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,10 +45,10 @@
                 </a>
                 <a href="meus-links.html" class="nav-item active">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
-                        <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/>
+                        <line x1="7" y1="7" x2="7.01" y2="7"/>
                     </svg>
-                    Links
+                    Ofertas
                 </a>
                 <a href="minha-equipe.html" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -80,7 +80,7 @@
                         <line x1="12" y1="1" x2="12" y2="23"/>
                         <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
                     </svg>
-                    Comissões
+                    Comissoes
                 </a>
                 <a href="materiais.html" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -117,20 +117,6 @@
                 </a>
             </nav>
 
-            <!-- Platform Selector -->
-            <div class="platform-selector">
-                <div class="platform-label">Plataforma</div>
-                <div class="platform-buttons">
-                    <button class="platform-btn active" data-platform="superbet" onclick="selectPlatform('superbet')">
-                        <img src="../img/superbet-logo.png" alt="Superbet">
-                    </button>
-                    <button class="platform-btn" data-platform="sportingbet" onclick="selectPlatform('sportingbet')">
-                        <img src="../img/sportingbet-logo.png" alt="Sportingbet">
-                    </button>
-                </div>
-            </div>
-
-            <!-- User Card -->
             <div class="sidebar-footer">
                 <div class="user-card">
                     <div class="user-avatar" id="userAvatar">F</div>
@@ -147,108 +133,123 @@
             <div class="page-content">
                 <!-- Header -->
                 <div class="page-header">
-                    <h1>Meus Links</h1>
-                    <p>Gerencie seus links de afiliado</p>
+                    <h1>Ofertas</h1>
+                    <p>Solicite seu link de afiliado nas casas disponiveis</p>
                 </div>
 
-                <!-- Link Card -->
-                <div class="link-main-card">
-                    <div class="link-main-header">
-                        <div class="link-platform-info">
-                            <div class="link-platform-logo" id="platformLogo"><img src="../img/superbet-logo.png" alt="Superbet"></div>
-                            <div>
-                                <span class="link-cpa">CPA: <strong id="platformCPA">R$ 35</strong></span>
-                            </div>
-                            <span id="platformName" style="display:none;">Superbet</span>
-                        </div>
-                        <span class="status-badge active">
-                            <span class="status-dot"></span>
-                            Ativo
-                        </span>
+                <div class="ofertas-stats">
+                    <div class="oferta-stat-card">
+                        <span class="oferta-stat-value" id="totalOfertas">2</span>
+                        <span class="oferta-stat-label">Ofertas</span>
                     </div>
-
-                    <div class="link-url-box">
-                        <span class="link-url" id="affiliateLink">https://superbet.com/register?ref=CODIGO</span>
-                        <button class="btn-copy" onclick="copyLink()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2"/>
-                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                            </svg>
-                            Copiar
-                        </button>
+                    <div class="oferta-stat-card">
+                        <span class="oferta-stat-value" id="totalAtivos">0</span>
+                        <span class="oferta-stat-label">Ativos</span>
                     </div>
-
-                    <div class="link-stats">
-                        <div class="link-stat">
-                            <span class="link-stat-value" id="linkClicks">0</span>
-                            <span class="link-stat-label">Cliques</span>
-                        </div>
-                        <div class="link-stat">
-                            <span class="link-stat-value" id="linkRegistros">0</span>
-                            <span class="link-stat-label">Registros</span>
-                        </div>
-                        <div class="link-stat">
-                            <span class="link-stat-value" id="linkFTDs">0</span>
-                            <span class="link-stat-label">FTDs</span>
-                        </div>
-                        <div class="link-stat">
-                            <span class="link-stat-value" id="linkEarnings">R$ 0</span>
-                            <span class="link-stat-label">Ganhos</span>
-                        </div>
+                    <div class="oferta-stat-card">
+                        <span class="oferta-stat-value" id="totalPendentes">0</span>
+                        <span class="oferta-stat-label">Pendentes</span>
                     </div>
                 </div>
 
-                <!-- Share -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Compartilhar</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="share-buttons">
-                            <button class="share-btn whatsapp" onclick="shareWhatsApp()">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                                </svg>
-                                WhatsApp
-                            </button>
-                            <button class="share-btn telegram" onclick="shareTelegram()">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                                </svg>
-                                Telegram
-                            </button>
-                            <button class="share-btn twitter" onclick="shareTwitter()">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                                </svg>
-                                Twitter
-                            </button>
-                            <button class="share-btn facebook" onclick="shareFacebook()">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                </svg>
-                                Facebook
-                            </button>
-                        </div>
-                    </div>
+                <!-- Ofertas List -->
+                <div class="ofertas-list" id="ofertasList">
+                    <!-- Populated by JS -->
                 </div>
             </div>
         </main>
     </div>
 
+    <!-- Modal: Link Details -->
+    <div class="modal-overlay" id="linkModal">
+        <div class="modal" style="max-width: 520px;">
+            <div class="modal-header">
+                <h3 id="modalTitle">Seu Link</h3>
+                <button class="modal-close" onclick="Modal.close('linkModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-link-box">
+                    <label style="font-size: 0.75rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: block;">SEU LINK DE AFILIADO</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="modalLinkInput" readonly style="flex: 1; padding: 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; color: var(--accent); font-family: monospace; font-size: 0.8rem;">
+                        <button class="btn btn-primary" onclick="copyModalLink()" style="padding: 12px 20px; white-space: nowrap;">Copiar</button>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <label style="font-size: 0.75rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; display: block;">COMPARTILHAR</label>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="share-btn-sm whatsapp" onclick="shareLink('whatsapp')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            WhatsApp
+                        </button>
+                        <button class="share-btn-sm telegram" onclick="shareLink('telegram')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                            Telegram
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Request Access -->
+    <div class="modal-overlay" id="requestModal">
+        <div class="modal" style="max-width: 440px;">
+            <div class="modal-header">
+                <h3 id="requestModalTitle">Solicitar Acesso</h3>
+                <button class="modal-close" onclick="Modal.close('requestModal')">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: center; padding: 24px;">
+                <div style="width: 64px; height: 64px; margin: 0 auto 16px; background: rgba(234, 179, 8, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#EAB308" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <h4 style="margin-bottom: 8px; color: var(--text-1);">Solicitar link de <span id="requestHouseName">-</span></h4>
+                <p style="color: var(--text-3); font-size: 0.85rem; margin-bottom: 24px;">Sua solicitacao sera enviada ao administrador. Voce sera notificado quando seu link estiver disponivel.</p>
+                <button class="btn btn-primary" onclick="submitRequest()" style="width: 100%; padding: 14px;">Solicitar Acesso</button>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/main.js"></script>
     <script>
-        let currentPlatform = 'superbet';
+        const offersConfig = [
+            {
+                id: 'superbet',
+                name: 'Superbet',
+                subtitle: 'Superbet Brasil',
+                logo: '../img/superbet-logo.png',
+                baseline: 'R$0',
+                wager: '1x',
+                payment: 'Mensal - dia 15',
+                currency: 'BRL',
+                metaTypes: ['QFTD'],
+                models: [{ type: 'CPA', value: null }],
+                defaultCPA: 150,
+                color: '#E8590C'
+            },
+            {
+                id: 'sportingbet',
+                name: 'Sportingbet',
+                subtitle: 'Sportingbet Brasil',
+                logo: '../img/sportingbet-logo.png',
+                baseline: 'R$0',
+                wager: '1x',
+                payment: 'Mensal - dia 15',
+                currency: 'BRL',
+                metaTypes: ['QFTD'],
+                models: [{ type: 'CPA', value: null }],
+                defaultCPA: 100,
+                color: '#22C55E'
+            }
+        ];
 
-        const platforms = {
-            superbet: { name: 'Superbet', logo: '../img/superbet-logo.png', cpa: 35, color: '#E8590C', baseUrl: 'https://superbet.com/register?ref=' },
-            sportingbet: { name: 'Sportingbet', logo: '../img/sportingbet-logo.png', cpa: 30, color: '#22C55E', baseUrl: 'https://sportingbet.com/register?ref=' }
-        };
+        let currentModalLink = '';
+        let currentRequestHouse = '';
 
         document.addEventListener('DOMContentLoaded', function() {
             if (!Auth.requireAuth()) return;
             loadUserInfo();
-            loadLinkData();
+            renderOffers();
         });
 
         function loadUserInfo() {
@@ -266,211 +267,438 @@
             return users.find(u => u.id === user.id) || user;
         }
 
-        function loadLinkData() {
-            const user = Auth.currentUser;
+        function getOfferStatus(offerId) {
             const fullUser = getFullUserData();
-            const platform = platforms[currentPlatform];
-            const affiliateCode = user?.affiliateCode || 'FENIX001';
+            if (!fullUser) return { status: 'none', link: '' };
 
-            // Check if admin configured a house link for this user
             const houses = Storage.get('bettingHouses') || [];
-            const house = houses.find(h => h.slug === currentPlatform || h.name.toLowerCase().includes(currentPlatform));
+            const house = houses.find(h => h.slug === offerId || (h.name && h.name.toLowerCase().includes(offerId)));
             const houseId = house ? house.id : null;
-            const adminLink = fullUser?.houseLinks?.[houseId] || '';
+            const adminLink = houseId ? (fullUser.houseLinks?.[houseId] || '') : '';
 
-            // Use admin-configured link if available, otherwise fallback to default
-            const displayLink = adminLink || (platform.baseUrl + affiliateCode);
+            // Check if user requested access
+            const requests = Storage.get('linkRequests_' + fullUser.id) || [];
+            const requested = requests.includes(offerId);
 
-            // Get CPA value from deal or house config
-            let cpaValue = platform.cpa;
+            if (adminLink) {
+                return { status: 'active', link: adminLink, houseId };
+            } else if (requested) {
+                return { status: 'pending', link: '', houseId };
+            }
+            return { status: 'none', link: '', houseId };
+        }
+
+        function getCPAValue(offerId, offer) {
+            const fullUser = getFullUserData();
+            const houses = Storage.get('bettingHouses') || [];
+            const house = houses.find(h => h.slug === offerId || (h.name && h.name.toLowerCase().includes(offerId)));
+            const houseId = house ? house.id : null;
+
             if (fullUser?.deals?.[houseId]) {
                 const deal = fullUser.deals[houseId];
-                if (deal.type === 'cpa') cpaValue = deal.cpaValue || cpaValue;
-                else if (deal.type === 'hybrid') cpaValue = deal.hybridCPA || cpaValue;
-            } else if (fullUser?.customCPA?.[houseId]) {
-                cpaValue = fullUser.customCPA[houseId];
-            } else if (house?.cpa) {
-                cpaValue = house.cpa;
+                if (deal.type === 'cpa') return deal.cpaValue || offer.defaultCPA;
+                if (deal.type === 'hybrid') return deal.hybridCPA || offer.defaultCPA;
             }
-
-            document.getElementById('platformLogo').innerHTML = `<img src="${platform.logo}" alt="${platform.name}">`;
-            document.getElementById('platformName').textContent = platform.name;
-            document.getElementById('platformCPA').textContent = Format.currency(cpaValue);
-            document.getElementById('affiliateLink').textContent = displayLink;
-
-            // Show status based on whether link is configured
-            const statusBadge = document.querySelector('.status-badge');
-            if (adminLink) {
-                statusBadge.className = 'status-badge active';
-                statusBadge.innerHTML = '<span class="status-dot"></span> Ativo';
-            } else {
-                statusBadge.className = 'status-badge pending';
-                statusBadge.innerHTML = '<span class="status-dot"></span> Aguardando Link';
-            }
-
-            const links = Links.getAll().filter(l => l.platform === currentPlatform);
-            const totalClicks = links.reduce((sum, l) => sum + (l.clicks || 0), 0);
-            const totalConversions = links.reduce((sum, l) => sum + (l.conversions || 0), 0);
-            const totalEarnings = links.reduce((sum, l) => sum + (l.earnings || 0), 0);
-
-            document.getElementById('linkClicks').textContent = totalClicks;
-            document.getElementById('linkRegistros').textContent = Math.floor(totalClicks / 10);
-            document.getElementById('linkFTDs').textContent = totalConversions;
-            document.getElementById('linkEarnings').textContent = Format.currency(totalEarnings);
+            if (fullUser?.customCPA?.[houseId]) return fullUser.customCPA[houseId];
+            if (house?.cpa) return house.cpa;
+            return offer.defaultCPA;
         }
 
-        function selectPlatform(platform) {
-            currentPlatform = platform;
-            document.querySelectorAll('.platform-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.platform === platform);
+        function renderOffers() {
+            const container = document.getElementById('ofertasList');
+            let activeCount = 0;
+            let pendingCount = 0;
+
+            let html = '';
+
+            offersConfig.forEach(function(offer) {
+                const offerStatus = getOfferStatus(offer.id);
+                const cpa = getCPAValue(offer.id, offer);
+
+                if (offerStatus.status === 'active') activeCount++;
+                if (offerStatus.status === 'pending') pendingCount++;
+
+                let statusBadge = '';
+                let actionBtn = '';
+
+                if (offerStatus.status === 'active') {
+                    statusBadge = '<span class="oferta-badge active"><span class="oferta-badge-dot"></span>Ativo</span>';
+                    actionBtn = '<button class="btn-oferta-action active" onclick="openLinkModal(\'' + offer.id + '\', \'' + encodeURIComponent(offerStatus.link) + '\', \'' + offer.name + '\')">Obter Link</button>';
+                } else if (offerStatus.status === 'pending') {
+                    statusBadge = '<span class="oferta-badge pending"><span class="oferta-badge-dot"></span>Pendente</span>';
+                    actionBtn = '<button class="btn-oferta-action pending" disabled>Solicitado</button>';
+                } else {
+                    statusBadge = '';
+                    actionBtn = '<button class="btn-oferta-action request" onclick="openRequestModal(\'' + offer.id + '\', \'' + offer.name + '\')">Solicitar acesso</button>';
+                }
+
+                html += '<div class="oferta-card">' +
+                    '<div class="oferta-left">' +
+                        '<div class="oferta-logo" style="border-color: ' + offer.color + '20;">' +
+                            '<img src="' + offer.logo + '" alt="' + offer.name + '">' +
+                        '</div>' +
+                        '<div class="oferta-info">' +
+                            '<div class="oferta-name">' + offer.name + '</div>' +
+                            '<div class="oferta-subtitle">' + offer.subtitle + '</div>' +
+                            '<div class="oferta-details">' +
+                                '<span>Baseline: ' + offer.baseline + '</span>' +
+                                '<span>Wager: ' + offer.wager + '</span>' +
+                                '<span>Pagamento: ' + offer.payment + '</span>' +
+                            '</div>' +
+                            '<div class="oferta-tags">' +
+                                '<span class="oferta-currency">' + offer.currency + '</span>' +
+                                statusBadge +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="oferta-right">' +
+                        '<div class="oferta-meta-grid">' +
+                            '<div class="oferta-meta-item">' +
+                                '<span class="oferta-meta-label">Tipo de meta</span>' +
+                                '<span class="oferta-meta-value">' + offer.metaTypes.join(', ') + '</span>' +
+                            '</div>' +
+                            '<div class="oferta-meta-item">' +
+                                '<span class="oferta-meta-label">Modelos</span>' +
+                                '<span class="oferta-meta-value">CPA</span>' +
+                            '</div>' +
+                            '<div class="oferta-meta-item">' +
+                                '<span class="oferta-meta-label">Pagamento</span>' +
+                                '<span class="oferta-meta-value">' + Format.currency(cpa) + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                        actionBtn +
+                    '</div>' +
+                '</div>';
             });
-            loadLinkData();
+
+            container.innerHTML = html;
+            document.getElementById('totalAtivos').textContent = activeCount;
+            document.getElementById('totalPendentes').textContent = pendingCount;
         }
 
-        function copyLink() {
-            const link = document.getElementById('affiliateLink').textContent;
-            Clipboard.copy(link);
+        function openLinkModal(offerId, encodedLink, houseName) {
+            currentModalLink = decodeURIComponent(encodedLink);
+            document.getElementById('modalTitle').textContent = 'Link - ' + houseName;
+            document.getElementById('modalLinkInput').value = currentModalLink;
+            Modal.open('linkModal');
         }
 
-        function shareWhatsApp() {
-            const link = document.getElementById('affiliateLink').textContent;
-            window.open(`https://wa.me/?text=${encodeURIComponent('Cadastre-se agora! ' + link)}`, '_blank');
+        function copyModalLink() {
+            var input = document.getElementById('modalLinkInput');
+            input.select();
+            navigator.clipboard.writeText(currentModalLink).then(function() {
+                Toast.success('Link copiado!');
+            });
         }
 
-        function shareTelegram() {
-            const link = document.getElementById('affiliateLink').textContent;
-            window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}`, '_blank');
+        function shareLink(platform) {
+            var link = currentModalLink;
+            var text = 'Cadastre-se agora! ' + link;
+            if (platform === 'whatsapp') {
+                window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+            } else if (platform === 'telegram') {
+                window.open('https://t.me/share/url?url=' + encodeURIComponent(link), '_blank');
+            }
         }
 
-        function shareTwitter() {
-            const link = document.getElementById('affiliateLink').textContent;
-            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('Cadastre-se agora! ' + link)}`, '_blank');
+        function openRequestModal(offerId, houseName) {
+            currentRequestHouse = offerId;
+            document.getElementById('requestHouseName').textContent = houseName;
+            document.getElementById('requestModalTitle').textContent = 'Solicitar - ' + houseName;
+            Modal.open('requestModal');
         }
 
-        function shareFacebook() {
-            const link = document.getElementById('affiliateLink').textContent;
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`, '_blank');
+        function submitRequest() {
+            const user = Auth.currentUser;
+            if (!user) return;
+            const requests = Storage.get('linkRequests_' + user.id) || [];
+            if (!requests.includes(currentRequestHouse)) {
+                requests.push(currentRequestHouse);
+                Storage.set('linkRequests_' + user.id, requests);
+            }
+            Modal.close('requestModal');
+            Toast.success('Solicitacao enviada! Aguarde aprovacao do administrador.');
+            renderOffers();
         }
-
     </script>
 
     <style>
-        .link-main-card {
+        .ofertas-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .oferta-stat-card {
             background: var(--bg-1);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 20px;
+            padding: 16px 20px;
+            text-align: center;
         }
 
-        .link-main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        .oferta-stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-1);
         }
 
-        .link-platform-info {
+        .oferta-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .ofertas-list {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 12px;
         }
 
-        .link-platform-logo {
-            width: 48px;
-            height: 48px;
+        .oferta-card {
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            transition: border-color 0.2s;
+        }
+
+        .oferta-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .oferta-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .oferta-logo {
+            width: 56px;
+            height: 56px;
+            min-width: 56px;
             background: #fff;
-            border-radius: var(--radius);
+            border: 2px solid var(--border);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            flex-shrink: 0;
-            padding: 4px;
+            padding: 6px;
         }
 
-        .link-platform-logo img {
+        .oferta-logo img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border-radius: 4px;
         }
 
-        .link-cpa {
-            font-size: 0.8125rem;
+        .oferta-info {
+            min-width: 0;
+        }
+
+        .oferta-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: 2px;
+        }
+
+        .oferta-subtitle {
+            font-size: 0.8rem;
             color: var(--text-3);
+            margin-bottom: 6px;
         }
 
-        .link-cpa strong {
-            color: var(--accent);
+        .oferta-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+            font-size: 0.75rem;
+            color: var(--text-3);
+            margin-bottom: 8px;
         }
 
-        .link-url-box {
+        .oferta-tags {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            background: var(--bg-2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 20px;
+            gap: 8px;
         }
 
-        .link-url {
-            flex: 1;
-            font-family: 'SF Mono', Monaco, Consolas, monospace;
-            font-size: 0.8125rem;
-            color: var(--accent);
-            word-break: break-all;
-        }
-
-        .link-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-
-        .link-stat {
-            text-align: center;
-            padding: 16px;
-            background: var(--bg-2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-        }
-
-        .link-stat-value {
-            display: block;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-1);
-            margin-bottom: 4px;
-        }
-
-        .link-stat-label {
-            font-size: 0.6875rem;
-            color: var(--text-3);
-            text-transform: uppercase;
+        .oferta-currency {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--blue);
+            border-radius: 4px;
             letter-spacing: 0.04em;
         }
 
+        .oferta-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .oferta-badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .oferta-badge.active {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--green);
+        }
+
+        .oferta-badge.active .oferta-badge-dot { background: var(--green); }
+
+        .oferta-badge.pending {
+            background: rgba(234, 179, 8, 0.1);
+            color: var(--yellow);
+        }
+
+        .oferta-badge.pending .oferta-badge-dot { background: var(--yellow); }
+
+        .oferta-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .oferta-meta-grid {
+            display: flex;
+            gap: 24px;
+        }
+
+        .oferta-meta-item {
+            text-align: center;
+        }
+
+        .oferta-meta-label {
+            display: block;
+            font-size: 0.65rem;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 4px;
+            white-space: nowrap;
+        }
+
+        .oferta-meta-value {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-1);
+            white-space: nowrap;
+        }
+
+        .btn-oferta-action {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .btn-oferta-action.active {
+            background: var(--green);
+            color: white;
+        }
+
+        .btn-oferta-action.active:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-oferta-action.pending {
+            background: rgba(234, 179, 8, 0.15);
+            color: var(--yellow);
+            cursor: default;
+        }
+
+        .btn-oferta-action.request {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-oferta-action.request:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .share-btn-sm {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-2);
+            color: var(--text-2);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .share-btn-sm.whatsapp:hover { background: #25D366; color: white; border-color: #25D366; }
+        .share-btn-sm.telegram:hover { background: #0088cc; color: white; border-color: #0088cc; }
+
         @media (max-width: 768px) {
-            .link-stats {
-                grid-template-columns: repeat(2, 1fr);
+            .ofertas-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
             }
 
-            .link-url-box {
+            .oferta-stat-card {
+                padding: 12px;
+            }
+
+            .oferta-stat-value {
+                font-size: 1.2rem;
+            }
+
+            .oferta-card {
                 flex-direction: column;
                 align-items: stretch;
+                padding: 16px;
+                gap: 16px;
             }
 
-            .link-url {
-                text-align: center;
-                margin-bottom: 10px;
+            .oferta-right {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
             }
 
-            .btn-copy {
+            .oferta-meta-grid {
+                justify-content: space-between;
+            }
+
+            .btn-oferta-action {
                 width: 100%;
-                justify-content: center;
+                text-align: center;
+                padding: 12px;
             }
         }
     </style>
@@ -481,8 +709,8 @@
             <span>Inicio</span>
         </a>
         <a href="meus-links.html" class="bottom-nav-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-            <span>Links</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            <span>Ofertas</span>
         </a>
         <a href="minha-equipe.html" class="bottom-nav-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
