@@ -102,7 +102,7 @@
                 <!-- Page Header -->
                 <div class="page-header">
                     <h1>Financeiro</h1>
-                    <p>Acompanhe seus ganhos e solicite saques</p>
+                    <p>Acompanhe seus ganhos</p>
                 </div>
 
                 <!-- Balance Card -->
@@ -114,13 +114,6 @@
                             <span>Próximo fechamento: <strong id="nextClosing">15/04</strong></span>
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-lg" onclick="openWithdrawModal()" id="withdrawBtn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-                            <line x1="1" y1="10" x2="23" y2="10"/>
-                        </svg>
-                        Solicitar Saque
-                    </button>
                 </div>
 
                 <!-- Period Cards -->
@@ -185,58 +178,8 @@
                     </div>
                 </div>
 
-                <!-- Withdrawal History -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Histórico de Saques</h3>
-                    </div>
-                    <div class="card-body">
-                        <div id="withdrawalHistory">
-                            <div class="empty-state">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-                                    <line x1="1" y1="10" x2="23" y2="10"/>
-                                </svg>
-                                <h3>Nenhum saque ainda</h3>
-                                <p>Seu histórico de saques aparecerá aqui</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </main>
-    </div>
-
-    <!-- Withdraw Modal -->
-    <div class="modal-overlay" id="withdrawModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Solicitar Saque</h3>
-                <button class="modal-close" onclick="closeWithdrawModal()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <form id="withdrawForm" onsubmit="submitWithdraw(event)">
-                <div class="modal-body">
-                    <div class="withdraw-balance-info">
-                        <span>Saldo disponível:</span>
-                        <strong id="modalBalance">R$ 0,00</strong>
-                    </div>
-                    <div class="form-group">
-                        <label>Valor do Saque</label>
-                        <input type="number" name="amount" min="1" step="0.01" placeholder="Valor do saque" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Confirmar Chave PIX</label>
-                        <input type="text" name="pixKey" id="modalPixKey" readonly>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="closeWithdrawModal()">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Solicitar</button>
-                </div>
-            </form>
-        </div>
     </div>
 
     <!-- PIX Modal -->
