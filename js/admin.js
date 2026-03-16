@@ -7,7 +7,6 @@ const AdminAuth = {
     currentAdmin: null,
 
     init() {
-        // Buscar admin do localStorage diretamente
         try {
             const adminData = localStorage.getItem('fenix_currentAdmin');
             if (adminData) {
@@ -16,47 +15,12 @@ const AdminAuth = {
         } catch(e) {
             this.currentAdmin = null;
         }
-        this.initDefaultAdmin();
     },
 
-    initDefaultAdmin() {
-        let admins = [];
-        try {
-            admins = JSON.parse(localStorage.getItem('fenix_admins') || '[]');
-        } catch(e) {
-            admins = [];
-        }
-
-        const defaultAdmin = {
-            id: 1,
-            name: 'Administrador Master',
-            email: 'admin@fenix.com',
-            password: 'fenix2026',
-            role: 'super_admin',
-            createdAt: new Date().toISOString()
-        };
-
-        const existing = admins.findIndex(a => a.email === 'admin@fenix.com');
-        if (existing >= 0) {
-            admins[existing].password = 'fenix2026';
-        } else {
-            admins.push(defaultAdmin);
-        }
-        localStorage.setItem('fenix_admins', JSON.stringify(admins));
-    },
-
-    login(email, password) {
-        let admins = [];
-        try {
-            admins = JSON.parse(localStorage.getItem('fenix_admins') || '[]');
-        } catch(e) {
-            admins = [];
-        }
-
-        const admin = admins.find(a => a.email === email && a.password === password);
-
-        if (admin) {
-            const adminData = {
+    async login(email, password) {
+        var admin = await SupabaseDB.getAdminByEmail(email);
+        if (admin && admin.password === password) {
+            var adminData = {
                 id: admin.id,
                 name: admin.name,
                 email: admin.email,
@@ -72,7 +36,6 @@ const AdminAuth = {
     logout() {
         this.currentAdmin = null;
         localStorage.removeItem('fenix_currentAdmin');
-        // Detecta se está na pasta admin ou na raiz
         if (window.location.pathname.includes('/admin/')) {
             window.location.href = '../index.html';
         } else {
@@ -184,10 +147,20 @@ const BettingHouses = {
     }
 };
 
-// Affiliate Management (Admin)
+// Affiliate Management (Admin) - Supabase
 const AffiliateManager = {
+    _cache: null,
+    _cacheTime: 0,
+
+    async fetchAll() {
+        this._cache = await SupabaseDB.getUsers();
+        this._cacheTime = Date.now();
+        return this._cache;
+    },
+
     getAll() {
-        return Storage.get('users') || [];
+        // Return cached data synchronously for rendering
+        return this._cache || [];
     },
 
     getPending() {
@@ -202,105 +175,49 @@ const AffiliateManager = {
         return this.getAll().filter(u => u.status === 'rejected');
     },
 
-    approve(userId) {
-        const users = this.getAll();
-        const index = users.findIndex(u => u.id === userId);
-        if (index !== -1) {
-            users[index].status = 'approved';
-            users[index].approvedAt = new Date().toISOString();
-            users[index].approvedBy = AdminAuth.currentAdmin?.id;
-            Storage.set('users', users);
-            return true;
-        }
-        return false;
+    async approve(userId) {
+        var result = await SupabaseDB.updateUser(userId, {
+            status: 'approved',
+            approved_at: new Date().toISOString(),
+            approved_by: AdminAuth.currentAdmin?.id
+        });
+        if (!result.error) await this.fetchAll();
+        return !result.error;
     },
 
-    reject(userId, reason = '') {
-        const users = this.getAll();
-        const index = users.findIndex(u => u.id === userId);
-        if (index !== -1) {
-            users[index].status = 'rejected';
-            users[index].rejectedAt = new Date().toISOString();
-            users[index].rejectedBy = AdminAuth.currentAdmin?.id;
-            users[index].rejectionReason = reason;
-            Storage.set('users', users);
-            return true;
-        }
-        return false;
+    async reject(userId, reason) {
+        var result = await SupabaseDB.updateUser(userId, { status: 'rejected' });
+        if (!result.error) await this.fetchAll();
+        return !result.error;
     },
 
-    block(userId) {
-        const users = this.getAll();
-        const index = users.findIndex(u => u.id === userId);
-        if (index !== -1) {
-            users[index].status = 'blocked';
-            users[index].blockedAt = new Date().toISOString();
-            Storage.set('users', users);
-            return true;
-        }
-        return false;
+    async block(userId) {
+        var result = await SupabaseDB.updateUser(userId, { status: 'blocked' });
+        if (!result.error) await this.fetchAll();
+        return !result.error;
     },
 
-    unblock(userId) {
-        const users = this.getAll();
-        const index = users.findIndex(u => u.id === userId);
-        if (index !== -1) {
-            users[index].status = 'approved';
-            delete users[index].blockedAt;
-            Storage.set('users', users);
-            return true;
-        }
-        return false;
+    async unblock(userId) {
+        var result = await SupabaseDB.updateUser(userId, { status: 'approved' });
+        if (!result.error) await this.fetchAll();
+        return !result.error;
     },
 
     getStats(userId) {
-        const links = Storage.get(`links_${userId}`) || [];
+        var user = this.getAll().find(u => u.id === userId);
         return {
-            totalLinks: links.length,
-            totalClicks: links.reduce((sum, l) => sum + l.clicks, 0),
-            totalConversions: links.reduce((sum, l) => sum + l.conversions, 0),
-            totalEarnings: links.reduce((sum, l) => sum + l.earnings, 0)
+            totalLinks: 0,
+            totalClicks: user ? (user.total_clicks || 0) : 0,
+            totalConversions: user ? (user.total_conversions || 0) : 0,
+            totalEarnings: user ? parseFloat(user.total_earnings || 0) : 0
         };
     },
 
-    updateCPA(userId, houseId, customCPA) {
-        const users = this.getAll();
-        const index = users.findIndex(u => u.id === userId);
-        if (index !== -1) {
-            if (!users[index].customCPA) {
-                users[index].customCPA = {};
-            }
-            users[index].customCPA[houseId] = customCPA;
-            Storage.set('users', users);
-            return true;
-        }
-        return false;
-    },
-
-    updateDeal(userId, houseId, dealData) {
-        const users = this.getAll();
-        const index = users.findIndex(u => u.id === userId);
-        if (index !== -1) {
-            if (!users[index].deals) {
-                users[index].deals = {};
-            }
-            users[index].deals[houseId] = dealData;
-            Storage.set('users', users);
-            return true;
-        }
-        return false;
-    },
-
     getDeal(userId, houseId) {
-        const users = this.getAll();
-        const user = users.find(u => u.id === userId);
-        if (user?.deals?.[houseId]) {
-            return user.deals[houseId];
-        }
-        const house = BettingHouses.getById(houseId);
+        var house = BettingHouses.getById(houseId);
         return {
             type: 'cpa',
-            cpaValue: user?.customCPA?.[houseId] || house?.cpa || 0,
+            cpaValue: house?.cpa || 0,
             revShare: house?.revShare || 25,
             hybridCPA: 0,
             hybridRevShare: 0
@@ -432,19 +349,17 @@ const MasterLinks = {
 // Dashboard Statistics
 const AdminStats = {
     getOverview() {
-        const users = AffiliateManager.getAll();
-        const houses = BettingHouses.getAll();
-        const withdrawals = WithdrawalManager.getAll();
+        var users = AffiliateManager.getAll();
+        var houses = BettingHouses.getAll();
 
-        let totalClicks = 0;
-        let totalConversions = 0;
-        let totalEarnings = 0;
+        var totalClicks = 0;
+        var totalConversions = 0;
+        var totalEarnings = 0;
 
-        users.forEach(user => {
-            const links = Storage.get(`links_${user.id}`) || [];
-            totalClicks += links.reduce((sum, l) => sum + l.clicks, 0);
-            totalConversions += links.reduce((sum, l) => sum + l.conversions, 0);
-            totalEarnings += links.reduce((sum, l) => sum + l.earnings, 0);
+        users.forEach(function(user) {
+            totalClicks += user.total_clicks || 0;
+            totalConversions += user.total_conversions || 0;
+            totalEarnings += parseFloat(user.total_earnings || 0);
         });
 
         return {
@@ -453,17 +368,17 @@ const AdminStats = {
             activeAffiliates: users.filter(u => u.status === 'approved').length,
             blockedAffiliates: users.filter(u => u.status === 'blocked').length,
             totalHouses: houses.length,
-            totalClicks,
-            totalConversions,
-            totalEarnings,
-            pendingWithdrawals: withdrawals.filter(w => w.status === 'pending').length,
-            totalWithdrawals: withdrawals.reduce((sum, w) => w.status === 'paid' ? sum + w.amount : sum, 0),
+            totalClicks: totalClicks,
+            totalConversions: totalConversions,
+            totalEarnings: totalEarnings,
+            pendingWithdrawals: 0,
+            totalWithdrawals: 0,
             conversionRate: totalClicks > 0 ? (totalConversions / totalClicks * 100) : 0
         };
     },
 
     getHouseStats() {
-        return BettingHouses.getAll().map(house => {
+        return BettingHouses.getAll().map(function(house) {
             return {
                 ...house,
                 revenue: house.totalConversions * house.cpa
@@ -535,112 +450,80 @@ const PostbackSimulator = {
     }
 };
 
-// Initialize Demo Data for Admin
+// Initialize Demo Data for Admin (data now lives in Supabase)
 const AdminDemoData = {
     init() {
-        // Initialize betting houses
+        // BettingHouses and MasterLinks still use localStorage for now
         BettingHouses.getAll();
-
-        // Initialize master links
         MasterLinks.getAll();
-
-        // Create demo affiliate account (only if not exists)
-        const users = Storage.get('users') || [];
-        if (!users.find(u => u.email === 'demo@fenix.com')) {
-            users.push({
-                id: 900001,
-                name: 'Afiliado Demo',
-                email: 'demo@fenix.com',
-                password: '123456',
-                phone: '',
-                status: 'approved',
-                affiliateCode: 'FNXDEMO01',
-                balance: 0,
-                totalEarnings: 0,
-                totalClicks: 0,
-                totalConversions: 0,
-                createdAt: new Date().toISOString()
-            });
-            Storage.set('users', users);
-        }
-
-        // Create demo manager (fixed ID 99999 to match Auth.login in main.js)
-        const managers = Storage.get('managers') || [];
-        if (!managers.find(m => m.email === 'gerente@fenix.com')) {
-            managers.push({
-                id: 99999,
-                name: 'Gerente Fenix',
-                email: 'gerente@fenix.com',
-                password: 'gerente123',
-                phone: '',
-                role: 'manager',
-                referralCode: 'MGRLUCAS',
-                cpaCommission: 30,
-                status: 'active',
-                balance: 0,
-                totalEarnings: 0,
-                createdAt: new Date().toISOString()
-            });
-            Storage.set('managers', managers);
-        }
     }
 };
 
-// Manager Management
+// Manager Management - Supabase
 const ManagerManager = {
+    _cache: null,
+
+    async fetchAll() {
+        this._cache = await SupabaseDB.getManagers();
+        return this._cache;
+    },
+
     getAll() {
-        return Storage.get('managers') || [];
+        return this._cache || [];
     },
 
     getById(id) {
-        return this.getAll().find(m => m.id === id);
+        return this.getAll().find(function(m) { return m.id == id; });
     },
 
-    add(data) {
-        const managers = this.getAll();
-        if (managers.find(m => m.email === data.email)) {
+    async add(data) {
+        var existing = this.getAll().find(function(m) { return m.email === data.email; });
+        if (existing) {
             return { success: false, message: 'E-mail já cadastrado' };
         }
-        const newManager = {
-            id: Date.now(),
+        var newManager = {
             name: data.name,
             email: data.email,
             password: data.password,
             phone: data.phone || '',
             role: 'manager',
-            referralCode: 'MGR' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-            cpaCommission: parseFloat(data.cpaCommission) || 30,
+            referral_code: 'MGR' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+            cpa_commission: parseFloat(data.cpaCommission) || 30,
             status: 'active',
             balance: 0,
-            totalEarnings: 0,
-            createdAt: new Date().toISOString()
+            total_earnings: 0,
+            created_at: new Date().toISOString()
         };
-        managers.push(newManager);
-        Storage.set('managers', managers);
-        return { success: true, manager: newManager };
-    },
-
-    update(id, data) {
-        const managers = this.getAll();
-        const index = managers.findIndex(m => m.id === id);
-        if (index !== -1) {
-            managers[index] = { ...managers[index], ...data };
-            Storage.set('managers', managers);
-            return managers[index];
+        var result = await SupabaseDB.createManager(newManager);
+        if (result.error) {
+            return { success: false, message: 'Erro ao criar gerente' };
         }
-        return null;
+        await this.fetchAll();
+        return { success: true, manager: result.data };
     },
 
-    remove(id) {
-        const managers = this.getAll().filter(m => m.id !== id);
-        Storage.set('managers', managers);
+    async update(id, data) {
+        var updateData = {};
+        if (data.name !== undefined) updateData.name = data.name;
+        if (data.email !== undefined) updateData.email = data.email;
+        if (data.password !== undefined) updateData.password = data.password;
+        if (data.phone !== undefined) updateData.phone = data.phone;
+        if (data.cpaCommission !== undefined) updateData.cpa_commission = parseFloat(data.cpaCommission);
+        if (data.status !== undefined) updateData.status = data.status;
+        var result = await SupabaseDB.updateManager(id, updateData);
+        if (!result.error) await this.fetchAll();
+        return result.data || null;
     },
 
-    login(email, password) {
-        const managers = this.getAll();
-        const manager = managers.find(m => m.email === email && m.password === password && m.status === 'active');
-        if (manager) {
-            const data = { id: manager.id, name: manager.name, email: manager.email, role: 'manager', referralCode: manager.referralCode };
+    async remove(id) {
+        await SupabaseDB.deleteManager(id);
+        await this.fetchAll();
+    },
+
+    async login(email, password) {
+        var manager = await SupabaseDB.getManagerByEmail(email);
+        if (manager && manager.password === password && manager.status === 'active') {
+            var data = { id: manager.id, name: manager.name, email: manager.email, role: 'manager', referralCode: manager.referral_code };
             localStorage.setItem('fenix_currentManager', JSON.stringify(data));
             return { success: true, manager: data };
         }
@@ -661,7 +544,7 @@ const ManagerManager = {
     },
 
     requireAuth() {
-        const m = this.getCurrentManager();
+        var m = this.getCurrentManager();
         if (!m) {
             window.location.href = '../index.html';
             return false;
@@ -670,70 +553,68 @@ const ManagerManager = {
     },
 
     getAffiliates(managerId) {
-        const allUsers = Storage.get('users') || [];
-        return allUsers.filter(u => u.managerId == managerId);
+        var allUsers = AffiliateManager.getAll();
+        return allUsers.filter(function(u) { return u.manager_id == managerId; });
     },
 
     getStats(managerId) {
-        const affiliates = this.getAffiliates(managerId);
-        const manager = this.getById(managerId);
-        let totalClicks = 0, totalConversions = 0, totalAffiliateEarnings = 0;
+        var affiliates = this.getAffiliates(managerId);
+        var manager = this.getById(managerId);
+        var totalClicks = 0, totalConversions = 0, totalEarnings = 0;
 
-        affiliates.forEach(aff => {
-            const links = Storage.get('links_' + aff.id) || [];
-            totalClicks += links.reduce((s, l) => s + l.clicks, 0);
-            totalConversions += links.reduce((s, l) => s + l.conversions, 0);
-            totalAffiliateEarnings += links.reduce((s, l) => s + l.earnings, 0);
+        affiliates.forEach(function(aff) {
+            totalClicks += aff.total_clicks || 0;
+            totalConversions += aff.total_conversions || 0;
+            totalEarnings += parseFloat(aff.total_earnings || 0);
         });
 
-        const cpaCommission = manager?.cpaCommission || 30;
-        const managerEarnings = totalConversions * cpaCommission;
+        var cpaCommission = manager ? (manager.cpa_commission || 30) : 30;
+        var managerEarnings = totalConversions * cpaCommission;
 
         return {
             totalAffiliates: affiliates.length,
-            pendingAffiliates: affiliates.filter(a => a.status === 'pending').length,
-            totalClicks,
-            totalConversions,
-            totalAffiliateEarnings,
-            managerEarnings,
-            cpaCommission,
-            balance: manager?.balance || 0
+            pendingAffiliates: affiliates.filter(function(a) { return a.status === 'pending'; }).length,
+            totalClicks: totalClicks,
+            totalConversions: totalConversions,
+            totalAffiliateEarnings: totalEarnings,
+            managerEarnings: managerEarnings,
+            cpaCommission: cpaCommission,
+            balance: manager ? (manager.balance || 0) : 0
         };
     },
 
-    approveAffiliate(managerId, userId) {
-        const users = Storage.get('users') || [];
-        const index = users.findIndex(u => u.id == userId && u.managerId == managerId);
-        if (index !== -1) {
-            users[index].status = 'approved';
-            users[index].approvedAt = new Date().toISOString();
-            users[index].approvedBy = managerId;
-            Storage.set('users', users);
-            return true;
-        }
-        return false;
+    async approveAffiliate(managerId, userId) {
+        var result = await SupabaseDB.updateUser(userId, {
+            status: 'approved',
+            approved_at: new Date().toISOString(),
+            approved_by: managerId
+        });
+        if (!result.error) await AffiliateManager.fetchAll();
+        return !result.error;
     },
 
-    rejectAffiliate(managerId, userId, reason) {
-        const users = Storage.get('users') || [];
-        const index = users.findIndex(u => u.id == userId && u.managerId == managerId);
-        if (index !== -1) {
-            users[index].status = 'rejected';
-            users[index].rejectedAt = new Date().toISOString();
-            users[index].rejectionReason = reason || '';
-            Storage.set('users', users);
-            return true;
-        }
-        return false;
+    async rejectAffiliate(managerId, userId, reason) {
+        var result = await SupabaseDB.updateUser(userId, {
+            status: 'rejected',
+            rejected_at: new Date().toISOString(),
+            rejection_reason: reason || ''
+        });
+        if (!result.error) await AffiliateManager.fetchAll();
+        return !result.error;
     }
 };
 
 window.ManagerManager = ManagerManager;
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async function() {
     AdminAuth.init();
     AdminDemoData.init();
+    // Pre-fetch data from Supabase
+    if (typeof SupabaseDB !== 'undefined') {
+        await AffiliateManager.fetchAll();
+        await ManagerManager.fetchAll();
+    }
 });
 
 // Toggle Sidebar (for mobile)

@@ -219,7 +219,8 @@
         </div>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             if (!Auth.requireAuth()) return;
@@ -390,7 +391,7 @@
                 userName: user.name,
                 amount: amount,
                 pixKey: formData.get('pixKey'),
-                pixType: user.pixData?.type || 'cpf',
+                pixType: user.pix_data?.type || 'cpf',
                 status: 'pending',
                 createdAt: new Date().toISOString()
             };

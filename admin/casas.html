@@ -264,10 +264,11 @@
         </div>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
-    <script src="../js/admin.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
+    <script src="../js/admin.js?v=3"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             if (!AdminAuth.requireAuth()) return;
             if (AdminAuth.currentAdmin) {
                 document.getElementById('adminName').textContent = AdminAuth.currentAdmin.name;

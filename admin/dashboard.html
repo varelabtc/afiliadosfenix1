@@ -330,11 +330,13 @@
         </main>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
-    <script src="../js/admin.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
+    <script src="../js/admin.js?v=3"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             if (!AdminAuth.requireAuth()) return;
+            await AffiliateManager.fetchAll();
             loadDashboard();
         });
 
@@ -460,8 +462,8 @@
             }).join('');
         }
 
-        function quickApprove(userId) {
-            if (AffiliateManager.approve(userId)) {
+        async function quickApprove(userId) {
+            if (await AffiliateManager.approve(userId)) {
                 Toast.success('Afiliado aprovado!');
                 loadDashboard();
             }

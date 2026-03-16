@@ -214,11 +214,13 @@
         </div>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
-    <script src="../js/admin.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
+    <script src="../js/admin.js?v=3"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             if (!AdminAuth.requireAuth()) return;
+            await ManagerManager.fetchAll();
             if (AdminAuth.currentAdmin) {
                 document.getElementById('adminName').textContent = AdminAuth.currentAdmin.name;
             }
@@ -241,8 +243,8 @@
 
                 return '<tr>' +
                     '<td><div style="display:flex;align-items:center;gap:10px;"><div class="user-avatar" style="background:var(--blue);">' + mgr.name.charAt(0) + '</div><div><div style="font-weight:600;">' + mgr.name + '</div><div style="font-size:0.75rem;color:var(--text-muted);">' + mgr.email + '</div></div></div></td>' +
-                    '<td><code style="background:var(--bg-2);padding:4px 8px;border-radius:4px;">' + mgr.referralCode + '</code></td>' +
-                    '<td style="color:var(--blue);font-weight:600;">R$ ' + (mgr.cpaCommission || 30).toFixed(2) + '</td>' +
+                    '<td><code style="background:var(--bg-2);padding:4px 8px;border-radius:4px;">' + (mgr.referral_code || '-') + '</code></td>' +
+                    '<td style="color:var(--blue);font-weight:600;">R$ ' + (mgr.cpa_commission || 30).toFixed(2) + '</td>' +
                     '<td>' + stats.totalAffiliates + '</td>' +
                     '<td>' + stats.totalConversions + '</td>' +
                     '<td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + statusText + '</span></td>' +
@@ -272,12 +274,12 @@
             document.querySelector('[name="email"]').value = mgr.email;
             document.querySelector('[name="password"]').value = mgr.password;
             document.querySelector('[name="phone"]').value = mgr.phone || '';
-            document.querySelector('[name="cpaCommission"]').value = mgr.cpaCommission || 30;
+            document.querySelector('[name="cpaCommission"]').value = mgr.cpa_commission || 30;
 
             Modal.open('managerModal');
         }
 
-        document.getElementById('managerForm').addEventListener('submit', function(e) {
+        document.getElementById('managerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             var editId = document.getElementById('editManagerId').value;
             var data = {
@@ -290,11 +292,11 @@
 
             if (editId) {
                 // Editing
-                ManagerManager.update(parseInt(editId), data);
+                await ManagerManager.update(parseInt(editId), data);
                 Toast.success('Gerente atualizado!');
             } else {
                 // Adding
-                var result = ManagerManager.add(data);
+                var result = await ManagerManager.add(data);
                 if (result.success) {
                     Toast.success('Gerente criado! Login: ' + data.email);
                 } else {
@@ -307,9 +309,9 @@
             loadManagers();
         });
 
-        function deleteManager(id) {
+        async function deleteManager(id) {
             if (confirm('Tem certeza que deseja excluir este gerente?')) {
-                ManagerManager.remove(id);
+                await ManagerManager.remove(id);
                 Toast.success('Gerente excluído');
                 loadManagers();
             }

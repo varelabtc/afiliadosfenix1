@@ -226,7 +226,8 @@
         </main>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             if (!Auth.requireAuth()) return;
@@ -242,7 +243,7 @@
                 document.getElementById('welcomeName').textContent = user.name.split(' ')[0];
 
                 // Referral link
-                var code = user.affiliateCode || 'FENIX001';
+                var code = user.affiliate_code || 'FENIX001';
                 var refUrl = window.location.origin + '/pages/cadastro.html?ref=' + code;
                 document.getElementById('myRefLink').textContent = refUrl;
             }

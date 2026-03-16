@@ -272,7 +272,8 @@
         </main>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             if (!Auth.requireAuth()) return;
@@ -287,7 +288,7 @@
                 document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
                 document.getElementById('treeUserName').textContent = user.name;
                 document.getElementById('treeUserAvatar').textContent = user.name.charAt(0).toUpperCase();
-                document.getElementById('treeUserCode').textContent = user.affiliateCode || 'FENIX001';
+                document.getElementById('treeUserCode').textContent = user.affiliate_code || 'FENIX001';
             }
         }
 

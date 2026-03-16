@@ -273,96 +273,82 @@ const Auth = {
         this.updateUI();
     },
 
-    login(email, password) {
-        // Check admin credentials first
-        if (email === 'admin@fenix.com' && password === 'fenix2026') {
-            const adminData = {
-                id: 1,
-                name: 'Administrador Master',
-                email: email,
-                role: 'super_admin'
+    async login(email, password) {
+        // Check admin credentials via Supabase
+        var admin = await SupabaseDB.getAdminByEmail(email);
+        if (admin && admin.password === password) {
+            var adminData = {
+                id: admin.id,
+                name: admin.name,
+                email: admin.email,
+                role: admin.role || 'super_admin'
             };
             localStorage.setItem('fenix_currentAdmin', JSON.stringify(adminData));
-            // Ensure admin exists in admins list
-            let admins = [];
-            try { admins = JSON.parse(localStorage.getItem('fenix_admins') || '[]'); } catch(e) { admins = []; }
-            if (!admins.find(a => a.email === email)) {
-                admins.push({ ...adminData, password: password, createdAt: new Date().toISOString() });
-                localStorage.setItem('fenix_admins', JSON.stringify(admins));
-            }
             return { success: true, user: adminData, isAdmin: true };
         }
 
-        // Check manager credentials
-        let managers = Storage.get('managers') || [];
-        // Ensure demo manager exists
-        if (!managers.find(m => m.email === 'gerente@fenix.com')) {
-            managers.push({
-                id: 99999,
-                name: 'Gerente Fenix',
-                email: 'gerente@fenix.com',
-                password: 'gerente123',
-                phone: '',
-                role: 'manager',
-                referralCode: 'MGRLUCAS',
-                cpaCommission: 30,
-                status: 'active',
-                balance: 0,
-                totalEarnings: 0,
-                createdAt: new Date().toISOString()
-            });
-            Storage.set('managers', managers);
-        }
-        const manager = managers.find(m => m.email === email && m.password === password && m.status === 'active');
-        if (manager) {
-            const mgrData = { id: manager.id, name: manager.name, email: manager.email, role: 'manager', referralCode: manager.referralCode };
+        // Check manager credentials via Supabase
+        var manager = await SupabaseDB.getManagerByEmail(email);
+        if (manager && manager.password === password && manager.status === 'active') {
+            var mgrData = { id: manager.id, name: manager.name, email: manager.email, role: 'manager', referralCode: manager.referral_code };
             localStorage.setItem('fenix_currentManager', JSON.stringify(mgrData));
             return { success: true, user: mgrData, isAdmin: false, isManager: true };
         }
 
-        const users = Storage.get('users') || [];
-        const user = users.find(u => u.email === email && u.password === password);
-
-        if (user) {
+        // Check affiliate credentials via Supabase
+        var user = await SupabaseDB.getUserByEmail(email);
+        if (user && user.password === password) {
             if (!user.status || user.status === 'pending') {
                 return { success: false, message: 'Seu cadastro está aguardando aprovação.' };
             }
             if (user.status === 'rejected') {
                 return { success: false, message: 'Seu cadastro foi rejeitado. Entre em contato com o suporte.' };
             }
+            if (user.status === 'blocked') {
+                return { success: false, message: 'Sua conta foi bloqueada. Entre em contato com o suporte.' };
+            }
             this.currentUser = user;
             Storage.set('currentUser', user);
-            return { success: true, user, isAdmin: false, isManager: false };
+            return { success: true, user: user, isAdmin: false, isManager: false };
         }
+
         return { success: false, message: 'E-mail ou senha incorretos' };
     },
 
-    register(userData) {
-        const users = Storage.get('users') || [];
-
-        if (users.find(u => u.email === userData.email)) {
+    async register(userData) {
+        // Check if email already exists
+        var existing = await SupabaseDB.getUserByEmail(userData.email);
+        if (existing) {
             return { success: false, message: 'Este e-mail já está cadastrado' };
         }
 
-        const newUser = {
-            id: Date.now(),
-            ...userData,
-            createdAt: new Date().toISOString(),
-            affiliateCode: this.generateAffiliateCode(),
+        // Also check managers
+        var existingMgr = await SupabaseDB.getManagerByEmail(userData.email);
+        if (existingMgr) {
+            return { success: false, message: 'Este e-mail já está cadastrado' };
+        }
+
+        var newUser = {
+            name: userData.name,
+            email: userData.email,
+            password: userData.password,
+            phone: userData.phone || '',
             status: 'pending',
+            affiliate_code: SupabaseDB.generateAffiliateCode(),
+            manager_id: userData.managerId || null,
+            referred_by: userData.referredBy || null,
             balance: 0,
-            totalEarnings: 0,
-            totalClicks: 0,
-            totalConversions: 0
+            total_earnings: 0,
+            total_clicks: 0,
+            total_conversions: 0
         };
 
-        users.push(newUser);
-        Storage.set('users', users);
+        var result = await SupabaseDB.createUser(newUser);
+        if (result.error) {
+            return { success: false, message: 'Erro ao criar conta. Tente novamente.' };
+        }
 
-        // Initialize user links
-        Storage.set(`links_${newUser.id}`, []);
-
-        return { success: true, user: newUser };
+        return { success: true, user: result.data };
     },
 
     logout() {
@@ -510,10 +496,7 @@ const Analytics = {
 // Initialize Demo Data
 const DemoData = {
     init() {
-        // Only initialize if no users exist
-        if (!Storage.get('users')) {
-            Storage.set('users', []);
-        }
+        // No-op: data is now in Supabase
     }
 };
 
@@ -524,35 +507,40 @@ const Pages = {
         const form = document.getElementById('loginForm');
         if (!form) return;
 
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             if (!FormValidator.validateForm(form)) return;
 
             const email = form.querySelector('[name="email"]').value;
             const password = form.querySelector('[name="password"]').value;
+            const btn = form.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'ENTRANDO...';
 
-            const result = Auth.login(email, password);
+            try {
+                const result = await Auth.login(email, password);
 
-            if (result.success) {
-                if (result.isAdmin) {
-                    Toast.success('Acesso Master autorizado!');
-                    setTimeout(() => {
-                        window.location.href = 'admin/dashboard.html';
-                    }, 1000);
-                } else if (result.isManager) {
-                    Toast.success('Acesso Gerente autorizado!');
-                    setTimeout(() => {
-                        window.location.href = 'gerente/dashboard.html';
-                    }, 1000);
+                if (result.success) {
+                    if (result.isAdmin) {
+                        Toast.success('Acesso Master autorizado!');
+                        setTimeout(() => { window.location.href = 'admin/dashboard.html'; }, 1000);
+                    } else if (result.isManager) {
+                        Toast.success('Acesso Gerente autorizado!');
+                        setTimeout(() => { window.location.href = 'gerente/dashboard.html'; }, 1000);
+                    } else {
+                        Toast.success('Login realizado com sucesso!');
+                        setTimeout(() => { window.location.href = 'pages/dashboard.html'; }, 1000);
+                    }
                 } else {
-                    Toast.success('Login realizado com sucesso!');
-                    setTimeout(() => {
-                        window.location.href = 'pages/dashboard.html';
-                    }, 1000);
+                    Toast.error(result.message);
+                    btn.disabled = false;
+                    btn.textContent = 'ENTRAR';
                 }
-            } else {
-                Toast.error(result.message);
+            } catch(err) {
+                Toast.error('Erro de conexão. Tente novamente.');
+                btn.disabled = false;
+                btn.textContent = 'ENTRAR';
             }
         });
     },
@@ -562,7 +550,7 @@ const Pages = {
         const form = document.getElementById('registerForm');
         if (!form) return;
 
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             if (!FormValidator.validateForm(form)) return;
@@ -575,34 +563,48 @@ const Pages = {
                 return;
             }
 
-            // Check for manager referral code in URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const refCode = urlParams.get('ref');
-            let managerId = null;
-            if (refCode) {
-                const managers = Storage.get('managers') || [];
-                const mgr = managers.find(m => m.referralCode === refCode);
-                if (mgr) managerId = mgr.id;
-            }
+            const btn = form.querySelector('button[type="submit"]');
+            btn.disabled = true;
 
-            const userData = {
-                name: form.querySelector('[name="name"]').value,
-                email: form.querySelector('[name="email"]').value,
-                phone: form.querySelector('[name="phone"]').value,
-                password: password,
-                managerId: managerId,
-                status: 'pending'
-            };
+            try {
+                // Check for referral code in URL (manager or affiliate)
+                const urlParams = new URLSearchParams(window.location.search);
+                const refCode = urlParams.get('ref');
+                let managerId = null;
+                let referredBy = null;
 
-            const result = Auth.register(userData);
+                if (refCode) {
+                    // Check if it's a manager referral code
+                    const mgr = await SupabaseDB.getManagerByReferralCode(refCode);
+                    if (mgr) {
+                        managerId = mgr.id;
+                    } else {
+                        // It's an affiliate referral code
+                        referredBy = refCode;
+                    }
+                }
 
-            if (result.success) {
-                Toast.success('Cadastro enviado! Aguarde a aprovação para fazer login.');
-                setTimeout(() => {
-                    window.location.href = '../index.html';
-                }, 3000);
-            } else {
-                Toast.error(result.message);
+                const userData = {
+                    name: form.querySelector('[name="name"]').value,
+                    email: form.querySelector('[name="email"]').value,
+                    phone: form.querySelector('[name="phone"]').value,
+                    password: password,
+                    managerId: managerId,
+                    referredBy: referredBy
+                };
+
+                const result = await Auth.register(userData);
+
+                if (result.success) {
+                    Toast.success('Cadastro enviado! Aguarde a aprovação para fazer login.');
+                    setTimeout(() => { window.location.href = '../index.html'; }, 3000);
+                } else {
+                    Toast.error(result.message);
+                    btn.disabled = false;
+                }
+            } catch(err) {
+                Toast.error('Erro de conexão. Tente novamente.');
+                btn.disabled = false;
             }
         });
     },
@@ -857,7 +859,7 @@ const Pages = {
 
         if (nameEl) nameEl.textContent = user.name;
         if (emailEl) emailEl.textContent = user.email;
-        if (codeEl) codeEl.textContent = user.affiliateCode;
+        if (codeEl) codeEl.textContent = user.affiliate_code;
         if (avatarEl) avatarEl.textContent = user.name.charAt(0).toUpperCase();
 
         // Fill form
@@ -873,23 +875,22 @@ const Pages = {
         const form = document.getElementById('profileForm');
         if (!form) return;
 
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const users = Storage.get('users') || [];
-            const index = users.findIndex(u => u.id === Auth.currentUser.id);
+            var newName = form.querySelector('[name="name"]').value;
+            var newPhone = form.querySelector('[name="phone"]').value;
 
-            if (index !== -1) {
-                users[index].name = form.querySelector('[name="name"]').value;
-                users[index].phone = form.querySelector('[name="phone"]').value;
-
-                Storage.set('users', users);
-                Auth.currentUser = users[index];
+            var result = await SupabaseDB.updateUser(Auth.currentUser.id, { name: newName, phone: newPhone });
+            if (!result.error) {
+                Auth.currentUser.name = newName;
+                Auth.currentUser.phone = newPhone;
                 Storage.set('currentUser', Auth.currentUser);
-
                 Auth.updateUI();
                 this.loadProfileData();
                 Toast.success('Perfil atualizado com sucesso!');
+            } else {
+                Toast.error('Erro ao atualizar perfil.');
             }
         });
     }

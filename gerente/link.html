@@ -110,11 +110,13 @@
         </main>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
-    <script src="../js/admin.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
+    <script src="../js/admin.js?v=3"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             if (!ManagerManager.requireAuth()) return;
+            await ManagerManager.fetchAll();
             var mgr = ManagerManager.getCurrentManager();
             if (!mgr) return;
 
@@ -126,7 +128,7 @@
             var refLink = baseUrl + '/pages/cadastro.html?ref=' + (mgr.referralCode || 'MGR');
             document.getElementById('referralLink').value = refLink;
             document.getElementById('refCode').textContent = mgr.referralCode || '-';
-            document.getElementById('cpaValue').textContent = Format.currency(fullMgr?.cpaCommission || 30);
+            document.getElementById('cpaValue').textContent = Format.currency(fullMgr ? (fullMgr.cpa_commission || 30) : 30);
         });
 
         function copyLink() {

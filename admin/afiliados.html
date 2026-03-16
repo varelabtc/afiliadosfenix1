@@ -276,13 +276,15 @@
         </div>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
-    <script src="../js/admin.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
+    <script src="../js/admin.js?v=3"></script>
     <script>
         let currentFilter = 'all';
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             if (!AdminAuth.requireAuth()) return;
+            await AffiliateManager.fetchAll();
             if (AdminAuth.currentAdmin) {
                 document.getElementById('adminName').textContent = AdminAuth.currentAdmin.name;
             }
@@ -347,7 +349,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td><code style="background: var(--bg-input); padding: 4px 8px; border-radius: 4px;">${user.affiliateCode || 'N/A'}</code></td>
+                        <td><code style="background: var(--bg-input); padding: 4px 8px; border-radius: 4px;">${user.affiliate_code || 'N/A'}</code></td>
                         <td>${getDealBadge(user)}</td>
                         <td>${Format.number(stats.totalConversions)}</td>
                         <td style="color: var(--success); font-weight: 600;">${Format.currency(stats.totalEarnings)}</td>
@@ -458,8 +460,8 @@
 
                 <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
                     <h4 style="margin-bottom: 12px;">Informações</h4>
-                    <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Código:</strong> ${user.affiliateCode || 'N/A'}</p>
-                    <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Cadastro:</strong> ${Format.dateTime(user.createdAt)}</p>
+                    <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Código:</strong> ${user.affiliate_code || 'N/A'}</p>
+                    <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Cadastro:</strong> ${Format.dateTime(user.created_at)}</p>
                     <p style="font-size: 0.875rem;"><strong>Status:</strong> ${user.status || 'Aprovado'}</p>
                 </div>
 
@@ -610,32 +612,32 @@
             loadAffiliates();
         });
 
-        function approveAffiliate(userId) {
-            if (AffiliateManager.approve(userId)) {
+        async function approveAffiliate(userId) {
+            if (await AffiliateManager.approve(userId)) {
                 Toast.success('Afiliado aprovado!');
                 loadAffiliates();
             }
         }
 
-        function rejectAffiliate(userId) {
+        async function rejectAffiliate(userId) {
             const reason = prompt('Motivo da rejeição (opcional):');
-            if (AffiliateManager.reject(userId, reason || '')) {
+            if (await AffiliateManager.reject(userId, reason || '')) {
                 Toast.success('Afiliado rejeitado');
                 loadAffiliates();
             }
         }
 
-        function blockAffiliate(userId) {
+        async function blockAffiliate(userId) {
             if (confirm('Tem certeza que deseja bloquear este afiliado?')) {
-                if (AffiliateManager.block(userId)) {
+                if (await AffiliateManager.block(userId)) {
                     Toast.success('Afiliado bloqueado');
                     loadAffiliates();
                 }
             }
         }
 
-        function unblockAffiliate(userId) {
-            if (AffiliateManager.unblock(userId)) {
+        async function unblockAffiliate(userId) {
+            if (await AffiliateManager.unblock(userId)) {
                 Toast.success('Afiliado desbloqueado');
                 loadAffiliates();
             }
@@ -657,7 +659,7 @@
             document.getElementById('postbackUrl').textContent = postbackUrl;
 
             // Build fields per house
-            var affiliateLinks = user && user.houseLinks ? user.houseLinks : {};
+            var affiliateLinks = user && user.house_links ? user.house_links : {};
 
             document.getElementById('linksFields').innerHTML = houses.map(function(house) {
                 var currentLink = affiliateLinks[house.id] || '';
@@ -677,24 +679,25 @@
             Modal.open('linksModal');
         }
 
-        document.getElementById('linksForm').addEventListener('submit', function(e) {
+        document.getElementById('linksForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             var userId = parseInt(document.getElementById('linksUserId').value);
             var houses = BettingHouses.getAll();
             var users = AffiliateManager.getAll();
-            var index = users.findIndex(function(u) { return u.id === userId; });
-            if (index === -1) return;
+            var user = users.find(function(u) { return u.id === userId; });
+            if (!user) return;
 
-            if (!users[index].houseLinks) users[index].houseLinks = {};
+            var houseLinks = user.house_links || {};
 
             houses.forEach(function(house) {
                 var input = document.querySelector('[name="house_link_' + house.id + '"]');
                 if (input) {
-                    users[index].houseLinks[house.id] = input.value.trim();
+                    houseLinks[house.id] = input.value.trim();
                 }
             });
 
-            Storage.set('users', users);
+            await SupabaseDB.updateUser(userId, { house_links: houseLinks });
+            await AffiliateManager.fetchAll();
             Toast.success('Links salvos com sucesso!');
             Modal.close('linksModal');
             loadAffiliates();

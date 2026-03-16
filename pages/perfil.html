@@ -600,7 +600,8 @@
         </main>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
     <script>
         let currentTab = 'cadastrais';
 
@@ -619,7 +620,7 @@
                 document.getElementById('profileName').textContent = user.name;
                 document.getElementById('profileEmail').textContent = user.email;
                 document.getElementById('profileAvatar').textContent = user.name.charAt(0).toUpperCase();
-                document.getElementById('profileCode').textContent = user.affiliateCode || 'FENIX001';
+                document.getElementById('profileCode').textContent = user.affiliate_code || 'FENIX001';
             }
         }
 
@@ -643,16 +644,16 @@
             document.getElementById('inputCpf').value = user.cpf || '';
 
             // PIX data
-            if (user.pixData) {
-                document.getElementById('inputPixType').value = user.pixData.type || '';
-                document.getElementById('inputPixKey').value = user.pixData.key || '';
-                document.getElementById('inputPixHolder').value = user.pixData.holder || '';
+            if (user.pix_data) {
+                document.getElementById('inputPixType').value = user.pix_data.type || '';
+                document.getElementById('inputPixKey').value = user.pix_data.key || '';
+                document.getElementById('inputPixHolder').value = user.pix_data.holder || '';
             }
 
             // Agreement dates
-            document.getElementById('agreementStartDate').textContent = Format.date(user.createdAt);
-            document.getElementById('createdDate').textContent = Format.date(user.createdAt);
-            document.getElementById('verifiedDate').textContent = Format.date(user.createdAt);
+            document.getElementById('agreementStartDate').textContent = Format.date(user.created_at);
+            document.getElementById('createdDate').textContent = Format.date(user.created_at);
+            document.getElementById('verifiedDate').textContent = Format.date(user.created_at);
         }
 
         function switchTab(tab) {
@@ -667,23 +668,25 @@
             document.getElementById(`tab-${tab}`).style.display = 'block';
         }
 
-        function savePersonalData(e) {
+        async function savePersonalData(e) {
             e.preventDefault();
-            const formData = new FormData(e.target);
-            const user = Auth.currentUser;
+            var formData = new FormData(e.target);
+            var user = Auth.currentUser;
 
-            const users = Storage.get('users') || [];
-            const index = users.findIndex(u => u.id === user.id);
+            var updateData = {
+                name: formData.get('name'),
+                phone: formData.get('phone')
+            };
 
-            if (index !== -1) {
-                users[index].name = formData.get('name');
-                users[index].phone = formData.get('phone');
-                users[index].cpf = formData.get('cpf');
-                users[index].birthdate = formData.get('birthdate');
-                users[index].gender = formData.get('gender');
-                Storage.set('users', users);
+            var result = await SupabaseDB.updateUser(user.id, updateData);
+            if (!result.error) {
+                user.name = updateData.name;
+                user.phone = updateData.phone;
+                Storage.set('currentUser', user);
                 Toast.success('Dados pessoais salvos!');
                 loadUserInfo();
+            } else {
+                Toast.error('Erro ao salvar dados.');
             }
         }
 
@@ -697,28 +700,30 @@
             Toast.success('Dados empresariais salvos!');
         }
 
-        function savePixData(e) {
+        async function savePixData(e) {
             e.preventDefault();
-            const formData = new FormData(e.target);
-            const user = Auth.currentUser;
+            var formData = new FormData(e.target);
+            var user = Auth.currentUser;
 
-            const users = Storage.get('users') || [];
-            const index = users.findIndex(u => u.id === user.id);
+            var pixData = {
+                type: formData.get('pixType'),
+                key: formData.get('pixKey'),
+                holder: formData.get('pixHolder')
+            };
 
-            if (index !== -1) {
-                users[index].pixData = {
-                    type: formData.get('pixType'),
-                    key: formData.get('pixKey'),
-                    holder: formData.get('pixHolder')
-                };
-                Storage.set('users', users);
+            var result = await SupabaseDB.updateUser(user.id, { pix_data: pixData });
+            if (!result.error) {
+                user.pix_data = pixData;
+                Storage.set('currentUser', user);
                 Toast.success('Dados PIX salvos!');
+            } else {
+                Toast.error('Erro ao salvar dados PIX.');
             }
         }
 
-        function changePassword(e) {
+        async function changePassword(e) {
             e.preventDefault();
-            const formData = new FormData(e.target);
+            var formData = new FormData(e.target);
 
             if (formData.get('newPassword') !== formData.get('confirmPassword')) {
                 Toast.error('As senhas não coincidem');
@@ -730,8 +735,13 @@
                 return;
             }
 
-            Toast.success('Senha alterada com sucesso!');
-            e.target.reset();
+            var result = await SupabaseDB.updateUser(Auth.currentUser.id, { password: formData.get('newPassword') });
+            if (!result.error) {
+                Toast.success('Senha alterada com sucesso!');
+                e.target.reset();
+            } else {
+                Toast.error('Erro ao alterar senha.');
+            }
         }
 
         function selectPlatform(platform) {
@@ -787,7 +797,7 @@
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
 
-        function saveDocuments() {
+        async function saveDocuments() {
             var user = Auth.currentUser;
             if (!user) return;
 
@@ -807,13 +817,14 @@
 
             docs.updatedAt = new Date().toISOString();
 
-            var users = Storage.get('users') || [];
-            var index = users.findIndex(function(u) { return u.id === user.id; });
-            if (index !== -1) {
-                users[index].documents = docs;
-                Storage.set('users', users);
+            var result = await SupabaseDB.updateUser(user.id, { documents: docs });
+            if (!result.error) {
+                user.documents = docs;
+                Storage.set('currentUser', user);
                 Toast.success('Documentos salvos com sucesso!');
                 updateDocStatus(docs);
+            } else {
+                Toast.error('Erro ao salvar documentos.');
             }
         }
 

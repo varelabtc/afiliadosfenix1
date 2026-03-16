@@ -96,63 +96,12 @@
         </div>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
     <script>
         // Credenciais do admin master
         const ADMIN_EMAIL = 'admin@fenix.com';
         const ADMIN_PASSWORD = 'fenix2026';
-
-        // Garantir que admin existe
-        function ensureDefaultAdmin() {
-            let admins = [];
-            try {
-                admins = JSON.parse(localStorage.getItem('fenix_admins') || '[]');
-            } catch(e) {
-                admins = [];
-            }
-
-            const existingIndex = admins.findIndex(a => a.email === ADMIN_EMAIL);
-            if (existingIndex >= 0) {
-                admins[existingIndex].password = ADMIN_PASSWORD;
-            } else {
-                admins.push({
-                    id: 1,
-                    name: 'Administrador Master',
-                    email: ADMIN_EMAIL,
-                    password: ADMIN_PASSWORD,
-                    role: 'super_admin',
-                    createdAt: new Date().toISOString()
-                });
-            }
-            localStorage.setItem('fenix_admins', JSON.stringify(admins));
-        }
-
-        // Função de login
-        function doLogin(email, password) {
-            let admins = [];
-            try {
-                admins = JSON.parse(localStorage.getItem('fenix_admins') || '[]');
-            } catch(e) {
-                admins = [];
-            }
-
-            const admin = admins.find(a => a.email === email && a.password === password);
-
-            if (admin) {
-                const adminData = {
-                    id: admin.id,
-                    name: admin.name,
-                    email: admin.email,
-                    role: admin.role
-                };
-                localStorage.setItem('fenix_currentAdmin', JSON.stringify(adminData));
-                return { success: true, admin: adminData };
-            }
-            return { success: false, message: 'E-mail ou senha incorretos' };
-        }
-
-        // Inicializar
-        ensureDefaultAdmin();
 
         // Verificar se já está logado
         (function() {
@@ -163,34 +112,44 @@
         })();
 
         // Event Listener para o form
-        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const btn = this.querySelector('.btn-admin-login');
-            const originalText = btn.innerHTML;
+            var btn = this.querySelector('.btn-admin-login');
+            var originalText = btn.innerHTML;
             btn.innerHTML = '<span>Verificando...</span>';
             btn.disabled = true;
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
+            var email = document.getElementById('email').value.trim();
+            var password = document.getElementById('password').value;
 
-            setTimeout(() => {
-                const result = doLogin(email, password);
-
-                if (result.success) {
+            try {
+                var admin = await SupabaseDB.getAdminByEmail(email);
+                if (admin && admin.password === password) {
+                    var adminData = {
+                        id: admin.id,
+                        name: admin.name,
+                        email: admin.email,
+                        role: admin.role
+                    };
+                    localStorage.setItem('fenix_currentAdmin', JSON.stringify(adminData));
                     btn.innerHTML = '<span>Acesso autorizado!</span>';
                     btn.classList.add('success');
-                    setTimeout(() => {
+                    setTimeout(function() {
                         window.location.href = 'dashboard.html';
                     }, 300);
                 } else {
                     btn.innerHTML = originalText;
                     btn.disabled = false;
-                    alert(result.message);
-                    this.classList.add('shake');
-                    setTimeout(() => this.classList.remove('shake'), 500);
+                    alert('E-mail ou senha incorretos');
+                    e.target.classList.add('shake');
+                    setTimeout(function() { e.target.classList.remove('shake'); }, 500);
                 }
-            }, 300);
+            } catch(err) {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert('Erro ao conectar. Tente novamente.');
+            }
         });
 
         function togglePassword() {

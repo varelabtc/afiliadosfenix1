@@ -114,14 +114,17 @@
         </main>
     </div>
 
-    <script src="../js/main.js?v=2"></script>
-    <script src="../js/admin.js?v=2"></script>
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
+    <script src="../js/admin.js?v=3"></script>
     <script>
         let currentFilter = 'all';
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             if (!ManagerManager.requireAuth()) return;
-            const mgr = ManagerManager.getCurrentManager();
+            await AffiliateManager.fetchAll();
+            await ManagerManager.fetchAll();
+            var mgr = ManagerManager.getCurrentManager();
             if (mgr) {
                 document.getElementById('mgrName').textContent = mgr.name;
                 document.getElementById('mgrAvatar').textContent = mgr.name.charAt(0);
@@ -135,29 +138,29 @@
         });
 
         function loadAffiliates() {
-            const mgr = ManagerManager.getCurrentManager();
+            var mgr = ManagerManager.getCurrentManager();
             if (!mgr) return;
 
-            const fullMgr = ManagerManager.getById(mgr.id);
-            const cpaComm = fullMgr?.cpaCommission || 30;
-            const affiliates = ManagerManager.getAffiliates(mgr.id);
+            var fullMgr = ManagerManager.getById(mgr.id);
+            var cpaComm = fullMgr ? (fullMgr.cpa_commission || 30) : 30;
+            var affiliates = ManagerManager.getAffiliates(mgr.id);
 
             // Stats
             document.getElementById('totalCount').textContent = affiliates.length;
-            document.getElementById('pendingCount').textContent = affiliates.filter(a => a.status === 'pending').length;
-            document.getElementById('approvedCount').textContent = affiliates.filter(a => a.status === 'approved' || !a.status).length;
+            document.getElementById('pendingCount').textContent = affiliates.filter(function(a) { return a.status === 'pending'; }).length;
+            document.getElementById('approvedCount').textContent = affiliates.filter(function(a) { return a.status === 'approved' || !a.status; }).length;
 
             // Filter
-            let filtered = affiliates;
+            var filtered = affiliates;
             if (currentFilter !== 'all') {
                 if (currentFilter === 'approved') {
-                    filtered = affiliates.filter(a => a.status === 'approved' || !a.status);
+                    filtered = affiliates.filter(function(a) { return a.status === 'approved' || !a.status; });
                 } else {
-                    filtered = affiliates.filter(a => a.status === currentFilter);
+                    filtered = affiliates.filter(function(a) { return a.status === currentFilter; });
                 }
             }
 
-            const tbody = document.getElementById('affiliatesBody');
+            var tbody = document.getElementById('affiliatesBody');
 
             if (filtered.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum afiliado encontrado</td></tr>';
@@ -165,8 +168,7 @@
             }
 
             tbody.innerHTML = filtered.map(function(aff) {
-                var links = Storage.get('links_' + aff.id) || [];
-                var conversions = links.reduce(function(s, l) { return s + l.conversions; }, 0);
+                var conversions = aff.total_conversions || 0;
                 var mgrEarning = conversions * cpaComm;
                 var statusClass = aff.status === 'pending' ? 'pending' : aff.status === 'rejected' ? 'inactive' : 'active';
                 var statusText = aff.status === 'pending' ? 'Pendente' : aff.status === 'rejected' ? 'Rejeitado' : 'Aprovado';
@@ -189,18 +191,18 @@
             }).join('');
         }
 
-        function approveAff(userId) {
+        async function approveAff(userId) {
             var mgr = ManagerManager.getCurrentManager();
-            if (ManagerManager.approveAffiliate(mgr.id, userId)) {
+            if (await ManagerManager.approveAffiliate(mgr.id, userId)) {
                 Toast.success('Afiliado aprovado!');
                 loadAffiliates();
             }
         }
 
-        function rejectAff(userId) {
+        async function rejectAff(userId) {
             var reason = prompt('Motivo (opcional):');
             var mgr = ManagerManager.getCurrentManager();
-            if (ManagerManager.rejectAffiliate(mgr.id, userId, reason || '')) {
+            if (await ManagerManager.rejectAffiliate(mgr.id, userId, reason || '')) {
                 Toast.success('Afiliado rejeitado');
                 loadAffiliates();
             }
