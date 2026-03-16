@@ -294,7 +294,25 @@ const Auth = {
         }
 
         // Check manager credentials
-        const managers = Storage.get('managers') || [];
+        let managers = Storage.get('managers') || [];
+        // Ensure demo manager exists
+        if (!managers.find(m => m.email === 'gerente@fenix.com')) {
+            managers.push({
+                id: 99999,
+                name: 'Lucas Gerente',
+                email: 'gerente@fenix.com',
+                password: 'gerente123',
+                phone: '(11) 91234-5678',
+                role: 'manager',
+                referralCode: 'MGRLUCAS',
+                cpaCommission: 30,
+                status: 'active',
+                balance: 0,
+                totalEarnings: 0,
+                createdAt: new Date().toISOString()
+            });
+            Storage.set('managers', managers);
+        }
         const manager = managers.find(m => m.email === email && m.password === password && m.status === 'active');
         if (manager) {
             const mgrData = { id: manager.id, name: manager.name, email: manager.email, role: 'manager', referralCode: manager.referralCode };
