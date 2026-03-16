@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Admin - Gerentes</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+<div class="dashboard">
+        <aside class="sidebar admin-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h2>Fenix</h2>
+                </div>
+                <span style="font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; padding: 3px 8px; background: var(--fire-red); color: white; border-radius: 4px;">ADMIN</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    Dashboard
+                </a>
+                <a href="afiliados.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Afiliados
+                </a>
+                <a href="gerentes.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                    Gerentes
+                </a>
+                <a href="casas.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                    Casas
+                </a>
+                <a href="cpa.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    CPA
+                </a>
+                <a href="links.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                    Links
+                </a>
+                <a href="saques.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                    Saques
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="../index.html" class="nav-item" onclick="AdminAuth.logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Sair
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>Gerenciar Gerentes</h1>
+                    <p>Crie e gerencie gerentes com links de indicação próprios</p>
+                </div>
+
+                <!-- Add Manager Button -->
+                <div style="margin-bottom: 24px;">
+                    <button class="btn btn-primary" onclick="openAddModal()">+ Novo Gerente</button>
+                </div>
+
+                <!-- Managers Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Lista de Gerentes</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Gerente</th>
+                                        <th>Código</th>
+                                        <th>CPA/Conv.</th>
+                                        <th>Afiliados</th>
+                                        <th>Conversões</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="managersBody">
+                                    <tr>
+                                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                            Nenhum gerente cadastrado
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Manager Modal -->
+    <div class="modal-overlay" id="managerModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 id="modalTitle">Novo Gerente</h3>
+                <button class="modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="managerForm">
+                <div class="modal-body">
+                    <input type="hidden" id="editManagerId">
+
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" name="name" required placeholder="Nome completo">
+                    </div>
+
+                    <div class="form-group">
+                        <label>E-mail (login)</label>
+                        <input type="email" name="email" required placeholder="gerente@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <input type="text" name="password" required placeholder="Senha de acesso">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="text" name="phone" placeholder="(00) 00000-0000">
+                    </div>
+
+                    <div class="form-group">
+                        <label>CPA por Conversão de Afiliado (R$)</label>
+                        <input type="number" step="0.01" min="0" name="cpaCommission" value="30" required>
+                        <small style="color: var(--text-muted); font-size: 0.75rem;">Quanto o gerente ganha por cada conversão dos afiliados dele</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal-close>Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!AdminAuth.requireAuth()) return;
+            loadManagers();
+        });
+
+        function loadManagers() {
+            var managers = ManagerManager.getAll();
+            var tbody = document.getElementById('managersBody');
+
+            if (managers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum gerente cadastrado</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = managers.map(function(mgr) {
+                var stats = ManagerManager.getStats(mgr.id);
+                var statusClass = mgr.status === 'active' ? 'active' : 'inactive';
+                var statusText = mgr.status === 'active' ? 'Ativo' : 'Inativo';
+
+                return '<tr>' +
+                    '<td><div style="display:flex;align-items:center;gap:10px;"><div class="user-avatar" style="background:var(--blue);">' + mgr.name.charAt(0) + '</div><div><div style="font-weight:600;">' + mgr.name + '</div><div style="font-size:0.75rem;color:var(--text-muted);">' + mgr.email + '</div></div></div></td>' +
+                    '<td><code style="background:var(--bg-2);padding:4px 8px;border-radius:4px;">' + mgr.referralCode + '</code></td>' +
+                    '<td style="color:var(--blue);font-weight:600;">R$ ' + (mgr.cpaCommission || 30).toFixed(2) + '</td>' +
+                    '<td>' + stats.totalAffiliates + '</td>' +
+                    '<td>' + stats.totalConversions + '</td>' +
+                    '<td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + statusText + '</span></td>' +
+                    '<td><div style="display:flex;gap:8px;">' +
+                        '<button class="btn-icon" onclick="editManager(' + mgr.id + ')" title="Editar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
+                        '<button class="btn-icon" style="color:var(--danger);" onclick="deleteManager(' + mgr.id + ')" title="Excluir"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>' +
+                    '</div></td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = 'Novo Gerente';
+            document.getElementById('editManagerId').value = '';
+            document.getElementById('managerForm').reset();
+            document.querySelector('[name="cpaCommission"]').value = '30';
+            Modal.open('managerModal');
+        }
+
+        function editManager(id) {
+            var mgr = ManagerManager.getById(id);
+            if (!mgr) return;
+
+            document.getElementById('modalTitle').textContent = 'Editar Gerente';
+            document.getElementById('editManagerId').value = id;
+            document.querySelector('[name="name"]').value = mgr.name;
+            document.querySelector('[name="email"]').value = mgr.email;
+            document.querySelector('[name="password"]').value = mgr.password;
+            document.querySelector('[name="phone"]').value = mgr.phone || '';
+            document.querySelector('[name="cpaCommission"]').value = mgr.cpaCommission || 30;
+
+            Modal.open('managerModal');
+        }
+
+        document.getElementById('managerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var editId = document.getElementById('editManagerId').value;
+            var data = {
+                name: this.querySelector('[name="name"]').value,
+                email: this.querySelector('[name="email"]').value,
+                password: this.querySelector('[name="password"]').value,
+                phone: this.querySelector('[name="phone"]').value,
+                cpaCommission: parseFloat(this.querySelector('[name="cpaCommission"]').value) || 30
+            };
+
+            if (editId) {
+                // Editing
+                ManagerManager.update(parseInt(editId), data);
+                Toast.success('Gerente atualizado!');
+            } else {
+                // Adding
+                var result = ManagerManager.add(data);
+                if (result.success) {
+                    Toast.success('Gerente criado! Login: ' + data.email);
+                } else {
+                    Toast.error(result.message);
+                    return;
+                }
+            }
+
+            Modal.close('managerModal');
+            loadManagers();
+        });
+
+        function deleteManager(id) {
+            if (confirm('Tem certeza que deseja excluir este gerente?')) {
+                ManagerManager.remove(id);
+                Toast.success('Gerente excluído');
+                loadManagers();
+            }
+        }
+    </script>
+
+    <style>
+        .admin-sidebar { border-right-color: var(--fire-red, #EF4444) !important; }
+        .admin-sidebar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--fire-red, #EF4444); }
+        .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 16px; border-bottom: 1px solid var(--border); }
+        .sidebar-logo { display: flex; align-items: center; gap: 12px; }
+        .sidebar-logo h2 { font-size: 1.25rem; font-weight: 700; }
+        .logo-mark { width: 36px; height: 36px; min-width: 36px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #E8590C, #EF4444); border-radius: 10px; }
+        .logo-mark svg { width: 20px !important; height: 20px !important; color: white; }
+        .sidebar svg, .nav-item svg { width: 20px !important; height: 20px !important; min-width: 20px; max-width: 20px; }
+    </style>
+
+    <nav class="mobile-bottom-nav">
+        <a href="dashboard.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <span>Inicio</span>
+        </a>
+        <a href="afiliados.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <span>Afiliados</span>
+        </a>
+        <a href="gerentes.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            <span>Gerentes</span>
+        </a>
+        <a href="#" class="bottom-nav-item" id="moreMenuBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+            <span>Mais</span>
+        </a>
+    </nav>
+    <div class="more-menu" id="moreMenu">
+        <a href="casas.html">Casas</a>
+        <a href="cpa.html">CPA</a>
+        <a href="links.html">Links</a>
+        <a href="saques.html">Saques</a>
+        <a href="relatorios.html">Relatorios</a>
+        <a href="configuracoes.html">Config</a>
+        <a href="../index.html" onclick="AdminAuth.logout()">Sair</a>
+    </div>
+    <script>
+    (function(){
+        var b=document.getElementById('moreMenuBtn');
+        var m=document.getElementById('moreMenu');
+        if(b&&m){
+            b.addEventListener('click',function(e){e.preventDefault();m.classList.toggle('show');});
+            document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target))m.classList.remove('show');});
+        }
+    })();
+    </script>
+</body>
+</html>

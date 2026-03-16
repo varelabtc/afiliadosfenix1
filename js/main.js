@@ -293,13 +293,22 @@ const Auth = {
             return { success: true, user: adminData, isAdmin: true };
         }
 
+        // Check manager credentials
+        const managers = Storage.get('managers') || [];
+        const manager = managers.find(m => m.email === email && m.password === password && m.status === 'active');
+        if (manager) {
+            const mgrData = { id: manager.id, name: manager.name, email: manager.email, role: 'manager', referralCode: manager.referralCode };
+            localStorage.setItem('fenix_currentManager', JSON.stringify(mgrData));
+            return { success: true, user: mgrData, isAdmin: false, isManager: true };
+        }
+
         const users = Storage.get('users') || [];
         const user = users.find(u => u.email === email && u.password === password);
 
         if (user) {
             this.currentUser = user;
             Storage.set('currentUser', user);
-            return { success: true, user, isAdmin: false };
+            return { success: true, user, isAdmin: false, isManager: false };
         }
         return { success: false, message: 'E-mail ou senha incorretos' };
     },
@@ -571,6 +580,11 @@ const Pages = {
                     setTimeout(() => {
                         window.location.href = 'admin/dashboard.html';
                     }, 1000);
+                } else if (result.isManager) {
+                    Toast.success('Acesso Gerente autorizado!');
+                    setTimeout(() => {
+                        window.location.href = 'gerente/dashboard.html';
+                    }, 1000);
                 } else {
                     Toast.success('Login realizado com sucesso!');
                     setTimeout(() => {
@@ -601,11 +615,23 @@ const Pages = {
                 return;
             }
 
+            // Check for manager referral code in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref');
+            let managerId = null;
+            if (refCode) {
+                const managers = Storage.get('managers') || [];
+                const mgr = managers.find(m => m.referralCode === refCode);
+                if (mgr) managerId = mgr.id;
+            }
+
             const userData = {
                 name: form.querySelector('[name="name"]').value,
                 email: form.querySelector('[name="email"]').value,
                 phone: form.querySelector('[name="phone"]').value,
-                password: password
+                password: password,
+                managerId: managerId,
+                status: managerId ? 'pending' : 'approved'
             };
 
             const result = Auth.register(userData);
@@ -931,8 +957,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const isAdmin = path.includes('/admin/');
     const page = path.split('/').pop().replace('.html', '') || 'index';
 
-    // Skip page init for admin pages - admin.js handles those
-    if (isAdmin) return;
+    // Skip page init for admin/gerente pages - their own JS handles those
+    if (isAdmin || path.includes('/gerente/')) return;
 
     switch (page) {
         case 'index':

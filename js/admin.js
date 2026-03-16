@@ -623,6 +623,152 @@ const AdminDemoData = {
     }
 };
 
+// Manager Management
+const ManagerManager = {
+    getAll() {
+        return Storage.get('managers') || [];
+    },
+
+    getById(id) {
+        return this.getAll().find(m => m.id === id);
+    },
+
+    add(data) {
+        const managers = this.getAll();
+        if (managers.find(m => m.email === data.email)) {
+            return { success: false, message: 'E-mail já cadastrado' };
+        }
+        const newManager = {
+            id: Date.now(),
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            phone: data.phone || '',
+            role: 'manager',
+            referralCode: 'MGR' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+            cpaCommission: parseFloat(data.cpaCommission) || 30,
+            status: 'active',
+            balance: 0,
+            totalEarnings: 0,
+            createdAt: new Date().toISOString()
+        };
+        managers.push(newManager);
+        Storage.set('managers', managers);
+        return { success: true, manager: newManager };
+    },
+
+    update(id, data) {
+        const managers = this.getAll();
+        const index = managers.findIndex(m => m.id === id);
+        if (index !== -1) {
+            managers[index] = { ...managers[index], ...data };
+            Storage.set('managers', managers);
+            return managers[index];
+        }
+        return null;
+    },
+
+    remove(id) {
+        const managers = this.getAll().filter(m => m.id !== id);
+        Storage.set('managers', managers);
+    },
+
+    login(email, password) {
+        const managers = this.getAll();
+        const manager = managers.find(m => m.email === email && m.password === password && m.status === 'active');
+        if (manager) {
+            const data = { id: manager.id, name: manager.name, email: manager.email, role: 'manager', referralCode: manager.referralCode };
+            localStorage.setItem('fenix_currentManager', JSON.stringify(data));
+            return { success: true, manager: data };
+        }
+        return { success: false };
+    },
+
+    logout() {
+        localStorage.removeItem('fenix_currentManager');
+        window.location.href = '../index.html';
+    },
+
+    getCurrentManager() {
+        try {
+            return JSON.parse(localStorage.getItem('fenix_currentManager'));
+        } catch(e) {
+            return null;
+        }
+    },
+
+    requireAuth() {
+        const m = this.getCurrentManager();
+        if (!m) {
+            window.location.href = '../index.html';
+            return false;
+        }
+        return true;
+    },
+
+    getAffiliates(managerId) {
+        const manager = this.getById(managerId);
+        if (!manager) return [];
+        const allUsers = Storage.get('users') || [];
+        return allUsers.filter(u => u.managerId === managerId);
+    },
+
+    getStats(managerId) {
+        const affiliates = this.getAffiliates(managerId);
+        const manager = this.getById(managerId);
+        let totalClicks = 0, totalConversions = 0, totalAffiliateEarnings = 0;
+
+        affiliates.forEach(aff => {
+            const links = Storage.get('links_' + aff.id) || [];
+            totalClicks += links.reduce((s, l) => s + l.clicks, 0);
+            totalConversions += links.reduce((s, l) => s + l.conversions, 0);
+            totalAffiliateEarnings += links.reduce((s, l) => s + l.earnings, 0);
+        });
+
+        const cpaCommission = manager?.cpaCommission || 30;
+        const managerEarnings = totalConversions * cpaCommission;
+
+        return {
+            totalAffiliates: affiliates.length,
+            pendingAffiliates: affiliates.filter(a => a.status === 'pending').length,
+            totalClicks,
+            totalConversions,
+            totalAffiliateEarnings,
+            managerEarnings,
+            cpaCommission,
+            balance: manager?.balance || 0
+        };
+    },
+
+    approveAffiliate(managerId, userId) {
+        const users = Storage.get('users') || [];
+        const index = users.findIndex(u => u.id === userId && u.managerId === managerId);
+        if (index !== -1) {
+            users[index].status = 'approved';
+            users[index].approvedAt = new Date().toISOString();
+            users[index].approvedBy = managerId;
+            Storage.set('users', users);
+            return true;
+        }
+        return false;
+    },
+
+    rejectAffiliate(managerId, userId, reason) {
+        const users = Storage.get('users') || [];
+        const index = users.findIndex(u => u.id === userId && u.managerId === managerId);
+        if (index !== -1) {
+            users[index].status = 'rejected';
+            users[index].rejectedAt = new Date().toISOString();
+            users[index].rejectionReason = reason || '';
+            Storage.set('users', users);
+            return true;
+        }
+        return false;
+    }
+};
+
+window.ManagerManager = ManagerManager;
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     AdminAuth.init();

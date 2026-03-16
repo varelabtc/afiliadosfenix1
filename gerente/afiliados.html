@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Gerente - Meus Afiliados</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E8590C' stroke-width='2'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+<div class="dashboard">
+        <aside class="sidebar" id="sidebar" style="border-right: 1px solid var(--blue);">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h2>Fenix</h2>
+                </div>
+                <span style="font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; padding: 3px 8px; background: var(--blue); color: white; border-radius: 4px;">GERENTE</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    Dashboard
+                </a>
+                <a href="afiliados.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Meus Afiliados
+                </a>
+                <a href="link.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                    Meu Link
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="#" class="nav-item" onclick="ManagerManager.logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Sair
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" style="background: var(--blue);" id="mgrAvatar">G</div>
+                    <div class="user-info">
+                        <div class="user-name" id="mgrName">Gerente</div>
+                        <div class="user-role" style="color: var(--blue);">Gerente</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>Meus Afiliados</h1>
+                    <p>Gerencie os afiliados que vieram pelo seu link</p>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalCount">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-card" style="border-left: 3px solid var(--warning);">
+                        <div class="stat-value" id="pendingCount" style="color: var(--warning);">0</div>
+                        <div class="stat-label">Pendentes</div>
+                    </div>
+                    <div class="stat-card" style="border-left: 3px solid var(--success);">
+                        <div class="stat-value" id="approvedCount" style="color: var(--success);">0</div>
+                        <div class="stat-label">Aprovados</div>
+                    </div>
+                </div>
+
+                <!-- Affiliates Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Lista de Afiliados</h3>
+                        <select id="statusFilter" style="padding: 8px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-1); font-size: 0.85rem;">
+                            <option value="all">Todos</option>
+                            <option value="pending">Pendentes</option>
+                            <option value="approved">Aprovados</option>
+                            <option value="rejected">Rejeitados</option>
+                        </select>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Afiliado</th>
+                                        <th>Status</th>
+                                        <th>Conversões</th>
+                                        <th>Seus Ganhos</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="affiliatesBody">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                            Nenhum afiliado ainda
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!ManagerManager.requireAuth()) return;
+            const mgr = ManagerManager.getCurrentManager();
+            if (mgr) {
+                document.getElementById('mgrName').textContent = mgr.name;
+                document.getElementById('mgrAvatar').textContent = mgr.name.charAt(0);
+            }
+            loadAffiliates();
+
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                currentFilter = this.value;
+                loadAffiliates();
+            });
+        });
+
+        function loadAffiliates() {
+            const mgr = ManagerManager.getCurrentManager();
+            if (!mgr) return;
+
+            const fullMgr = ManagerManager.getById(mgr.id);
+            const cpaComm = fullMgr?.cpaCommission || 30;
+            const affiliates = ManagerManager.getAffiliates(mgr.id);
+
+            // Stats
+            document.getElementById('totalCount').textContent = affiliates.length;
+            document.getElementById('pendingCount').textContent = affiliates.filter(a => a.status === 'pending').length;
+            document.getElementById('approvedCount').textContent = affiliates.filter(a => a.status === 'approved' || !a.status).length;
+
+            // Filter
+            let filtered = affiliates;
+            if (currentFilter !== 'all') {
+                if (currentFilter === 'approved') {
+                    filtered = affiliates.filter(a => a.status === 'approved' || !a.status);
+                } else {
+                    filtered = affiliates.filter(a => a.status === currentFilter);
+                }
+            }
+
+            const tbody = document.getElementById('affiliatesBody');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum afiliado encontrado</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(function(aff) {
+                var links = Storage.get('links_' + aff.id) || [];
+                var conversions = links.reduce(function(s, l) { return s + l.conversions; }, 0);
+                var mgrEarning = conversions * cpaComm;
+                var statusClass = aff.status === 'pending' ? 'pending' : aff.status === 'rejected' ? 'inactive' : 'active';
+                var statusText = aff.status === 'pending' ? 'Pendente' : aff.status === 'rejected' ? 'Rejeitado' : 'Aprovado';
+
+                var actions = '';
+                if (aff.status === 'pending') {
+                    actions = '<button class="btn btn-sm btn-primary" onclick="approveAff(' + aff.id + ')">Aprovar</button> ' +
+                              '<button class="btn btn-sm btn-secondary" onclick="rejectAff(' + aff.id + ')">Rejeitar</button>';
+                } else {
+                    actions = '<span style="font-size:0.75rem;color:var(--text-muted);">-</span>';
+                }
+
+                return '<tr>' +
+                    '<td><div style="display:flex;align-items:center;gap:10px;"><div class="user-avatar">' + aff.name.charAt(0) + '</div><div><div style="font-weight:600;">' + aff.name + '</div><div style="font-size:0.75rem;color:var(--text-muted);">' + aff.email + '</div></div></div></td>' +
+                    '<td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + statusText + '</span></td>' +
+                    '<td>' + conversions + '</td>' +
+                    '<td style="color:var(--blue);font-weight:600;">' + Format.currency(mgrEarning) + '</td>' +
+                    '<td>' + actions + '</td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function approveAff(userId) {
+            var mgr = ManagerManager.getCurrentManager();
+            if (ManagerManager.approveAffiliate(mgr.id, userId)) {
+                Toast.success('Afiliado aprovado!');
+                loadAffiliates();
+            }
+        }
+
+        function rejectAff(userId) {
+            var reason = prompt('Motivo (opcional):');
+            var mgr = ManagerManager.getCurrentManager();
+            if (ManagerManager.rejectAffiliate(mgr.id, userId, reason || '')) {
+                Toast.success('Afiliado rejeitado');
+                loadAffiliates();
+            }
+        }
+    </script>
+
+    <style>
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: 1fr !important; }
+        }
+    </style>
+
+    <nav class="mobile-bottom-nav">
+        <a href="dashboard.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <span>Inicio</span>
+        </a>
+        <a href="afiliados.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <span>Afiliados</span>
+        </a>
+        <a href="link.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            <span>Meu Link</span>
+        </a>
+        <a href="#" class="bottom-nav-item" onclick="ManagerManager.logout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Sair</span>
+        </a>
+    </nav>
+</body>
+</html>
