@@ -275,6 +275,36 @@ const AffiliateManager = {
             return true;
         }
         return false;
+    },
+
+    updateDeal(userId, houseId, dealData) {
+        const users = this.getAll();
+        const index = users.findIndex(u => u.id === userId);
+        if (index !== -1) {
+            if (!users[index].deals) {
+                users[index].deals = {};
+            }
+            users[index].deals[houseId] = dealData;
+            Storage.set('users', users);
+            return true;
+        }
+        return false;
+    },
+
+    getDeal(userId, houseId) {
+        const users = this.getAll();
+        const user = users.find(u => u.id === userId);
+        if (user?.deals?.[houseId]) {
+            return user.deals[houseId];
+        }
+        const house = BettingHouses.getById(houseId);
+        return {
+            type: 'cpa',
+            cpaValue: user?.customCPA?.[houseId] || house?.cpa || 0,
+            revShare: house?.revShare || 25,
+            hybridCPA: 0,
+            hybridRevShare: 0
+        };
     }
 };
 

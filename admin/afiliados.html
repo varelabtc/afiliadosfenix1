@@ -161,7 +161,7 @@
                                 <tr>
                                     <th>Afiliado</th>
                                     <th>Código</th>
-                                    <th>Cliques</th>
+                                    <th>Acordo</th>
                                     <th>Conversões</th>
                                     <th>Ganhos</th>
                                     <th>Status</th>
@@ -200,9 +200,9 @@
 
     <!-- CPA Modal -->
     <div class="modal-overlay" id="cpaModal">
-        <div class="modal" style="max-width: 400px;">
+        <div class="modal" style="max-width: 520px;">
             <div class="modal-header">
-                <h3>Configurar CPA Individual</h3>
+                <h3 id="cpaModalTitle">Configurar Acordo</h3>
                 <button class="modal-close">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12"/>
@@ -212,13 +212,11 @@
             <form id="cpaForm">
                 <div class="modal-body">
                     <input type="hidden" id="cpaUserId">
-                    <div id="cpaFields">
-                        <!-- CPA fields will be loaded here -->
-                    </div>
+                    <div id="cpaFields"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-modal-close>Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Acordo</button>
                 </div>
             </form>
         </div>
@@ -293,7 +291,7 @@
                             </div>
                         </td>
                         <td><code style="background: var(--bg-input); padding: 4px 8px; border-radius: 4px;">${user.affiliateCode || 'N/A'}</code></td>
-                        <td>${Format.number(stats.totalClicks)}</td>
+                        <td>${getDealBadge(user)}</td>
                         <td>${Format.number(stats.totalConversions)}</td>
                         <td style="color: var(--success); font-weight: 600;">${Format.currency(stats.totalEarnings)}</td>
                         <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusText}</span></td>
@@ -341,6 +339,22 @@
                     </tr>
                 `;
             }).join('');
+        }
+
+        function getDealBadge(user) {
+            const houses = BettingHouses.getAll();
+            const badges = houses.map(house => {
+                const deal = AffiliateManager.getDeal(user.id, house.id);
+                const type = deal.type || 'cpa';
+                if (type === 'cpa') {
+                    return '<span style="background: rgba(34,197,94,0.15); color: var(--success); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">CPA R$' + (deal.cpaValue || house.cpa).toFixed(0) + '</span>';
+                } else if (type === 'revshare') {
+                    return '<span style="background: rgba(59,130,246,0.15); color: var(--info); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">Rev ' + (deal.revShare || house.revShare) + '%</span>';
+                } else {
+                    return '<span style="background: rgba(234,179,8,0.15); color: var(--warning); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">Híb</span>';
+                }
+            });
+            return badges.join(' ');
         }
 
         function viewAffiliate(userId) {
@@ -397,14 +411,44 @@
             const users = AffiliateManager.getAll();
             const user = users.find(u => u.id === userId);
 
+            document.getElementById('cpaModalTitle').textContent = 'Acordo - ' + (user?.name || 'Afiliado');
+
             document.getElementById('cpaFields').innerHTML = houses.map(house => {
-                const currentCPA = user?.customCPA?.[house.id] || house.cpa;
+                const deal = AffiliateManager.getDeal(userId, house.id);
+                const dealType = deal.type || 'cpa';
+
                 return `
-                    <div class="form-group">
-                        <label>${house.logo} ${house.name}</label>
-                        <div style="display: flex; gap: 12px; align-items: center;">
-                            <input type="number" step="0.01" name="cpa_${house.id}" value="${currentCPA}" style="flex: 1;">
-                            <span style="color: var(--text-muted); font-size: 0.8rem;">Padrão: R$ ${house.cpa.toFixed(2)}</span>
+                    <div style="background: var(--bg-input); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+                        <div style="font-weight: 600; margin-bottom: 12px; font-size: 0.95rem;">${house.logo} ${house.name}</div>
+
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Tipo de Acordo</label>
+                            <select name="deal_type_${house.id}" onchange="toggleDealFields(${house.id}, this.value)" style="width: 100%; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 0.875rem;">
+                                <option value="cpa" ${dealType === 'cpa' ? 'selected' : ''}>CPA (Custo por Aquisição)</option>
+                                <option value="revshare" ${dealType === 'revshare' ? 'selected' : ''}>RevShare (% da Receita)</option>
+                                <option value="hybrid" ${dealType === 'hybrid' ? 'selected' : ''}>Híbrido (CPA + RevShare)</option>
+                            </select>
+                        </div>
+
+                        <div id="deal_fields_${house.id}">
+                            <div id="cpa_field_${house.id}" style="display: ${dealType === 'cpa' || dealType === 'hybrid' ? 'block' : 'none'};">
+                                <div class="form-group" style="margin-bottom: 8px;">
+                                    <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Valor CPA (R$)</label>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="number" step="0.01" min="0" name="cpa_value_${house.id}" value="${deal.type === 'hybrid' ? (deal.hybridCPA || 0) : (deal.cpaValue || house.cpa)}" style="flex: 1; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary);">
+                                        <span style="color: var(--text-muted); font-size: 0.75rem; white-space: nowrap;">Padrão: R$ ${house.cpa.toFixed(2)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="rev_field_${house.id}" style="display: ${dealType === 'revshare' || dealType === 'hybrid' ? 'block' : 'none'};">
+                                <div class="form-group" style="margin-bottom: 8px;">
+                                    <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">RevShare (%)</label>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="number" step="0.5" min="0" max="100" name="rev_value_${house.id}" value="${deal.type === 'hybrid' ? (deal.hybridRevShare || 0) : (deal.revShare || house.revShare)}" style="flex: 1; padding: 10px 12px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary);">
+                                        <span style="color: var(--text-muted); font-size: 0.75rem; white-space: nowrap;">Padrão: ${house.revShare}%</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -413,23 +457,64 @@
             Modal.open('cpaModal');
         }
 
+        function toggleDealFields(houseId, type) {
+            const cpaField = document.getElementById('cpa_field_' + houseId);
+            const revField = document.getElementById('rev_field_' + houseId);
+            if (type === 'cpa') {
+                cpaField.style.display = 'block';
+                revField.style.display = 'none';
+            } else if (type === 'revshare') {
+                cpaField.style.display = 'none';
+                revField.style.display = 'block';
+            } else {
+                cpaField.style.display = 'block';
+                revField.style.display = 'block';
+            }
+        }
+
         document.getElementById('cpaForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const userId = parseInt(document.getElementById('cpaUserId').value);
             const houses = BettingHouses.getAll();
 
             houses.forEach(house => {
-                const input = this.querySelector(`[name="cpa_${house.id}"]`);
-                if (input) {
-                    const value = parseFloat(input.value);
-                    if (value !== house.cpa) {
-                        AffiliateManager.updateCPA(userId, house.id, value);
-                    }
+                const typeSelect = this.querySelector('[name="deal_type_' + house.id + '"]');
+                const cpaInput = this.querySelector('[name="cpa_value_' + house.id + '"]');
+                const revInput = this.querySelector('[name="rev_value_' + house.id + '"]');
+
+                if (!typeSelect) return;
+
+                const dealType = typeSelect.value;
+                const cpaValue = parseFloat(cpaInput?.value) || 0;
+                const revValue = parseFloat(revInput?.value) || 0;
+
+                const dealData = { type: dealType };
+
+                if (dealType === 'cpa') {
+                    dealData.cpaValue = cpaValue;
+                    dealData.revShare = 0;
+                    dealData.hybridCPA = 0;
+                    dealData.hybridRevShare = 0;
+                    AffiliateManager.updateCPA(userId, house.id, cpaValue);
+                } else if (dealType === 'revshare') {
+                    dealData.cpaValue = 0;
+                    dealData.revShare = revValue;
+                    dealData.hybridCPA = 0;
+                    dealData.hybridRevShare = 0;
+                } else {
+                    dealData.cpaValue = cpaValue;
+                    dealData.revShare = revValue;
+                    dealData.hybridCPA = cpaValue;
+                    dealData.hybridRevShare = revValue;
+                    AffiliateManager.updateCPA(userId, house.id, cpaValue);
                 }
+
+                AffiliateManager.updateDeal(userId, house.id, dealData);
             });
 
-            Toast.success('CPA atualizado com sucesso!');
+            Toast.success('Acordo atualizado com sucesso!');
             Modal.close('cpaModal');
+            loadAffiliates();
         });
 
         function approveAffiliate(userId) {
