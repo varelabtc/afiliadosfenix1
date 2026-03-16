@@ -8,7 +8,7 @@
 // 2. User clicks -> this function logs the click and redirects (302) to the real house link
 // 3. Admin can see clicks in Vercel logs
 
-export default function handler(req, res) {
+module.exports = function handler(req, res) {
     const params = req.query || {};
 
     const affiliateId = params.a || params.aff || '';
