@@ -523,7 +523,11 @@ const DemoData = {
                 balance: 2547.80,
                 totalEarnings: 15789.50,
                 totalClicks: 12547,
-                totalConversions: 487
+                totalConversions: 487,
+                houseLinks: {
+                    1: 'https://superbet.com/register?ref=FENIXDEMO01'
+                },
+                status: 'approved'
             };
 
             Storage.set('users', [demoUser]);

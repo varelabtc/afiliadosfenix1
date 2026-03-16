@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix - Oferta</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../img/fenix-logo.png">
+</head>
+<body>
+<div class="dashboard">
+        <input type="checkbox" id="menu-toggle" class="menu-toggle-check">
+        <div class="mobile-header">
+            <label for="menu-toggle" class="mobile-menu-label">
+                <span></span><span></span><span></span>
+            </label>
+            <span class="mobile-logo"><img src="../img/fenix-logo.png" alt="Fenix"> Fenix</span>
+            <div style="width: 44px;"></div>
+        </div>
+        <label for="menu-toggle" class="sidebar-overlay-label"></label>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-mark">
+                        <img src="../img/fenix-logo.png" alt="Fenix">
+                    </div>
+                    <h2>FENIX</h2>
+                </div>
+                <label for="menu-toggle" class="sidebar-toggle-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></label>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    Dashboard
+                </a>
+                <a href="meus-links.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    Ofertas
+                </a>
+                <a href="minha-equipe.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Equipe
+                </a>
+                <a href="financeiro.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                    Financeiro
+                </a>
+                <a href="comissoes.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Comissoes
+                </a>
+                <a href="perfil.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Perfil
+                </a>
+                <div class="nav-divider"></div>
+                <a href="../index.html" class="nav-item" onclick="Auth.logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Sair
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" id="userAvatar">F</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Carregando...</div>
+                        <div class="user-role">Afiliado</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-content">
+                <!-- Back + Title -->
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+                    <a href="meus-links.html" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: var(--bg-2); border: 1px solid var(--border); color: var(--text-2); text-decoration: none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    </a>
+                    <div>
+                        <h1 style="font-size: 1.25rem;" id="pageTitle">Oferta</h1>
+                    </div>
+                </div>
+
+                <!-- Info Cards Row -->
+                <div class="od-row">
+                    <div class="od-card">
+                        <h4 class="od-card-title">Informacao basica</h4>
+                        <div class="od-field">
+                            <span class="od-label">Nome</span>
+                            <span class="od-value" id="odName">-</span>
+                        </div>
+                        <div class="od-field">
+                            <span class="od-label">Pais</span>
+                            <span class="od-value">Brasil</span>
+                        </div>
+                        <div class="od-field">
+                            <span class="od-label">Linguagem</span>
+                            <span class="od-value">PT / Portugues</span>
+                        </div>
+                        <div class="od-field">
+                            <span class="od-label">Categoria</span>
+                            <span class="od-value">Apostas Esportivas</span>
+                        </div>
+                        <div class="od-field">
+                            <span class="od-label">Traffic Source</span>
+                            <span class="od-value">Todos</span>
+                        </div>
+                        <div class="od-field">
+                            <span class="od-label">Vertical</span>
+                            <span class="od-value">iGaming</span>
+                        </div>
+                    </div>
+                    <div class="od-card">
+                        <h4 class="od-card-title">Modelos de pagamento</h4>
+                        <div class="od-pay-grid">
+                            <div>
+                                <span class="od-label">Tipo de meta</span>
+                                <div class="od-value" id="odMeta">QFTD</div>
+                            </div>
+                            <div>
+                                <span class="od-label">Modelos</span>
+                                <div class="od-value" id="odModelo">CPA</div>
+                            </div>
+                            <div>
+                                <span class="od-label">Pagamento</span>
+                                <div class="od-value od-accent" id="odPagamento">R$ 150</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+                            <div class="od-field">
+                                <span class="od-label">Baseline</span>
+                                <span class="od-value">R$ 0</span>
+                            </div>
+                            <div class="od-field">
+                                <span class="od-label">Wager</span>
+                                <span class="od-value">1x</span>
+                            </div>
+                            <div class="od-field">
+                                <span class="od-label">Pagamento</span>
+                                <span class="od-value">Mensal - dia 15</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="od-tabs">
+                    <button class="od-tab active" data-tab="links">Links de rastreamento</button>
+                    <button class="od-tab" data-tab="banners">Banners</button>
+                    <button class="od-tab" data-tab="descricao">Descricao</button>
+                    <button class="od-tab" data-tab="limites">Limites</button>
+                </div>
+
+                <!-- Tab: Links de rastreamento -->
+                <div class="od-tab-content active" id="tab-links">
+                    <div class="od-card">
+                        <h4 class="od-card-title">Gerador de link de rastreamento</h4>
+
+                        <div class="od-field-block">
+                            <label class="od-label">LINK</label>
+                            <div class="od-link-row">
+                                <input type="text" id="trackingLink" readonly class="od-link-input">
+                                <button class="od-btn-icon" onclick="copyTrackingLink()" title="Copiar">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="od-config-row">
+                            <div class="od-config-col">
+                                <h5 class="od-section-title">Configuracoes</h5>
+                                <div class="od-field-block">
+                                    <label class="od-label">URL DA OFERTA</label>
+                                    <div class="od-select-row">
+                                        <span class="od-select-text" id="odUrlOferta">-</span>
+                                        <span class="od-badge-redirect">Redirect</span>
+                                    </div>
+                                    <p class="od-help">Redirecionamento — as informacoes do lead sao coletadas por meio do dominio de rastreamento.</p>
+                                </div>
+                            </div>
+                            <div class="od-config-col">
+                                <h5 class="od-section-title">Identificadores Unicos</h5>
+                                <div class="od-uid-row">
+                                    <div class="od-uid-item">
+                                        <label class="od-label">TIPO</label>
+                                        <select class="od-select" id="uidType">
+                                            <option value="">Selecione dados</option>
+                                            <option value="subid">Sub ID</option>
+                                            <option value="clickid">Click ID</option>
+                                            <option value="source">Source</option>
+                                        </select>
+                                    </div>
+                                    <div class="od-uid-item">
+                                        <label class="od-label">TEXTO</label>
+                                        <input type="text" class="od-input" id="uidText" placeholder="Digite o texto...">
+                                    </div>
+                                    <button class="od-btn-add" onclick="addUidToLink()">+</button>
+                                </div>
+                                <div id="uidList" style="margin-top: 8px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Share -->
+                    <div class="od-card" style="margin-top: 16px;">
+                        <h4 class="od-card-title">Compartilhar</h4>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="share-btn-od whatsapp" onclick="shareOd('whatsapp')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                WhatsApp
+                            </button>
+                            <button class="share-btn-od telegram" onclick="shareOd('telegram')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                                Telegram
+                            </button>
+                            <button class="share-btn-od copy" onclick="copyTrackingLink()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                Copiar Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Banners -->
+                <div class="od-tab-content" id="tab-banners">
+                    <div class="od-card">
+                        <h4 class="od-card-title">Banners disponiveis</h4>
+                        <p style="color: var(--text-3); font-size: 0.85rem;">Nenhum banner disponivel no momento. Entre em contato com o suporte.</p>
+                    </div>
+                </div>
+
+                <!-- Tab: Descricao -->
+                <div class="od-tab-content" id="tab-descricao">
+                    <div class="od-card">
+                        <h4 class="od-card-title">Descricao da oferta</h4>
+                        <p id="odDescricao" style="color: var(--text-2); font-size: 0.9rem; line-height: 1.7;">-</p>
+                    </div>
+                </div>
+
+                <!-- Tab: Limites -->
+                <div class="od-tab-content" id="tab-limites">
+                    <div class="od-card">
+                        <h4 class="od-card-title">Limites</h4>
+                        <div class="od-field"><span class="od-label">Limite diario</span><span class="od-value">Sem limite</span></div>
+                        <div class="od-field"><span class="od-label">Limite mensal</span><span class="od-value">Sem limite</span></div>
+                        <div class="od-field"><span class="od-label">Limite total</span><span class="od-value">Sem limite</span></div>
+                        <div class="od-field"><span class="od-label">GEO permitidos</span><span class="od-value">Brasil</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        var offerData = {
+            superbet: {
+                name: 'Superbet',
+                subtitle: 'Superbet Brasil',
+                logo: '../img/superbet-logo.png',
+                houseId: 1,
+                slug: 'superbet',
+                defaultCPA: 150,
+                color: '#E8590C',
+                descricao: 'A Superbet e uma das maiores casas de apostas do Brasil. Oferta CPA para novos jogadores que realizarem o primeiro deposito qualificado (QFTD). Pagamento mensal no dia 15. Aceita trafego organico, pago, social media e influenciadores.'
+            },
+            sportingbet: {
+                name: 'Sportingbet',
+                subtitle: 'Sportingbet Brasil',
+                logo: '../img/sportingbet-logo.png',
+                houseId: 2,
+                slug: 'sportingbet',
+                defaultCPA: 100,
+                color: '#22C55E',
+                descricao: 'Sportingbet e uma plataforma global de apostas esportivas. Modelo CPA para primeiro deposito qualificado. Pagamento mensal. Aceita diversos tipos de trafego.'
+            }
+        };
+
+        var currentOffer = null;
+        var baseTrackingLink = '';
+        var uidParams = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!Auth.requireAuth()) return;
+
+            var user = Auth.currentUser;
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            }
+
+            var params = new URLSearchParams(window.location.search);
+            var house = params.get('house') || 'superbet';
+            currentOffer = offerData[house];
+
+            if (!currentOffer) {
+                window.location.href = 'meus-links.html';
+                return;
+            }
+
+            loadOfferData(house);
+            initTabs();
+        });
+
+        function getFullUserData() {
+            var user = Auth.currentUser;
+            if (!user) return null;
+            var users = Storage.get('users') || [];
+            return users.find(function(u) { return u.id === user.id; }) || user;
+        }
+
+        function loadOfferData(house) {
+            var offer = currentOffer;
+            var fullUser = getFullUserData();
+            var user = Auth.currentUser;
+
+            document.getElementById('pageTitle').textContent = 'Oferta: ' + offer.name;
+            document.getElementById('odName').textContent = offer.name;
+            document.getElementById('odDescricao').textContent = offer.descricao;
+
+            // CPA value
+            var cpa = offer.defaultCPA;
+            var houseId = offer.houseId;
+            if (fullUser && fullUser.deals && fullUser.deals[houseId]) {
+                var deal = fullUser.deals[houseId];
+                if (deal.type === 'cpa') cpa = deal.cpaValue || cpa;
+                else if (deal.type === 'hybrid') cpa = deal.hybridCPA || cpa;
+            } else if (fullUser && fullUser.customCPA && fullUser.customCPA[houseId]) {
+                cpa = fullUser.customCPA[houseId];
+            } else {
+                var houses = Storage.get('bettingHouses') || [];
+                var h = houses.find(function(x) { return x.id === houseId; });
+                if (h && h.cpa) cpa = h.cpa;
+            }
+
+            document.getElementById('odPagamento').textContent = Format.currency(cpa);
+
+            // Raw link
+            var rawLink = '';
+            if (fullUser && fullUser.houseLinks && fullUser.houseLinks[houseId]) {
+                rawLink = fullUser.houseLinks[houseId];
+            }
+
+            if (!rawLink) {
+                window.location.href = 'meus-links.html';
+                return;
+            }
+
+            document.getElementById('odUrlOferta').textContent = user.name + ' #' + user.id + ' / ' + offer.name;
+
+            // Generate Fenix tracking link
+            var encoded = btoa(rawLink);
+            baseTrackingLink = window.location.origin + '/api/go?a=' + user.id + '&h=' + offer.slug + '&url=' + encodeURIComponent(encoded);
+            updateTrackingLink();
+        }
+
+        function updateTrackingLink() {
+            var link = baseTrackingLink;
+            uidParams.forEach(function(p) {
+                link += '&' + encodeURIComponent(p.type) + '=' + encodeURIComponent(p.value);
+            });
+            document.getElementById('trackingLink').value = link;
+        }
+
+        function addUidToLink() {
+            var type = document.getElementById('uidType').value;
+            var text = document.getElementById('uidText').value.trim();
+            if (!type || !text) {
+                Toast.error('Selecione o tipo e digite o texto');
+                return;
+            }
+
+            uidParams.push({ type: type, value: text });
+            document.getElementById('uidType').value = '';
+            document.getElementById('uidText').value = '';
+            updateTrackingLink();
+            renderUidList();
+        }
+
+        function removeUid(index) {
+            uidParams.splice(index, 1);
+            updateTrackingLink();
+            renderUidList();
+        }
+
+        function renderUidList() {
+            var container = document.getElementById('uidList');
+            if (uidParams.length === 0) { container.innerHTML = ''; return; }
+            var html = '';
+            uidParams.forEach(function(p, i) {
+                html += '<div class="od-uid-tag">' +
+                    '<span>' + p.type + '=' + p.value + '</span>' +
+                    '<button onclick="removeUid(' + i + ')">&times;</button>' +
+                '</div>';
+            });
+            container.innerHTML = html;
+        }
+
+        function copyTrackingLink() {
+            var link = document.getElementById('trackingLink').value;
+            navigator.clipboard.writeText(link).then(function() {
+                Toast.success('Link copiado!');
+            });
+        }
+
+        function shareOd(platform) {
+            var link = document.getElementById('trackingLink').value;
+            var text = 'Cadastre-se agora! ' + link;
+            if (platform === 'whatsapp') {
+                window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+            } else if (platform === 'telegram') {
+                window.open('https://t.me/share/url?url=' + encodeURIComponent(link), '_blank');
+            }
+        }
+
+        function initTabs() {
+            document.querySelectorAll('.od-tab').forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.od-tab').forEach(function(t) { t.classList.remove('active'); });
+                    document.querySelectorAll('.od-tab-content').forEach(function(c) { c.classList.remove('active'); });
+                    tab.classList.add('active');
+                    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+                });
+            });
+        }
+    </script>
+
+    <style>
+        .od-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .od-card {
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+        }
+
+        .od-card-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: 16px;
+        }
+
+        .od-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+        }
+
+        .od-label {
+            font-size: 0.75rem;
+            color: var(--text-3);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .od-value {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-1);
+        }
+
+        .od-accent {
+            color: var(--accent) !important;
+            font-weight: 700 !important;
+            font-size: 1rem !important;
+        }
+
+        .od-pay-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .od-pay-grid > div {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        /* Tabs */
+        .od-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .od-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--text-3);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .od-tab:hover {
+            color: var(--text-1);
+        }
+
+        .od-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            font-weight: 600;
+        }
+
+        .od-tab-content {
+            display: none;
+        }
+
+        .od-tab-content.active {
+            display: block;
+        }
+
+        /* Link generator */
+        .od-field-block {
+            margin-bottom: 20px;
+        }
+
+        .od-field-block > .od-label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .od-link-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .od-link-input {
+            flex: 1;
+            padding: 12px 14px;
+            background: var(--bg-2);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            color: var(--accent);
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 0.75rem;
+        }
+
+        .od-btn-icon {
+            padding: 12px;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .od-btn-icon:hover {
+            background: var(--bg-3);
+            color: var(--text-1);
+        }
+
+        .od-config-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .od-section-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: 12px;
+        }
+
+        .od-select-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .od-select-text {
+            font-size: 0.8rem;
+            color: var(--text-1);
+            flex: 1;
+        }
+
+        .od-badge-redirect {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--blue);
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .od-help {
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: var(--text-3);
+            line-height: 1.5;
+        }
+
+        .od-uid-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .od-uid-item {
+            flex: 1;
+        }
+
+        .od-uid-item .od-label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .od-select, .od-input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-1);
+            font-size: 0.8rem;
+        }
+
+        .od-btn-add {
+            padding: 10px 16px;
+            background: var(--accent);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .od-btn-add:hover {
+            filter: brightness(1.1);
+        }
+
+        .od-uid-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-2);
+            margin-right: 6px;
+            margin-top: 4px;
+        }
+
+        .od-uid-tag button {
+            background: none;
+            border: none;
+            color: var(--red);
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .share-btn-od {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-2);
+            color: var(--text-2);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .share-btn-od.whatsapp:hover { background: #25D366; color: white; border-color: #25D366; }
+        .share-btn-od.telegram:hover { background: #0088cc; color: white; border-color: #0088cc; }
+        .share-btn-od.copy:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .od-row { grid-template-columns: 1fr; }
+            .od-config-row { grid-template-columns: 1fr; }
+            .od-pay-grid { grid-template-columns: 1fr; gap: 10px; }
+            .od-uid-row { flex-wrap: wrap; }
+            .od-uid-item { min-width: 120px; }
+            .od-tabs { gap: 0; }
+            .od-tab { padding: 10px 14px; font-size: 0.75rem; }
+        }
+    </style>
+
+    <nav class="mobile-bottom-nav">
+        <a href="dashboard.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <span>Inicio</span>
+        </a>
+        <a href="meus-links.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            <span>Ofertas</span>
+        </a>
+        <a href="minha-equipe.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <span>Equipe</span>
+        </a>
+        <a href="financeiro.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <span>Financeiro</span>
+        </a>
+        <a href="#" class="bottom-nav-item" id="moreMenuBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+            <span>Mais</span>
+        </a>
+    </nav>
+    <div class="more-menu" id="moreMenu">
+        <a href="comissoes.html">Comissoes</a>
+        <a href="minha-rede.html">Minha Rede</a>
+        <a href="materiais.html">Materiais</a>
+        <a href="suporte.html">Suporte</a>
+        <a href="perfil.html">Perfil</a>
+        <a href="../index.html" onclick="Auth.logout()">Sair</a>
+    </div>
+    <script>
+    (function(){
+        var b=document.getElementById('moreMenuBtn');
+        var m=document.getElementById('moreMenu');
+        if(b&&m){
+            b.addEventListener('click',function(e){e.preventDefault();m.classList.toggle('show');});
+            document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target))m.classList.remove('show');});
+        }
+    })();
+    </script>
+</body>
+</html>
