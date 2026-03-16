@@ -195,7 +195,7 @@ const AffiliateManager = {
     },
 
     getApproved() {
-        return this.getAll().filter(u => u.status === 'approved' || !u.status);
+        return this.getAll().filter(u => u.status === 'approved');
     },
 
     getRejected() {
@@ -450,7 +450,7 @@ const AdminStats = {
         return {
             totalAffiliates: users.length,
             pendingAffiliates: users.filter(u => u.status === 'pending').length,
-            activeAffiliates: users.filter(u => u.status === 'approved' || !u.status).length,
+            activeAffiliates: users.filter(u => u.status === 'approved').length,
             blockedAffiliates: users.filter(u => u.status === 'blocked').length,
             totalHouses: houses.length,
             totalClicks,

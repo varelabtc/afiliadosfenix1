@@ -249,11 +249,31 @@
             const chartBars = document.getElementById('chartBars');
             const chartLabels = document.getElementById('chartLabels');
             const days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
-            const data = days.map(() => Math.floor(Math.random() * 80) + 20);
-            const max = Math.max(...data);
+
+            // Use real data - conversions per day from links
+            const links = Links.getAll();
+            const totalConversions = links.reduce((sum, l) => sum + (l.conversions || 0), 0);
+
+            // If no real data, show empty bars
+            var data;
+            if (totalConversions === 0) {
+                data = [0, 0, 0, 0, 0, 0, 0];
+            } else {
+                // Distribute conversions across days based on link activity
+                data = days.map(function() { return 0; });
+                links.forEach(function(l) {
+                    if (l.conversions > 0) {
+                        var dayIndex = new Date(l.createdAt || Date.now()).getDay();
+                        dayIndex = dayIndex === 0 ? 6 : dayIndex - 1; // Mon=0, Sun=6
+                        data[dayIndex] += l.conversions;
+                    }
+                });
+            }
+
+            const max = Math.max(...data) || 1;
 
             chartBars.innerHTML = data.map(v =>
-                `<div class="chart-bar" style="height: ${(v / max) * 100}%"></div>`
+                `<div class="chart-bar" style="height: ${max > 0 ? (v / max) * 100 : 0}%; ${v === 0 ? 'min-height: 2px; opacity: 0.2;' : ''}"></div>`
             ).join('');
 
             chartLabels.innerHTML = days.map(d => `<span>${d}</span>`).join('');

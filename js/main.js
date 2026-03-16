@@ -324,8 +324,8 @@ const Auth = {
         const user = users.find(u => u.email === email && u.password === password);
 
         if (user) {
-            if (user.status === 'pending') {
-                return { success: false, message: 'Seu cadastro está aguardando aprovação do gerente.' };
+            if (!user.status || user.status === 'pending') {
+                return { success: false, message: 'Seu cadastro está aguardando aprovação.' };
             }
             if (user.status === 'rejected') {
                 return { success: false, message: 'Seu cadastro foi rejeitado. Entre em contato com o suporte.' };
@@ -349,6 +349,7 @@ const Auth = {
             ...userData,
             createdAt: new Date().toISOString(),
             affiliateCode: this.generateAffiliateCode(),
+            status: 'pending',
             balance: 0,
             totalEarnings: 0,
             totalClicks: 0,
@@ -678,20 +679,16 @@ const Pages = {
                 phone: form.querySelector('[name="phone"]').value,
                 password: password,
                 managerId: managerId,
-                status: managerId ? 'pending' : 'approved'
+                status: 'pending'
             };
 
             const result = Auth.register(userData);
 
             if (result.success) {
-                if (managerId) {
-                    Toast.success('Cadastro enviado! Aguarde a aprovação do gerente para fazer login.');
-                } else {
-                    Toast.success('Cadastro realizado com sucesso!');
-                }
+                Toast.success('Cadastro enviado! Aguarde a aprovação para fazer login.');
                 setTimeout(() => {
                     window.location.href = '../index.html';
-                }, managerId ? 3000 : 1500);
+                }, 3000);
             } else {
                 Toast.error(result.message);
             }
