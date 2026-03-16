@@ -799,22 +799,11 @@ tbody tr:hover { background: var(--bg-2); }
     .page-content { padding: 16px; }
     .stats-grid { grid-template-columns: 1fr; }
     .share-grid { grid-template-columns: repeat(2, 1fr); }
-
-    /* Bottom Navigation Bar */
-    .mobile-bottom-nav {
-        display: flex !important;
-    }
-    .more-menu {
-        display: none;
-    }
-    .more-menu.show {
-        display: flex !important;
-    }
 }
 
-/* Bottom Tab Navigation - like WhatsApp/Instagram */
+/* Bottom Tab Navigation - VISIBLE BY DEFAULT, hidden on desktop */
 .mobile-bottom-nav {
-    display: none;
+    display: flex;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -871,6 +860,16 @@ tbody tr:hover { background: var(--bg-2); }
     box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
 }
 
+.more-menu.show {
+    display: flex;
+}
+
+/* On desktop: hide bottom nav, show sidebar */
+@media (min-width: 769px) {
+    .mobile-bottom-nav { display: none !important; }
+    .more-menu { display: none !important; }
+}
+
 .more-menu a {
     display: block;
     padding: 12px 20px;
@@ -882,6 +881,15 @@ tbody tr:hover { background: var(--bg-2); }
 
 .more-menu a:active {
     background: var(--bg-3);
+}
+
+/* Ensure body has bottom padding for the nav bar */
+body {
+    padding-bottom: 70px;
+}
+
+@media (min-width: 769px) {
+    body { padding-bottom: 0; }
 }
 
 /* Auth */
