@@ -359,10 +359,7 @@
         });
 
         function getFullUserData() {
-            var user = Auth.currentUser;
-            if (!user) return null;
-            var users = Storage.get('users') || [];
-            return users.find(function(u) { return u.id === user.id; }) || user;
+            return Auth.currentUser || null;
         }
 
         function loadOfferData(house) {

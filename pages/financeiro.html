@@ -239,7 +239,7 @@
         function loadFinancialData() {
             const user = Auth.currentUser;
             const balance = user?.balance || 0;
-            const pixData = user?.pixData || {};
+            const pixData = user?.pix_data || {};
 
             // Balance
             document.getElementById('availableBalance').textContent = Format.currency(balance);

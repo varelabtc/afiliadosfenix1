@@ -257,10 +257,7 @@
         }
 
         function getFullUserData() {
-            const user = Auth.currentUser;
-            if (!user) return null;
-            const users = Storage.get('users') || [];
-            return users.find(u => u.id === user.id) || user;
+            return Auth.currentUser || null;
         }
 
         function getOfferStatus(offerId) {
