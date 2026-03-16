@@ -261,15 +261,54 @@
             }
         }
 
+        function getFullUserData() {
+            const user = Auth.currentUser;
+            if (!user) return null;
+            const users = Storage.get('users') || [];
+            return users.find(u => u.id === user.id) || user;
+        }
+
         function loadLinkData() {
             const user = Auth.currentUser;
+            const fullUser = getFullUserData();
             const platform = platforms[currentPlatform];
             const affiliateCode = user?.affiliateCode || 'FENIX001';
 
+            // Check if admin configured a house link for this user
+            const houses = Storage.get('bettingHouses') || [];
+            const house = houses.find(h => h.slug === currentPlatform || h.name.toLowerCase().includes(currentPlatform));
+            const houseId = house ? house.id : null;
+            const adminLink = fullUser?.houseLinks?.[houseId] || '';
+
+            // Use admin-configured link if available, otherwise fallback to default
+            const displayLink = adminLink || (platform.baseUrl + affiliateCode);
+
+            // Get CPA value from deal or house config
+            let cpaValue = platform.cpa;
+            if (fullUser?.deals?.[houseId]) {
+                const deal = fullUser.deals[houseId];
+                if (deal.type === 'cpa') cpaValue = deal.cpaValue || cpaValue;
+                else if (deal.type === 'hybrid') cpaValue = deal.hybridCPA || cpaValue;
+            } else if (fullUser?.customCPA?.[houseId]) {
+                cpaValue = fullUser.customCPA[houseId];
+            } else if (house?.cpa) {
+                cpaValue = house.cpa;
+            }
+
             document.getElementById('platformLogo').innerHTML = `<img src="${platform.logo}" alt="${platform.name}">`;
             document.getElementById('platformName').textContent = platform.name;
-            document.getElementById('platformCPA').textContent = Format.currency(platform.cpa);
-            document.getElementById('affiliateLink').textContent = platform.baseUrl + affiliateCode;
+            document.getElementById('platformCPA').textContent = Format.currency(cpaValue);
+            document.getElementById('affiliateLink').textContent = displayLink;
+
+            // Show status based on whether link is configured
+            const statusBadge = document.querySelector('.status-badge');
+            if (adminLink) {
+                statusBadge.className = 'status-badge active';
+                statusBadge.innerHTML = '<span class="status-dot"></span> Ativo';
+            } else {
+                statusBadge.className = 'status-badge pending';
+                statusBadge.innerHTML = '<span class="status-dot"></span> Aguardando Link';
+            }
 
             const links = Links.getAll().filter(l => l.platform === currentPlatform);
             const totalClicks = links.reduce((sum, l) => sum + (l.clicks || 0), 0);

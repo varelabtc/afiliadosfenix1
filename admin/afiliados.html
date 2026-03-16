@@ -226,6 +226,38 @@
         </div>
     </div>
 
+    <!-- Links Modal -->
+    <div class="modal-overlay" id="linksModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 id="linksModalTitle">Links das Casas</h3>
+                <button class="modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="linksForm">
+                <div class="modal-body">
+                    <input type="hidden" id="linksUserId">
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Cole o link de afiliado de cada casa de apostas. O afiliado verá esses links no painel dele.</p>
+                    <div id="linksFields"></div>
+
+                    <div style="margin-top: 20px; padding: 16px; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 10px;">
+                        <h4 style="font-size: 0.85rem; color: var(--blue); margin-bottom: 8px;">URL de Postback (para receber eventos)</h4>
+                        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">Configure esta URL como postback/webhook nas plataformas das casas para rastrear conversões automaticamente:</p>
+                        <div style="background: var(--bg-0); padding: 10px 14px; border-radius: 8px; font-family: monospace; font-size: 0.75rem; color: var(--accent); word-break: break-all;" id="postbackUrl"></div>
+                        <button type="button" class="btn btn-secondary btn-sm" style="margin-top: 8px;" onclick="copyPostback()">Copiar URL</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal-close>Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Links</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="../js/main.js"></script>
     <script src="../js/admin.js"></script>
     <script>
@@ -310,6 +342,12 @@
                                 <button class="btn-icon" onclick="openCPAModal(${user.id})" title="Configurar CPA">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                                    </svg>
+                                </button>
+                                <button class="btn-icon" style="color: var(--blue);" onclick="openLinksModal(${user.id})" title="Links das Casas">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                                        <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
                                     </svg>
                                 </button>
                                 ${user.status === 'pending' ? `
@@ -550,6 +588,76 @@
                 Toast.success('Afiliado desbloqueado');
                 loadAffiliates();
             }
+        }
+
+        // === LINKS DAS CASAS POR AFILIADO ===
+
+        function openLinksModal(userId) {
+            document.getElementById('linksUserId').value = userId;
+            var users = AffiliateManager.getAll();
+            var user = users.find(function(u) { return u.id === userId; });
+            var houses = BettingHouses.getAll();
+
+            document.getElementById('linksModalTitle').textContent = 'Links - ' + (user ? user.name : 'Afiliado');
+
+            // Postback URL
+            var baseUrl = window.location.origin;
+            var postbackUrl = baseUrl + '/api/postback?affiliate_id=' + userId + '&house={HOUSE_ID}&event={EVENT}&subid={SUBID}&payout={PAYOUT}';
+            document.getElementById('postbackUrl').textContent = postbackUrl;
+
+            // Build fields per house
+            var affiliateLinks = user && user.houseLinks ? user.houseLinks : {};
+
+            document.getElementById('linksFields').innerHTML = houses.map(function(house) {
+                var currentLink = affiliateLinks[house.id] || '';
+                return '<div style="background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px;">' +
+                    '<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">' +
+                        '<span style="font-size: 1.2rem;">' + house.logo + '</span>' +
+                        '<span style="font-weight: 600;">' + house.name + '</span>' +
+                        '<span class="status-badge ' + (currentLink ? 'active' : 'inactive') + '" style="font-size: 0.65rem;"><span class="status-dot"></span>' + (currentLink ? 'Configurado' : 'Sem link') + '</span>' +
+                    '</div>' +
+                    '<div class="form-group" style="margin-bottom: 0;">' +
+                        '<label style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;">Link de afiliado na ' + house.name + '</label>' +
+                        '<input type="url" name="house_link_' + house.id + '" value="' + currentLink + '" placeholder="https://' + house.slug + '.com/register?btag=XXXXX" style="width:100%;padding:10px 12px;background:var(--bg-0);border:1px solid var(--border);border-radius:8px;color:var(--text-1);font-size:0.85rem;">' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+
+            Modal.open('linksModal');
+        }
+
+        document.getElementById('linksForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var userId = parseInt(document.getElementById('linksUserId').value);
+            var houses = BettingHouses.getAll();
+            var users = AffiliateManager.getAll();
+            var index = users.findIndex(function(u) { return u.id === userId; });
+            if (index === -1) return;
+
+            if (!users[index].houseLinks) users[index].houseLinks = {};
+
+            houses.forEach(function(house) {
+                var input = document.querySelector('[name="house_link_' + house.id + '"]');
+                if (input) {
+                    users[index].houseLinks[house.id] = input.value.trim();
+                }
+            });
+
+            Storage.set('users', users);
+            Toast.success('Links salvos com sucesso!');
+            Modal.close('linksModal');
+            loadAffiliates();
+        });
+
+        function copyPostback() {
+            var el = document.getElementById('postbackUrl');
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+            document.execCommand('copy');
+            Toast.success('URL de postback copiada!');
         }
     </script>
 
