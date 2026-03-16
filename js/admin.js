@@ -605,6 +605,74 @@ const AdminDemoData = {
             Storage.set('users', users);
         }
 
+        // Add demo manager
+        const managers = Storage.get('managers') || [];
+        if (!managers.find(m => m.email === 'gerente@fenix.com')) {
+            const mgrId = Date.now() + 100;
+            managers.push({
+                id: mgrId,
+                name: 'Lucas Gerente',
+                email: 'gerente@fenix.com',
+                password: 'gerente123',
+                phone: '(11) 91234-5678',
+                role: 'manager',
+                referralCode: 'MGRLUCAS',
+                cpaCommission: 30,
+                status: 'active',
+                balance: 0,
+                totalEarnings: 0,
+                createdAt: new Date().toISOString()
+            });
+            Storage.set('managers', managers);
+
+            // Add some affiliates linked to this manager
+            const mgrAffiliates = [
+                {
+                    id: Date.now() + 201,
+                    name: 'Pedro Costa',
+                    email: 'pedro@teste.com',
+                    password: '123456',
+                    phone: '(41) 98888-1111',
+                    status: 'pending',
+                    affiliateCode: 'FNXPCOSTA',
+                    managerId: mgrId,
+                    balance: 0,
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 202,
+                    name: 'Ana Lima',
+                    email: 'ana@teste.com',
+                    password: '123456',
+                    phone: '(51) 97777-2222',
+                    status: 'approved',
+                    affiliateCode: 'FNXALIMA',
+                    managerId: mgrId,
+                    balance: 200,
+                    totalEarnings: 600,
+                    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ];
+            users.push(...mgrAffiliates);
+            Storage.set('users', users);
+
+            // Add demo links for Ana
+            Storage.set('links_' + mgrAffiliates[1].id, [
+                {
+                    id: 1,
+                    name: 'Superbet Link',
+                    houseId: 1,
+                    houseName: 'Superbet',
+                    shortCode: 'analima1',
+                    clicks: 320,
+                    conversions: 4,
+                    earnings: 600,
+                    status: 'active',
+                    createdAt: new Date().toISOString()
+                }
+            ]);
+        }
+
         // Add demo withdrawals
         if (!Storage.get('withdrawals') || Storage.get('withdrawals').length === 0) {
             Storage.set('withdrawals', [
