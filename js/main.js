@@ -525,7 +525,8 @@ const DemoData = {
                 totalClicks: 12547,
                 totalConversions: 487,
                 houseLinks: {
-                    1: 'https://superbet.com/register?ref=FENIXDEMO01'
+                    1: 'https://superbet.com/register?ref=FENIXDEMO01',
+                    2: 'https://sportingbet.com/register?ref=FENIXDEMO01'
                 },
                 status: 'approved'
             };
@@ -581,6 +582,24 @@ const DemoData = {
             ];
 
             Storage.set('links_1', demoLinks);
+        }
+
+        // Ensure demo user always has house links (even if created before this update)
+        const users = Storage.get('users') || [];
+        const demoIdx = users.findIndex(u => u.email === 'demo@fenix.com');
+        if (demoIdx !== -1 && !users[demoIdx].houseLinks) {
+            users[demoIdx].houseLinks = {
+                1: 'https://superbet.com/register?ref=FENIXDEMO01',
+                2: 'https://sportingbet.com/register?ref=FENIXDEMO01'
+            };
+            users[demoIdx].status = users[demoIdx].status || 'approved';
+            Storage.set('users', users);
+            // Update currentUser if logged in as demo
+            const current = Storage.get('currentUser');
+            if (current && current.email === 'demo@fenix.com') {
+                current.houseLinks = users[demoIdx].houseLinks;
+                Storage.set('currentUser', current);
+            }
         }
     }
 };
