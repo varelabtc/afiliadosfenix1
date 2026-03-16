@@ -565,7 +565,96 @@
     </script>
 
     <style>
+        .profile-header-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 32px;
+            background: linear-gradient(135deg, var(--bg-card), var(--bg-input));
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
         @media (max-width: 768px) {
+            .profile-header-card { flex-direction: column; gap: 24px; text-align: center; }
+        }
+        .profile-header-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .profile-header-info { flex-direction: column; }
+        }
+        .profile-avatar-lg {
+            width: 80px;
+            height: 80px;
+            min-width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+        .profile-details h2 { margin-bottom: 4px; color: var(--text-primary); }
+        .profile-details p { color: var(--text-muted); margin-bottom: 12px; }
+        .profile-badges { display: flex; gap: 8px; }
+        .profile-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(59,130,246,0.15);
+            color: var(--blue);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .profile-badge.affiliate-code {
+            background: var(--blue);
+            color: white;
+        }
+        .profile-header-stats { display: flex; gap: 32px; }
+        .profile-stat-item { text-align: center; }
+        .profile-stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); }
+        .profile-stat-label { font-size: 0.85rem; color: var(--text-muted); }
+        .profile-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        .profile-tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .profile-tab:hover { background: var(--bg-input); }
+        .profile-tab.active {
+            background: var(--blue);
+            color: white;
+            border-color: transparent;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
             .doc-upload-grid { grid-template-columns: 1fr !important; }
         }
     </style>
