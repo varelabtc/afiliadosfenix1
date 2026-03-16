@@ -43,7 +43,34 @@
                     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repita a senha" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary">CRIAR CONTA</button>
+                <!-- Fontes de Tráfego -->
+                <div style="border-top: 1px solid var(--border); padding-top: 16px; margin-top: 8px;">
+                    <label style="font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; color: var(--text-3); display: block; margin-bottom: 12px;">FONTES DE TRÁFEGO</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="trafficSource" style="font-size: 0.65rem;">ONDE VAI PROMOVER?</label>
+                            <select id="trafficSource" style="width: 100%; padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text-1); font-size: 0.85rem; appearance: auto;">
+                                <option value="">Selecione</option>
+                                <option value="Website">Website</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="Telegram">Telegram</option>
+                                <option value="X">X</option>
+                                <option value="Facebook">Facebook</option>
+                                <option value="YouTube">YouTube</option>
+                                <option value="TikTok">TikTok</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="trafficUrl" style="font-size: 0.65rem;">URL OU CANAL</label>
+                            <input type="text" id="trafficUrl" placeholder="URL ou nome do canal">
+                        </div>
+                    </div>
+                    <button type="button" id="addTrafficBtn" style="margin-top: 10px; padding: 6px 14px; background: var(--accent); color: white; border: none; border-radius: var(--radius); font-size: 0.75rem; font-weight: 600; cursor: pointer; letter-spacing: 0.05em;">ADICIONAR FONTE</button>
+                    <div id="trafficList" style="margin-top: 10px;"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 16px;">CRIAR CONTA</button>
             </form>
 
             <div class="auth-footer">
@@ -54,5 +81,44 @@
 
     <script src="../js/supabase-db.js?v=3"></script>
     <script src="../js/main.js?v=3"></script>
+    <script>
+    (function() {
+        var sources = [];
+        var btn = document.getElementById('addTrafficBtn');
+        var list = document.getElementById('trafficList');
+        var selectEl = document.getElementById('trafficSource');
+        var urlEl = document.getElementById('trafficUrl');
+
+        btn.addEventListener('click', function() {
+            var type = selectEl.value;
+            var url = urlEl.value.trim();
+            if (!type) { alert('Selecione uma fonte de tráfego'); return; }
+            sources.push({ type: type, url: url });
+            renderList();
+            selectEl.value = '';
+            urlEl.value = '';
+        });
+
+        function renderList() {
+            if (sources.length === 0) { list.innerHTML = ''; return; }
+            var html = '<p style="font-size:0.7rem;font-weight:600;color:var(--text-3);margin-bottom:6px;letter-spacing:0.05em;">FONTES ADICIONADAS:</p>';
+            sources.forEach(function(s, i) {
+                html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:4px;font-size:0.8rem;">';
+                html += '<span style="color:var(--text-1);">' + s.type + (s.url ? ' &mdash; <span style="color:var(--text-2);">' + s.url + '</span>' : '') + '</span>';
+                html += '<button type="button" onclick="removeTraffic(' + i + ')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:1rem;padding:0 4px;">&times;</button>';
+                html += '</div>';
+            });
+            list.innerHTML = html;
+        }
+
+        window.removeTraffic = function(i) {
+            sources.splice(i, 1);
+            renderList();
+        };
+
+        // Expose sources for form submission
+        window.getTrafficSources = function() { return sources; };
+    })();
+    </script>
 </body>
 </html>

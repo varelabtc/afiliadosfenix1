@@ -343,6 +343,11 @@ const Auth = {
             total_conversions: 0
         };
 
+        // Add traffic_sources if provided
+        if (userData.trafficSources && userData.trafficSources.length > 0) {
+            newUser.traffic_sources = userData.trafficSources;
+        }
+
         var result = await SupabaseDB.createUser(newUser);
         if (result.error) {
             return { success: false, message: 'Erro ao criar conta. Tente novamente.' };
@@ -584,13 +589,16 @@ const Pages = {
                     }
                 }
 
+                const trafficSources = typeof window.getTrafficSources === 'function' ? window.getTrafficSources() : [];
+
                 const userData = {
                     name: form.querySelector('[name="name"]').value,
                     email: form.querySelector('[name="email"]').value,
                     phone: form.querySelector('[name="phone"]').value,
                     password: password,
                     managerId: managerId,
-                    referredBy: referredBy
+                    referredBy: referredBy,
+                    trafficSources: trafficSources
                 };
 
                 const result = await Auth.register(userData);
