@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix - Perfil do Gerente</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="icon" type="image/png" href="../img/fenix-logo.png">
+</head>
+<body>
+<div class="dashboard">
+        <aside class="sidebar" id="sidebar" style="border-right: 1px solid var(--blue);">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-mark">
+                        <img src="../img/fenix-logo.png" alt="Fenix">
+                    </div>
+                    <h2>FENIX</h2>
+                </div>
+                <span style="font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; padding: 3px 8px; background: var(--blue); color: white; border-radius: 4px;">GERENTE</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    Dashboard
+                </a>
+                <a href="afiliados.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                    Meus Afiliados
+                </a>
+                <a href="link.html" class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                    Meu Link
+                </a>
+                <a href="perfil.html" class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Meu Perfil
+                </a>
+
+                <div class="nav-divider"></div>
+
+                <a href="#" class="nav-item" onclick="ManagerManager.logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Sair
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar" style="background: var(--blue);" id="mgrAvatar">G</div>
+                    <div class="user-info">
+                        <div class="user-name" id="mgrName">Gerente</div>
+                        <div class="user-role" style="color: var(--blue);">Gerente</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-content">
+                <div class="page-header">
+                    <h1>Meu Perfil</h1>
+                    <p>Gerencie suas informações</p>
+                </div>
+
+                <!-- Profile Header -->
+                <div class="profile-header-card">
+                    <div class="profile-header-info">
+                        <div class="profile-avatar-lg" style="background: var(--blue);" id="profileAvatar">G</div>
+                        <div class="profile-details">
+                            <h2 id="profileName">Carregando...</h2>
+                            <p id="profileEmail">email@exemplo.com</p>
+                            <div class="profile-badges">
+                                <span class="profile-badge" style="background: rgba(59,130,246,0.15); color: var(--blue);">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                        <polyline points="22 4 12 14.01 9 11.01"/>
+                                    </svg>
+                                    Gerente
+                                </span>
+                                <span class="profile-badge affiliate-code" id="profileCode">MGR000</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-header-stats">
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value" id="profileAfiliados">0</div>
+                            <div class="profile-stat-label">Afiliados</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value" id="profileConversions">0</div>
+                            <div class="profile-stat-label">Conversões</div>
+                        </div>
+                        <div class="profile-stat-item">
+                            <div class="profile-stat-value" id="profileEarnings">R$ 0</div>
+                            <div class="profile-stat-label">Total Ganho</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Tabs -->
+                <div class="profile-tabs">
+                    <button class="profile-tab active" onclick="switchTab('pessoais')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Dados Pessoais
+                    </button>
+                    <button class="profile-tab" onclick="switchTab('endereco')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        Endereço
+                    </button>
+                    <button class="profile-tab" onclick="switchTab('pagamento')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                            <line x1="1" y1="10" x2="23" y2="10"/>
+                        </svg>
+                        Dados de Pagamento
+                    </button>
+                    <button class="profile-tab" onclick="switchTab('documentos')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Documentos
+                    </button>
+                    <button class="profile-tab" onclick="switchTab('senha')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0110 0v4"/>
+                        </svg>
+                        Alterar Senha
+                    </button>
+                </div>
+
+                <!-- Tab: Dados Pessoais -->
+                <div class="tab-content" id="tab-pessoais">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Dados Pessoais</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="personalDataForm" onsubmit="savePersonalData(event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Nome Completo</label>
+                                        <input type="text" name="name" id="inputName" placeholder="Seu nome completo">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>CPF</label>
+                                        <input type="text" name="cpf" id="inputCpf" placeholder="000.000.000-00">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>E-mail</label>
+                                        <input type="email" name="email" id="inputEmail" placeholder="seu@email.com" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Telefone</label>
+                                        <input type="tel" name="phone" id="inputPhone" placeholder="(00) 00000-0000">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Data de Nascimento</label>
+                                        <input type="date" name="birthdate" id="inputBirthdate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Gênero</label>
+                                        <select name="gender" id="inputGender">
+                                            <option value="">Selecione...</option>
+                                            <option value="male">Masculino</option>
+                                            <option value="female">Feminino</option>
+                                            <option value="other">Outro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Endereço -->
+                <div class="tab-content" id="tab-endereco" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Endereço</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="addressForm" onsubmit="saveAddress(event)">
+                                <div class="form-row">
+                                    <div class="form-group" style="flex: 0.3;">
+                                        <label>CEP</label>
+                                        <input type="text" name="cep" id="inputCep" placeholder="00000-000">
+                                    </div>
+                                    <div class="form-group" style="flex: 0.7;">
+                                        <label>Rua</label>
+                                        <input type="text" name="street" id="inputStreet" placeholder="Nome da rua">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group" style="flex: 0.2;">
+                                        <label>Número</label>
+                                        <input type="text" name="number" id="inputNumber" placeholder="123">
+                                    </div>
+                                    <div class="form-group" style="flex: 0.4;">
+                                        <label>Complemento</label>
+                                        <input type="text" name="complement" id="inputComplement" placeholder="Apto, sala...">
+                                    </div>
+                                    <div class="form-group" style="flex: 0.4;">
+                                        <label>Bairro</label>
+                                        <input type="text" name="neighborhood" id="inputNeighborhood" placeholder="Bairro">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Cidade</label>
+                                        <input type="text" name="city" id="inputCity" placeholder="Cidade">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Estado</label>
+                                        <select name="state" id="inputState">
+                                            <option value="">Selecione...</option>
+                                            <option value="AC">Acre</option>
+                                            <option value="AL">Alagoas</option>
+                                            <option value="AP">Amapá</option>
+                                            <option value="AM">Amazonas</option>
+                                            <option value="BA">Bahia</option>
+                                            <option value="CE">Ceará</option>
+                                            <option value="DF">Distrito Federal</option>
+                                            <option value="ES">Espírito Santo</option>
+                                            <option value="GO">Goiás</option>
+                                            <option value="MA">Maranhão</option>
+                                            <option value="MT">Mato Grosso</option>
+                                            <option value="MS">Mato Grosso do Sul</option>
+                                            <option value="MG">Minas Gerais</option>
+                                            <option value="PA">Pará</option>
+                                            <option value="PB">Paraíba</option>
+                                            <option value="PR">Paraná</option>
+                                            <option value="PE">Pernambuco</option>
+                                            <option value="PI">Piauí</option>
+                                            <option value="RJ">Rio de Janeiro</option>
+                                            <option value="RN">Rio Grande do Norte</option>
+                                            <option value="RS">Rio Grande do Sul</option>
+                                            <option value="RO">Rondônia</option>
+                                            <option value="RR">Roraima</option>
+                                            <option value="SC">Santa Catarina</option>
+                                            <option value="SP">São Paulo</option>
+                                            <option value="SE">Sergipe</option>
+                                            <option value="TO">Tocantins</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Endereço</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Dados de Pagamento -->
+                <div class="tab-content" id="tab-pagamento" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Dados PIX</h3>
+                            <p>Configure sua chave PIX para receber pagamentos</p>
+                        </div>
+                        <div class="card-body">
+                            <form id="pixForm" onsubmit="savePixData(event)">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Tipo de Chave</label>
+                                        <select name="pixType" id="inputPixType" required>
+                                            <option value="">Selecione...</option>
+                                            <option value="cpf">CPF</option>
+                                            <option value="email">E-mail</option>
+                                            <option value="phone">Telefone</option>
+                                            <option value="random">Chave Aleatória</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Chave PIX</label>
+                                        <input type="text" name="pixKey" id="inputPixKey" placeholder="Digite sua chave PIX" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nome do Titular</label>
+                                    <input type="text" name="pixHolder" id="inputPixHolder" placeholder="Nome completo do titular da conta">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Salvar Dados PIX</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Documentos -->
+                <div class="tab-content" id="tab-documentos" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Verificação de Identidade</h3>
+                            <p>Envie seus documentos para verificação</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="doc-upload-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div class="card" style="padding: 20px; text-align: center; border: 2px dashed var(--border);">
+                                    <div style="margin-bottom: 8px; color: var(--text-3);">
+                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                                            <polyline points="21 15 16 10 5 21"/>
+                                        </svg>
+                                    </div>
+                                    <p style="font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Documento (Frente)</p>
+                                    <input type="file" id="docFrenteInput" accept="image/*" style="display: none;" onchange="handleDocUpload('frente', this)">
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('docFrenteInput').click()">Enviar</button>
+                                    <p id="docFrenteStatus" style="font-size: 0.75rem; color: var(--text-3); margin-top: 8px;">Nenhum arquivo</p>
+                                </div>
+                                <div class="card" style="padding: 20px; text-align: center; border: 2px dashed var(--border);">
+                                    <div style="margin-bottom: 8px; color: var(--text-3);">
+                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                                            <polyline points="21 15 16 10 5 21"/>
+                                        </svg>
+                                    </div>
+                                    <p style="font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Documento (Verso)</p>
+                                    <input type="file" id="docVersoInput" accept="image/*" style="display: none;" onchange="handleDocUpload('verso', this)">
+                                    <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('docVersoInput').click()">Enviar</button>
+                                    <p id="docVersoStatus" style="font-size: 0.75rem; color: var(--text-3); margin-top: 8px;">Nenhum arquivo</p>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top: 16px;">
+                                <label>Selfie com Documento</label>
+                                <input type="file" id="docSelfieInput" accept="image/*" style="display: none;" onchange="handleDocUpload('selfie', this)">
+                                <div class="card" style="padding: 20px; text-align: center; border: 2px dashed var(--border); cursor: pointer;" onclick="document.getElementById('docSelfieInput').click()">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--text-3);">
+                                        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                                        <circle cx="12" cy="13" r="4"/>
+                                    </svg>
+                                    <p style="font-size: 0.8rem; color: var(--text-3); margin-top: 8px;">Clique para enviar selfie</p>
+                                    <p id="docSelfieStatus" style="font-size: 0.75rem; color: var(--text-3); margin-top: 4px;">Nenhum arquivo</p>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" style="margin-top: 16px;" onclick="saveDocuments()">Salvar Documentos</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Alterar Senha -->
+                <div class="tab-content" id="tab-senha" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Alterar Senha</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="passwordForm" onsubmit="changePassword(event)">
+                                <div class="form-group">
+                                    <label>Senha Atual</label>
+                                    <input type="password" name="currentPassword" placeholder="Digite sua senha atual" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Nova Senha</label>
+                                        <input type="password" name="newPassword" placeholder="Digite a nova senha" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Confirmar Nova Senha</label>
+                                        <input type="password" name="confirmPassword" placeholder="Confirme a nova senha" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Alterar Senha</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/supabase-db.js?v=3"></script>
+    <script src="../js/main.js?v=3"></script>
+    <script src="../js/admin.js?v=3"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (!ManagerManager.requireAuth()) return;
+            await AffiliateManager.fetchAll();
+            await ManagerManager.fetchAll();
+            loadProfile();
+        });
+
+        function loadProfile() {
+            var mgr = ManagerManager.getCurrentManager();
+            if (!mgr) return;
+            var fullMgr = ManagerManager.getById(mgr.id) || mgr;
+
+            // Sidebar
+            document.getElementById('mgrName').textContent = fullMgr.name;
+            document.getElementById('mgrAvatar').textContent = fullMgr.name.charAt(0);
+
+            // Profile header
+            document.getElementById('profileAvatar').textContent = fullMgr.name.charAt(0);
+            document.getElementById('profileName').textContent = fullMgr.name;
+            document.getElementById('profileEmail').textContent = fullMgr.email;
+            document.getElementById('profileCode').textContent = fullMgr.referral_code || fullMgr.referralCode || '-';
+
+            // Stats
+            var stats = ManagerManager.getStats(mgr.id);
+            document.getElementById('profileAfiliados').textContent = stats.totalAffiliates;
+            document.getElementById('profileConversions').textContent = stats.totalConversions;
+            document.getElementById('profileEarnings').textContent = Format.currency(stats.managerEarnings);
+
+            // Fill forms with existing data
+            document.getElementById('inputName').value = fullMgr.name || '';
+            document.getElementById('inputEmail').value = fullMgr.email || '';
+            document.getElementById('inputPhone').value = fullMgr.phone || '';
+            document.getElementById('inputCpf').value = fullMgr.cpf || '';
+            document.getElementById('inputBirthdate').value = fullMgr.birthdate || '';
+            if (fullMgr.gender) document.getElementById('inputGender').value = fullMgr.gender;
+
+            // Address
+            var addr = fullMgr.address || {};
+            if (typeof addr === 'string') try { addr = JSON.parse(addr); } catch(e) { addr = {}; }
+            document.getElementById('inputCep').value = addr.cep || '';
+            document.getElementById('inputStreet').value = addr.street || '';
+            document.getElementById('inputNumber').value = addr.number || '';
+            document.getElementById('inputComplement').value = addr.complement || '';
+            document.getElementById('inputNeighborhood').value = addr.neighborhood || '';
+            document.getElementById('inputCity').value = addr.city || '';
+            if (addr.state) document.getElementById('inputState').value = addr.state;
+
+            // PIX
+            var pix = fullMgr.pix_data || fullMgr.pixData || {};
+            if (typeof pix === 'string') try { pix = JSON.parse(pix); } catch(e) { pix = {}; }
+            if (pix.type) document.getElementById('inputPixType').value = pix.type;
+            document.getElementById('inputPixKey').value = pix.key || '';
+            document.getElementById('inputPixHolder').value = pix.holder || '';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(function(el) { el.style.display = 'none'; });
+            document.querySelectorAll('.profile-tab').forEach(function(el) { el.classList.remove('active'); });
+            document.getElementById('tab-' + tab).style.display = 'block';
+            event.currentTarget.classList.add('active');
+        }
+
+        async function savePersonalData(e) {
+            e.preventDefault();
+            var mgr = ManagerManager.getCurrentManager();
+            var data = {
+                name: document.getElementById('inputName').value,
+                phone: document.getElementById('inputPhone').value,
+                cpf: document.getElementById('inputCpf').value,
+                birthdate: document.getElementById('inputBirthdate').value,
+                gender: document.getElementById('inputGender').value
+            };
+            try {
+                await SupabaseDB.updateManager(mgr.id, data);
+                // Update local session
+                var updated = Object.assign({}, mgr, data);
+                localStorage.setItem('fenix_currentManager', JSON.stringify(updated));
+                await ManagerManager.fetchAll();
+                loadProfile();
+                Toast.success('Dados pessoais salvos!');
+            } catch(err) {
+                Toast.error('Erro ao salvar dados.');
+            }
+        }
+
+        async function saveAddress(e) {
+            e.preventDefault();
+            var mgr = ManagerManager.getCurrentManager();
+            var address = {
+                cep: document.getElementById('inputCep').value,
+                street: document.getElementById('inputStreet').value,
+                number: document.getElementById('inputNumber').value,
+                complement: document.getElementById('inputComplement').value,
+                neighborhood: document.getElementById('inputNeighborhood').value,
+                city: document.getElementById('inputCity').value,
+                state: document.getElementById('inputState').value
+            };
+            try {
+                await SupabaseDB.updateManager(mgr.id, { address: address });
+                var updated = Object.assign({}, mgr, { address: address });
+                localStorage.setItem('fenix_currentManager', JSON.stringify(updated));
+                await ManagerManager.fetchAll();
+                Toast.success('Endereço salvo!');
+            } catch(err) {
+                Toast.error('Erro ao salvar endereço.');
+            }
+        }
+
+        async function savePixData(e) {
+            e.preventDefault();
+            var mgr = ManagerManager.getCurrentManager();
+            var pixData = {
+                type: document.getElementById('inputPixType').value,
+                key: document.getElementById('inputPixKey').value,
+                holder: document.getElementById('inputPixHolder').value
+            };
+            try {
+                await SupabaseDB.updateManager(mgr.id, { pix_data: pixData });
+                var updated = Object.assign({}, mgr, { pix_data: pixData });
+                localStorage.setItem('fenix_currentManager', JSON.stringify(updated));
+                await ManagerManager.fetchAll();
+                Toast.success('Dados PIX salvos!');
+            } catch(err) {
+                Toast.error('Erro ao salvar dados PIX.');
+            }
+        }
+
+        function handleDocUpload(type, input) {
+            if (input.files && input.files[0]) {
+                var fileName = input.files[0].name;
+                var statusEl = document.getElementById('doc' + type.charAt(0).toUpperCase() + type.slice(1) + 'Status');
+                if (statusEl) statusEl.textContent = fileName;
+            }
+        }
+
+        async function saveDocuments() {
+            Toast.success('Documentos salvos! Aguarde a verificação.');
+        }
+
+        async function changePassword(e) {
+            e.preventDefault();
+            var mgr = ManagerManager.getCurrentManager();
+            var fullMgr = ManagerManager.getById(mgr.id) || mgr;
+
+            var currentPass = e.target.querySelector('[name="currentPassword"]').value;
+            var newPass = e.target.querySelector('[name="newPassword"]').value;
+            var confirmPass = e.target.querySelector('[name="confirmPassword"]').value;
+
+            if (currentPass !== fullMgr.password) {
+                Toast.error('Senha atual incorreta');
+                return;
+            }
+            if (newPass !== confirmPass) {
+                Toast.error('As senhas não coincidem');
+                return;
+            }
+            if (newPass.length < 6) {
+                Toast.error('A nova senha deve ter pelo menos 6 caracteres');
+                return;
+            }
+
+            try {
+                await SupabaseDB.updateManager(mgr.id, { password: newPass });
+                var updated = Object.assign({}, mgr, { password: newPass });
+                localStorage.setItem('fenix_currentManager', JSON.stringify(updated));
+                await ManagerManager.fetchAll();
+                e.target.reset();
+                Toast.success('Senha alterada com sucesso!');
+            } catch(err) {
+                Toast.error('Erro ao alterar senha.');
+            }
+        }
+    </script>
+
+    <style>
+        @media (max-width: 768px) {
+            .doc-upload-grid { grid-template-columns: 1fr !important; }
+        }
+    </style>
+
+    <nav class="mobile-bottom-nav">
+        <a href="dashboard.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            <span>Inicio</span>
+        </a>
+        <a href="afiliados.html" class="bottom-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <span>Afiliados</span>
+        </a>
+        <a href="perfil.html" class="bottom-nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Perfil</span>
+        </a>
+        <a href="#" class="bottom-nav-item" onclick="ManagerManager.logout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Sair</span>
+        </a>
+    </nav>
+</body>
+</html>
