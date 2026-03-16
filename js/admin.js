@@ -544,82 +544,35 @@ const AdminDemoData = {
         // Initialize master links
         MasterLinks.getAll();
 
-        // Add demo affiliates only once (check by email to avoid duplicates)
+        // Create demo affiliate account (only if not exists)
         const users = Storage.get('users') || [];
-        const demoEmails = ['joao@teste.com', 'maria@teste.com', 'carlos@teste.com'];
-        const hasDemoUsers = demoEmails.some(email => users.find(u => u.email === email));
-
-        if (!hasDemoUsers && users.length < 3) {
-            const carlosId = 900001;
-            const demoUsers = [
-                {
-                    id: 900002,
-                    name: 'João Silva',
-                    email: 'joao@teste.com',
-                    password: '123456',
-                    phone: '(11) 98765-4321',
-                    status: 'pending',
-                    affiliateCode: 'FNXJSILVA',
-                    balance: 0,
-                    createdAt: new Date().toISOString()
-                },
-                {
-                    id: 900003,
-                    name: 'Maria Santos',
-                    email: 'maria@teste.com',
-                    password: '123456',
-                    phone: '(21) 99876-5432',
-                    status: 'pending',
-                    affiliateCode: 'FNXMSANTOS',
-                    balance: 0,
-                    createdAt: new Date().toISOString()
-                },
-                {
-                    id: carlosId,
-                    name: 'Carlos Oliveira',
-                    email: 'carlos@teste.com',
-                    password: '123456',
-                    phone: '(31) 97654-3210',
-                    status: 'approved',
-                    affiliateCode: 'FNXCOLIVEIRA',
-                    balance: 450.00,
-                    totalEarnings: 1250.00,
-                    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-                }
-            ];
-
-            // Add demo links for Carlos
-            if (!Storage.get(`links_${carlosId}`)) {
-                Storage.set(`links_${carlosId}`, [
-                    {
-                        id: 1,
-                        name: 'Superbet - Promo Verão',
-                        houseId: 1,
-                        houseName: 'Superbet',
-                        shortCode: 'sbpromo1',
-                        clicks: 580,
-                        conversions: 8,
-                        earnings: 1200.00,
-                        status: 'active',
-                        createdAt: new Date().toISOString()
-                    }
-                ]);
-            }
-
-            users.push(...demoUsers);
+        if (!users.find(u => u.email === 'demo@fenix.com')) {
+            users.push({
+                id: 900001,
+                name: 'Afiliado Demo',
+                email: 'demo@fenix.com',
+                password: '123456',
+                phone: '',
+                status: 'approved',
+                affiliateCode: 'FNXDEMO01',
+                balance: 0,
+                totalEarnings: 0,
+                totalClicks: 0,
+                totalConversions: 0,
+                createdAt: new Date().toISOString()
+            });
             Storage.set('users', users);
         }
 
-        // Add demo manager (fixed ID 99999 to match Auth.login in main.js)
+        // Create demo manager (fixed ID 99999 to match Auth.login in main.js)
         const managers = Storage.get('managers') || [];
         if (!managers.find(m => m.email === 'gerente@fenix.com')) {
-            const mgrId = 99999;
             managers.push({
-                id: mgrId,
-                name: 'Lucas Gerente',
+                id: 99999,
+                name: 'Gerente Fenix',
                 email: 'gerente@fenix.com',
                 password: 'gerente123',
-                phone: '(11) 91234-5678',
+                phone: '',
                 role: 'manager',
                 referralCode: 'MGRLUCAS',
                 cpaCommission: 30,
@@ -629,80 +582,6 @@ const AdminDemoData = {
                 createdAt: new Date().toISOString()
             });
             Storage.set('managers', managers);
-
-            // Add some affiliates linked to this manager (fixed IDs, check by email)
-            const currentUsers = Storage.get('users') || [];
-            const mgrAffiliates = [];
-
-            if (!currentUsers.find(u => u.email === 'pedro@teste.com')) {
-                mgrAffiliates.push({
-                    id: 900004,
-                    name: 'Pedro Costa',
-                    email: 'pedro@teste.com',
-                    password: '123456',
-                    phone: '(41) 98888-1111',
-                    status: 'pending',
-                    affiliateCode: 'FNXPCOSTA',
-                    managerId: mgrId,
-                    balance: 0,
-                    createdAt: new Date().toISOString()
-                });
-            }
-
-            if (!currentUsers.find(u => u.email === 'ana@teste.com')) {
-                mgrAffiliates.push({
-                    id: 900005,
-                    name: 'Ana Lima',
-                    email: 'ana@teste.com',
-                    password: '123456',
-                    phone: '(51) 97777-2222',
-                    status: 'approved',
-                    affiliateCode: 'FNXALIMA',
-                    managerId: mgrId,
-                    balance: 200,
-                    totalEarnings: 600,
-                    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
-                });
-
-                // Add demo links for Ana
-                if (!Storage.get('links_900005')) {
-                    Storage.set('links_900005', [
-                        {
-                            id: 1,
-                            name: 'Superbet Link',
-                            houseId: 1,
-                            houseName: 'Superbet',
-                            shortCode: 'analima1',
-                            clicks: 320,
-                            conversions: 4,
-                            earnings: 600,
-                            status: 'active',
-                            createdAt: new Date().toISOString()
-                        }
-                    ]);
-                }
-            }
-
-            if (mgrAffiliates.length > 0) {
-                currentUsers.push(...mgrAffiliates);
-                Storage.set('users', currentUsers);
-            }
-        }
-
-        // Add demo withdrawals
-        if (!Storage.get('withdrawals') || Storage.get('withdrawals').length === 0) {
-            Storage.set('withdrawals', [
-                {
-                    id: 1,
-                    userId: users[2]?.id || 1,
-                    userName: 'Carlos Oliveira',
-                    amount: 300.00,
-                    pixKey: '123.456.789-00',
-                    pixType: 'cpf',
-                    status: 'pending',
-                    createdAt: new Date().toISOString()
-                }
-            ]);
         }
     }
 };

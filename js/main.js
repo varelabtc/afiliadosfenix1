@@ -299,10 +299,10 @@ const Auth = {
         if (!managers.find(m => m.email === 'gerente@fenix.com')) {
             managers.push({
                 id: 99999,
-                name: 'Lucas Gerente',
+                name: 'Gerente Fenix',
                 email: 'gerente@fenix.com',
                 password: 'gerente123',
-                phone: '(11) 91234-5678',
+                phone: '',
                 role: 'manager',
                 referralCode: 'MGRLUCAS',
                 cpaCommission: 30,
@@ -512,95 +512,7 @@ const DemoData = {
     init() {
         // Only initialize if no users exist
         if (!Storage.get('users')) {
-            // Create demo user
-            const demoUser = {
-                id: 1,
-                name: 'Usuário Demo',
-                email: 'demo@fenix.com',
-                password: '123456',
-                phone: '(11) 99999-9999',
-                createdAt: new Date().toISOString(),
-                affiliateCode: 'FNXDEMO01',
-                balance: 2547.80,
-                totalEarnings: 15789.50,
-                totalClicks: 12547,
-                totalConversions: 487,
-                houseLinks: {
-                    1: 'https://superbet.com/register?ref=FENIXDEMO01',
-                    2: 'https://sportingbet.com/register?ref=FENIXDEMO01'
-                },
-                status: 'approved'
-            };
-
-            Storage.set('users', [demoUser]);
-
-            // Create demo links
-            const demoLinks = [
-                {
-                    id: 1,
-                    name: 'Curso de Marketing Digital',
-                    originalUrl: 'https://exemplo.com/curso-marketing',
-                    shortCode: 'mktdig01',
-                    clicks: 3547,
-                    conversions: 127,
-                    earnings: 4572.50,
-                    status: 'active',
-                    createdAt: '2024-01-15T10:00:00Z'
-                },
-                {
-                    id: 2,
-                    name: 'E-book Finanças Pessoais',
-                    originalUrl: 'https://exemplo.com/ebook-financas',
-                    shortCode: 'finpess02',
-                    clicks: 2891,
-                    conversions: 98,
-                    earnings: 2940.00,
-                    status: 'active',
-                    createdAt: '2024-01-20T14:30:00Z'
-                },
-                {
-                    id: 3,
-                    name: 'Software de Gestão',
-                    originalUrl: 'https://exemplo.com/software-gestao',
-                    shortCode: 'gestao03',
-                    clicks: 4215,
-                    conversions: 156,
-                    earnings: 5460.00,
-                    status: 'active',
-                    createdAt: '2024-02-01T09:15:00Z'
-                },
-                {
-                    id: 4,
-                    name: 'Mentoria Online',
-                    originalUrl: 'https://exemplo.com/mentoria',
-                    shortCode: 'ment04',
-                    clicks: 1894,
-                    conversions: 106,
-                    earnings: 2817.00,
-                    status: 'pending',
-                    createdAt: '2024-02-10T16:45:00Z'
-                }
-            ];
-
-            Storage.set('links_1', demoLinks);
-        }
-
-        // Ensure demo user always has house links (even if created before this update)
-        const users = Storage.get('users') || [];
-        const demoIdx = users.findIndex(u => u.email === 'demo@fenix.com');
-        if (demoIdx !== -1 && !users[demoIdx].houseLinks) {
-            users[demoIdx].houseLinks = {
-                1: 'https://superbet.com/register?ref=FENIXDEMO01',
-                2: 'https://sportingbet.com/register?ref=FENIXDEMO01'
-            };
-            users[demoIdx].status = users[demoIdx].status || 'approved';
-            Storage.set('users', users);
-            // Update currentUser if logged in as demo
-            const current = Storage.get('currentUser');
-            if (current && current.email === 'demo@fenix.com') {
-                current.houseLinks = users[demoIdx].houseLinks;
-                Storage.set('currentUser', current);
-            }
+            Storage.set('users', []);
         }
     }
 };
