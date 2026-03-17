@@ -673,10 +673,22 @@
             var postbackUrl = baseUrl + '/api/postback?affiliate_id=' + userId + '&house={HOUSE_ID}&event={EVENT}&subid={SUBID}&payout={PAYOUT}';
             document.getElementById('postbackUrl').textContent = postbackUrl;
 
+            // OTG Affiliate ID field
+            var otgId = user && user.otg_affiliate_id ? user.otg_affiliate_id : '';
+
             // Build fields per house
             var affiliateLinks = user && user.house_links ? user.house_links : {};
 
-            document.getElementById('linksFields').innerHTML = houses.map(function(house) {
+            document.getElementById('linksFields').innerHTML =
+                '<div style="background: rgba(232,89,12,0.08); border: 1px solid rgba(232,89,12,0.25); border-radius: 12px; padding: 16px; margin-bottom: 16px;">' +
+                    '<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">' +
+                        '<span style="font-size: 1.1rem;">🔗</span>' +
+                        '<span style="font-weight: 600; color: #E8590C;">ID do Afiliado na OTG/Superbet</span>' +
+                    '</div>' +
+                    '<p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">Cole o ID do afiliado retornado pela API da OTG Partners. Isso conecta os dados reais (registros, FTDs, CPA) ao painel deste afiliado.</p>' +
+                    '<input type="text" id="otgAffiliateId" value="' + otgId + '" placeholder="Ex: clx1234567890abcdef" style="width:100%;padding:10px 12px;background:var(--bg-0);border:1px solid rgba(232,89,12,0.3);border-radius:8px;color:var(--text-1);font-size:0.85rem;">' +
+                '</div>' +
+                houses.map(function(house) {
                 var currentLink = affiliateLinks[house.id] || '';
                 return '<div style="background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px;">' +
                     '<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">' +
@@ -711,7 +723,11 @@
                 }
             });
 
-            await SupabaseDB.updateUser(userId, { house_links: houseLinks });
+            var otgId = document.getElementById('otgAffiliateId').value.trim();
+            var updateData = { house_links: houseLinks };
+            if (otgId !== undefined) updateData.otg_affiliate_id = otgId || null;
+
+            await SupabaseDB.updateUser(userId, updateData);
             await AffiliateManager.fetchAll();
             Toast.success('Links salvos com sucesso!');
             Modal.close('linksModal');

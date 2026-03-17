@@ -229,49 +229,100 @@
     <script src="../js/supabase-db.js?v=3"></script>
     <script src="../js/main.js?v=3"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        var superbetCache = null;
+
+        document.addEventListener('DOMContentLoaded', async function() {
             if (!Auth.requireAuth()) return;
-            loadDashboard();
+            loadUserInfo();
+            await loadSuperbetStats(30);
             initChart();
         });
 
-        function loadDashboard() {
+        function loadUserInfo() {
             const user = Auth.currentUser;
             if (user) {
                 document.getElementById('userName').textContent = user.name;
                 document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
                 document.getElementById('welcomeName').textContent = user.name.split(' ')[0];
+                document.getElementById('totalSaque').textContent = Format.currency(user.balance || 0);
 
                 // Referral link
                 var code = user.affiliate_code || 'FENIX001';
                 var refUrl = window.location.origin + '/pages/cadastro.html?ref=' + code;
                 document.getElementById('myRefLink').textContent = refUrl;
             }
+        }
 
-            const links = Links.getAll();
-            const totalClicks = links.reduce((sum, l) => sum + l.clicks, 0);
-            const totalConversions = links.reduce((sum, l) => sum + l.conversions, 0);
-            const totalEarnings = links.reduce((sum, l) => sum + l.earnings, 0);
+        async function loadSuperbetStats(days) {
+            const user = Auth.currentUser;
+            if (!user) return;
 
-            document.getElementById('emConversao').textContent = Format.currency(totalEarnings * 0.3);
-            document.getElementById('totalSaque').textContent = Format.currency(user?.balance || 0);
-            document.getElementById('depositantes').textContent = totalConversions;
-            document.getElementById('meusLinks').textContent = links.length;
-            document.getElementById('perfCPAs').textContent = totalConversions;
-            document.getElementById('perfRegistros').textContent = Math.floor(totalClicks / 10);
-            document.getElementById('perfFTDs').textContent = totalConversions;
+            var otgId = user.otg_affiliate_id;
+
+            // Default zeros
+            var stats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, lucro_tipster: 0 };
+            var dailyData = [];
+
+            if (otgId) {
+                try {
+                    var end = new Date();
+                    var start = new Date();
+                    start.setDate(end.getDate() - days);
+                    var fmt = function(d) { return d.toISOString().split('T')[0]; };
+
+                    var baseUrl = '/api/superbet?action=results&startDate=' + fmt(start) + '&endDate=' + fmt(end) + '&affiliateIds=' + encodeURIComponent(otgId);
+
+                    var [totalRes, dailyRes] = await Promise.all([
+                        fetch(baseUrl + '&limit=100'),
+                        fetch(baseUrl + '&groupBy=date&limit=100')
+                    ]);
+
+                    if (totalRes.ok) {
+                        var totalJson = await totalRes.json();
+                        var rows = (totalJson.data && totalJson.data.data) || totalJson.data || [];
+                        if (Array.isArray(rows)) {
+                            rows.forEach(function(r) {
+                                stats.registrations += (r.registrations || 0);
+                                stats.first_deposits += (r.first_deposits || 0);
+                                stats.qualified_cpa += (r.qualified_cpa || 0);
+                                stats.cpa += (r.cpa || 0);
+                                stats.rvs += (r.rvs || 0);
+                                stats.lucro_tipster += (r.lucro_tipster || 0);
+                            });
+                        }
+                    }
+
+                    if (dailyRes.ok) {
+                        var dailyJson = await dailyRes.json();
+                        dailyData = (dailyJson.data && dailyJson.data.data) || dailyJson.data || [];
+                    }
+                } catch (err) {
+                    console.error('Erro ao buscar dados Superbet:', err);
+                }
+            }
+
+            superbetCache = { stats: stats, daily: dailyData };
+
+            // Update UI with real data
+            var totalEarnings = stats.lucro_tipster + stats.rvs;
+            document.getElementById('emConversao').textContent = Format.currency(stats.rvs);
+            document.getElementById('depositantes').textContent = Math.round(stats.first_deposits);
+            document.getElementById('meusLinks').textContent = Math.round(stats.qualified_cpa);
+
+            // Performance
+            document.getElementById('perfRegistros').textContent = Math.round(stats.registrations);
+            document.getElementById('perfFTDs').textContent = Math.round(stats.first_deposits);
+            document.getElementById('perfCPAs').textContent = Math.round(stats.qualified_cpa);
             document.getElementById('perfDepositos').textContent = Format.currency(totalEarnings);
 
-            const superbetEarnings = totalEarnings * 0.6;
-            const sportingbetEarnings = totalEarnings * 0.4;
-            const total = superbetEarnings + sportingbetEarnings || 1;
+            // Platform breakdown - Superbet is the real data
+            document.getElementById('superbetValue').textContent = Format.currency(totalEarnings);
+            document.getElementById('sportingbetValue').textContent = Format.currency(0);
+            document.getElementById('superbetBar').style.width = totalEarnings > 0 ? '100%' : '0%';
+            document.getElementById('sportingbetBar').style.width = '0%';
 
-            document.getElementById('superbetValue').textContent = Format.currency(superbetEarnings);
-            document.getElementById('sportingbetValue').textContent = Format.currency(sportingbetEarnings);
-            document.getElementById('superbetBar').style.width = (superbetEarnings / total) * 100 + '%';
-            document.getElementById('sportingbetBar').style.width = (sportingbetEarnings / total) * 100 + '%';
-
-            loadRecentCommissions();
+            // Recent commissions from daily data
+            loadRecentCommissions(dailyData);
         }
 
         function initChart() {
@@ -279,22 +330,15 @@
             const chartLabels = document.getElementById('chartLabels');
             const days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
 
-            // Use real data - conversions per day from links
-            const links = Links.getAll();
-            const totalConversions = links.reduce((sum, l) => sum + (l.conversions || 0), 0);
+            var data = [0, 0, 0, 0, 0, 0, 0];
 
-            // If no real data, show empty bars
-            var data;
-            if (totalConversions === 0) {
-                data = [0, 0, 0, 0, 0, 0, 0];
-            } else {
-                // Distribute conversions across days based on link activity
-                data = days.map(function() { return 0; });
-                links.forEach(function(l) {
-                    if (l.conversions > 0) {
-                        var dayIndex = new Date(l.createdAt || Date.now()).getDay();
-                        dayIndex = dayIndex === 0 ? 6 : dayIndex - 1; // Mon=0, Sun=6
-                        data[dayIndex] += l.conversions;
+            if (superbetCache && superbetCache.daily && superbetCache.daily.length > 0) {
+                superbetCache.daily.forEach(function(r) {
+                    if (r.id || r.label || r.date) {
+                        var d = new Date(r.id || r.label || r.date);
+                        var dayIndex = d.getDay();
+                        dayIndex = dayIndex === 0 ? 6 : dayIndex - 1;
+                        data[dayIndex] += (r.first_deposits || r.qualified_cpa || 0);
                     }
                 });
             }
@@ -302,28 +346,30 @@
             const max = Math.max(...data) || 1;
 
             chartBars.innerHTML = data.map(v =>
-                `<div class="chart-bar" style="height: ${max > 0 ? (v / max) * 100 : 0}%; ${v === 0 ? 'min-height: 2px; opacity: 0.2;' : ''}"></div>`
+                '<div class="chart-bar" style="height: ' + (max > 0 ? (v / max) * 100 : 0) + '%; ' + (v === 0 ? 'min-height: 2px; opacity: 0.2;' : '') + '"></div>'
             ).join('');
 
-            chartLabels.innerHTML = days.map(d => `<span>${d}</span>`).join('');
+            chartLabels.innerHTML = days.map(d => '<span>' + d + '</span>').join('');
         }
 
-        function loadRecentCommissions() {
-            const links = Links.getAll();
+        function loadRecentCommissions(dailyData) {
             const container = document.getElementById('ultimasComissoes');
-            const commissions = links.filter(l => l.conversions > 0).slice(0, 4);
+            if (!dailyData || dailyData.length === 0) return;
 
-            if (commissions.length === 0) return;
+            var recent = dailyData.filter(function(r) { return (r.qualified_cpa || 0) > 0; }).slice(0, 4);
+            if (recent.length === 0) return;
 
-            container.innerHTML = commissions.map(c => `
-                <div class="commission-row">
-                    <div>
-                        <div class="commission-name">${c.name}</div>
-                        <div class="commission-detail">${c.conversions} conversão${c.conversions > 1 ? 'ões' : ''}</div>
-                    </div>
-                    <span class="commission-amount text-green">+${Format.currency(c.earnings)}</span>
-                </div>
-            `).join('');
+            container.innerHTML = recent.map(function(r) {
+                var date = r.id || r.label || r.date || '-';
+                var earnings = (r.lucro_tipster || 0) + (r.rvs || 0);
+                return '<div class="commission-row">' +
+                    '<div>' +
+                        '<div class="commission-name">Superbet - ' + date + '</div>' +
+                        '<div class="commission-detail">' + Math.round(r.qualified_cpa || 0) + ' CPA qualificado</div>' +
+                    '</div>' +
+                    '<span class="commission-amount text-green">+' + Format.currency(earnings) + '</span>' +
+                '</div>';
+            }).join('');
         }
 
         function copyRefLink() {
@@ -351,9 +397,11 @@
 
 
         document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
+            tab.addEventListener('click', async function() {
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
+                var days = parseInt(this.dataset.period) || 30;
+                await loadSuperbetStats(days);
                 initChart();
             });
         });
