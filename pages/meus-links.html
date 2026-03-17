@@ -271,7 +271,7 @@
             const houses = Storage.get('bettingHouses') || [];
             const house = houses.find(h => h.slug === offerId || (h.name && h.name.toLowerCase().includes(offerId)));
             const houseId = house ? house.id : null;
-            const adminLink = houseId ? (fullUser.houseLinks?.[houseId] || '') : '';
+            const adminLink = houseId ? (fullUser.house_links?.[houseId] || '') : '';
 
             // Check if user requested access
             const requests = Storage.get('linkRequests_' + fullUser.id) || [];

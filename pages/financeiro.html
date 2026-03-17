@@ -335,7 +335,7 @@
                                                   w.status === 'pending' ? 'Pendente' : 'Rejeitado';
                                 return `
                                     <tr>
-                                        <td>${Format.date(w.createdAt)}</td>
+                                        <td>${Format.date(w.created_at)}</td>
                                         <td style="font-weight: 600;">${Format.currency(w.amount)}</td>
                                         <td>
                                             <span class="status-badge ${statusClass}">
@@ -393,7 +393,7 @@
                 pixKey: formData.get('pixKey'),
                 pixType: user.pix_data?.type || 'cpf',
                 status: 'pending',
-                createdAt: new Date().toISOString()
+                created_at: new Date().toISOString()
             };
 
             const withdrawals = Storage.get('withdrawals') || [];

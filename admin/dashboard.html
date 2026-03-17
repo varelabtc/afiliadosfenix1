@@ -372,7 +372,7 @@
             loadDashboard();
         });
 
-        function loadDashboard() {
+        async function loadDashboard() {
             const stats = AdminStats.getOverview();
 
             document.getElementById('totalAffiliates').textContent = stats.totalAffiliates;
@@ -389,44 +389,92 @@
                 document.getElementById('adminName').textContent = AdminAuth.currentAdmin.name;
             }
 
-            loadHousesPerformance();
+            await loadHousesPerformance();
             loadPendingAffiliates();
             loadPendingWithdrawals();
             loadRecentActivity();
         }
 
-        function loadHousesPerformance() {
-            const houses = BettingHouses.getAll();
-            const container = document.getElementById('housesGrid');
+        async function loadHousesPerformance() {
+            var container = document.getElementById('housesGrid');
 
-            container.innerHTML = houses.map(house => `
-                <div class="house-card">
-                    <div class="house-header">
-                        <span class="house-logo">${house.logo}</span>
-                        <div>
-                            <h4>${house.name}</h4>
-                            <span class="status-badge ${house.status === 'active' ? 'active' : 'inactive'}">
-                                <span class="status-dot"></span>
-                                ${house.status === 'active' ? 'Ativo' : 'Inativo'}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="house-stats">
-                        <div>
-                            <span class="house-stat-value">${Format.number(house.totalClicks)}</span>
-                            <span class="house-stat-label">Cliques</span>
-                        </div>
-                        <div>
-                            <span class="house-stat-value">${Format.number(house.totalConversions)}</span>
-                            <span class="house-stat-label">Conv.</span>
-                        </div>
-                        <div>
-                            <span class="house-stat-value">${Format.currency(house.cpa)}</span>
-                            <span class="house-stat-label">CPA</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+            // Fetch real Superbet totals from API
+            var sbStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, lucro: 0 };
+            try {
+                var end = new Date();
+                var start = new Date();
+                start.setDate(end.getDate() - 30);
+                var fmt = function(d) { return d.toISOString().split('T')[0]; };
+                var res = await fetch('/api/superbet?action=results&startDate=' + fmt(start) + '&endDate=' + fmt(end) + '&limit=100');
+                if (res.ok) {
+                    var json = await res.json();
+                    var rows = (json.data && json.data.data) || json.data || [];
+                    if (Array.isArray(rows)) {
+                        rows.forEach(function(r) {
+                            sbStats.registrations += (r.registrations || 0);
+                            sbStats.first_deposits += (r.first_deposits || 0);
+                            sbStats.qualified_cpa += (r.qualified_cpa || 0);
+                            sbStats.cpa += (r.cpa || 0);
+                            sbStats.rvs += (r.rvs || 0);
+                            sbStats.lucro += (r.lucro_tipster || 0);
+                        });
+                    }
+                }
+            } catch (e) { console.error('Erro API casas:', e); }
+
+            var superbetTotal = sbStats.lucro + sbStats.rvs;
+
+            var housesData = [
+                {
+                    name: 'Superbet',
+                    logo: '🎰',
+                    status: 'active',
+                    registros: Math.round(sbStats.registrations),
+                    ftds: Math.round(sbStats.first_deposits),
+                    cpaQual: Math.round(sbStats.qualified_cpa),
+                    receita: superbetTotal
+                },
+                {
+                    name: 'Sportingbet',
+                    logo: '⚽',
+                    status: 'active',
+                    registros: '—',
+                    ftds: '—',
+                    cpaQual: '—',
+                    receita: null
+                }
+            ];
+
+            container.innerHTML = housesData.map(function(house) {
+                var isRealData = house.receita !== null;
+                return '<div class="house-card">' +
+                    '<div class="house-header">' +
+                        '<span class="house-logo">' + house.logo + '</span>' +
+                        '<div>' +
+                            '<h4>' + house.name + '</h4>' +
+                            '<span class="status-badge active"><span class="status-dot"></span>Ativo</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="house-stats">' +
+                        '<div>' +
+                            '<span class="house-stat-value">' + (isRealData ? Format.number(house.registros) : house.registros) + '</span>' +
+                            '<span class="house-stat-label">Registros</span>' +
+                        '</div>' +
+                        '<div>' +
+                            '<span class="house-stat-value">' + (isRealData ? Format.number(house.ftds) : house.ftds) + '</span>' +
+                            '<span class="house-stat-label">FTDs</span>' +
+                        '</div>' +
+                        '<div>' +
+                            '<span class="house-stat-value">' + (isRealData ? Format.number(house.cpaQual) : house.cpaQual) + '</span>' +
+                            '<span class="house-stat-label">CPA Qual.</span>' +
+                        '</div>' +
+                        '<div>' +
+                            '<span class="house-stat-value" style="color:var(--success);font-weight:700;">' + (isRealData ? Format.currency(house.receita) : 'Power BI') + '</span>' +
+                            '<span class="house-stat-label">Receita</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
         }
 
         function loadPendingAffiliates() {
@@ -488,7 +536,7 @@
                         <td>${user?.name || 'N/A'}</td>
                         <td>${conv.houseName}</td>
                         <td class="text-success" style="font-weight: 600;">${Format.currency(conv.amount)}</td>
-                        <td class="text-muted">${Format.dateTime(conv.createdAt)}</td>
+                        <td class="text-muted">${Format.dateTime(conv.created_at)}</td>
                     </tr>
                 `;
             }).join('');

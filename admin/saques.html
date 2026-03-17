@@ -274,7 +274,7 @@
                                 <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Tipo: ${w.pixType?.toUpperCase() || 'N/A'}</div>
                             </div>
                         </td>
-                        <td>${Format.dateTime(w.createdAt)}</td>
+                        <td>${Format.dateTime(w.created_at)}</td>
                         <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusText}</span></td>
                         <td>
                             ${w.status === 'pending' ? `

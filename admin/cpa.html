@@ -323,7 +323,7 @@
 
             document.getElementById('simAffiliateSelect').innerHTML = `
                 <option value="">Selecione...</option>
-                ${users.map(u => `<option value="${u.id}">${u.name} (${u.affiliateCode})</option>`).join('')}
+                ${users.map(u => `<option value="${u.id}">${u.name} (${u.affiliate_code})</option>`).join('')}
             `;
 
             document.getElementById('simHouseSelect').innerHTML = `

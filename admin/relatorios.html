@@ -360,7 +360,7 @@
                 const user = users.find(u => u.id === conv.affiliateId);
                 return `
                     <tr>
-                        <td>${Format.dateTime(conv.createdAt)}</td>
+                        <td>${Format.dateTime(conv.created_at)}</td>
                         <td>${user?.name || 'N/A'}</td>
                         <td>${conv.houseName}</td>
                         <td style="color: var(--success); font-weight: 600;">${Format.currency(conv.amount)}</td>
@@ -391,7 +391,7 @@
             csv += 'Nome,Email,Código,Status,Ganhos\n';
             users.forEach(u => {
                 const stats = AffiliateManager.getStats(u.id);
-                csv += `${u.name},${u.email},${u.affiliateCode || 'N/A'},${u.status || 'approved'},${stats.totalEarnings}\n`;
+                csv += `${u.name},${u.email},${u.affiliate_code || 'N/A'},${u.status || 'approved'},${stats.totalEarnings}\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv' });
