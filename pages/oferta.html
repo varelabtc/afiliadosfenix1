@@ -183,7 +183,7 @@
                     </div>
 
                     <!-- Gerador de link - SUPERBET -->
-                    <div class="od-card" style="margin-top: 16px;">
+                    <div class="od-card" id="generatorCard_superbet" style="margin-top: 16px; display: none;">
                         <h4 class="od-card-title" style="color: #E8590C;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8590C" stroke-width="2" style="margin-right: 6px; vertical-align: -3px;"><path d="M12 5v14M5 12h14"/></svg>
                             Gerador de Link — Superbet
@@ -240,7 +240,7 @@
                     </div>
 
                     <!-- Gerador de link - SPORTINGBET -->
-                    <div class="od-card" style="margin-top: 16px;">
+                    <div class="od-card" id="generatorCard_sportingbet" style="margin-top: 16px; display: none;">
                         <h4 class="od-card-title" style="color: #22C55E;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" style="margin-right: 6px; vertical-align: -3px;"><path d="M12 5v14M5 12h14"/></svg>
                             Gerador de Link — Sportingbet
@@ -419,6 +419,10 @@
                 window.location.href = 'meus-links.html';
                 return;
             }
+
+            // Show only the generator for this house
+            var genCard = document.getElementById('generatorCard_' + offer.slug);
+            if (genCard) genCard.style.display = '';
 
             // Generate Fenix tracking link
             var encoded = btoa(rawLink);
