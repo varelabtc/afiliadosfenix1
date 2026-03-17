@@ -284,7 +284,7 @@
 
         document.addEventListener('DOMContentLoaded', async function() {
             if (!AdminAuth.requireAuth()) return;
-            await AffiliateManager.fetchAll();
+            await Promise.all([AffiliateManager.fetchAll(), ManagerManager.fetchAll()]);
             if (AdminAuth.currentAdmin) {
                 document.getElementById('adminName').textContent = AdminAuth.currentAdmin.name;
             }
@@ -462,7 +462,12 @@
                     <h4 style="margin-bottom: 12px;">Informações</h4>
                     <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Código:</strong> ${user.affiliate_code || 'N/A'}</p>
                     <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Cadastro:</strong> ${Format.dateTime(user.created_at)}</p>
-                    <p style="font-size: 0.875rem;"><strong>Status:</strong> ${user.status || 'Aprovado'}</p>
+                    <p style="font-size: 0.875rem; margin-bottom: 8px;"><strong>Status:</strong> ${user.status || 'Aprovado'}</p>
+                    <p style="font-size: 0.875rem;"><strong>Gerente:</strong> ${(function() {
+                        if (!user.manager_id) return '<span style="color: var(--text-muted);">Sem gerente</span>';
+                        var mgr = ManagerManager.getById(user.manager_id);
+                        return mgr ? '<span style="color: var(--accent); font-weight: 600;">' + mgr.name + '</span>' : 'ID ' + user.manager_id;
+                    })()}</p>
                 </div>
 
                 <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
