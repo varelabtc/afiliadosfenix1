@@ -509,13 +509,18 @@
                     throw new Error(errData.message || errData.error || 'Erro ' + totalRes.status);
                 }
 
-                var totalData = await totalRes.json();
-                var affData = await affRes.json();
-                var campData = await campRes.json();
+                var totalJson = await totalRes.json();
+                var affJson = await affRes.json();
+                var campJson = await campRes.json();
+
+                // API returns { data: { data: [...] } } — extract inner array
+                var totalData = (totalJson.data && totalJson.data.data) || totalJson.data || [];
+                var affData = (affJson.data && affJson.data.data) || affJson.data || [];
+                var campData = (campJson.data && campJson.data.data) || campJson.data || [];
 
                 // Calculate totals from granular data
                 var totals = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, lucro_tipster: 0 };
-                (totalData.data || []).forEach(function(r) {
+                (totalData || []).forEach(function(r) {
                     totals.registrations += (r.registrations || 0);
                     totals.first_deposits += (r.first_deposits || 0);
                     totals.qualified_cpa += (r.qualified_cpa || 0);
@@ -534,7 +539,7 @@
 
                 // Affiliates table
                 var affBody = document.getElementById('sbAffiliatesBody');
-                var affRows = (affData.data || []);
+                var affRows = (affData || []);
                 if (affRows.length === 0) {
                     affBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">Nenhum dado no período</td></tr>';
                 } else {
@@ -552,7 +557,7 @@
 
                 // Campaigns table
                 var campBody = document.getElementById('sbCampaignsBody');
-                var campRows = (campData.data || []);
+                var campRows = (campData || []);
                 if (campRows.length === 0) {
                     campBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">Nenhum dado no período</td></tr>';
                 } else {
