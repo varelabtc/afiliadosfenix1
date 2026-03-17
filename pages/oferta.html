@@ -191,6 +191,10 @@
                         <p class="od-help" style="margin-bottom: 16px;">Cole qualquer link de promocao ou oferta da casa e gere automaticamente um link Fenix com seu rastreamento vinculado.</p>
 
                         <div class="od-field-block">
+                            <label class="od-label">NOME DO LINK</label>
+                            <input type="text" id="customLinkName" class="od-input" placeholder="Ex: Bilhete Flamengo x Palmeiras" style="font-size: 0.85rem; margin-bottom: 12px;">
+                        </div>
+                        <div class="od-field-block">
                             <label class="od-label">COLE O LINK DA OFERTA / PROMOCAO</label>
                             <div class="od-link-row">
                                 <input type="text" id="customUrlInput" class="od-input" placeholder="https://superbet.com/promo/bonus-especial" style="flex:1; font-size: 0.85rem;">
@@ -479,7 +483,12 @@
 
         // ── Custom Link Generator ──
         function generateCustomLink() {
+            var linkName = document.getElementById('customLinkName').value.trim();
             var rawUrl = document.getElementById('customUrlInput').value.trim();
+            if (!linkName) {
+                Toast.error('Dê um nome ao link');
+                return;
+            }
             if (!rawUrl) {
                 Toast.error('Cole um link antes de gerar');
                 return;
@@ -498,15 +507,18 @@
             document.getElementById('customResult').style.display = 'block';
 
             // Save to localStorage
-            saveCustomLink(rawUrl, fenixLink);
-            Toast.success('Link Fenix gerado com sucesso!');
+            saveCustomLink(linkName, rawUrl, fenixLink);
+            document.getElementById('customLinkName').value = '';
+            document.getElementById('customUrlInput').value = '';
+            Toast.success('Link "' + linkName + '" gerado com sucesso!');
         }
 
-        function saveCustomLink(originalUrl, fenixLink) {
+        function saveCustomLink(name, originalUrl, fenixLink) {
             var user = Auth.currentUser;
             var key = 'customLinks_' + user.id + '_' + currentOffer.slug;
             var links = JSON.parse(localStorage.getItem(key) || '[]');
             links.unshift({
+                name: name,
                 original: originalUrl,
                 fenix: fenixLink,
                 date: new Date().toISOString()
@@ -534,7 +546,9 @@
             links.forEach(function(link, i) {
                 var d = new Date(link.date);
                 var dateStr = d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+                var linkName = link.name || 'Link ' + (i + 1);
                 html += '<div class="saved-link-item">' +
+                    '<div class="saved-link-name">' + linkName + '</div>' +
                     '<div class="saved-link-original">' + link.original + '</div>' +
                     '<div class="saved-link-fenix">' + link.fenix + '</div>' +
                     '<div class="saved-link-actions">' +
@@ -902,6 +916,13 @@
             border: 1px solid var(--border);
             border-radius: 8px;
             margin-bottom: 8px;
+        }
+
+        .saved-link-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-1);
+            margin-bottom: 4px;
         }
 
         .saved-link-original {
