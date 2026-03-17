@@ -286,122 +286,206 @@
     <script src="../js/main.js?v=3"></script>
     <script src="../js/admin.js?v=3"></script>
     <script>
+        var SUPABASE_URL = 'https://zaopgwnrzadisqtxrlst.supabase.co';
+        var SUPABASE_KEY = 'sb_publishable_5IHTgZdNubSyGzyuKWPPUg_cxXH_KCH';
+        var allUsers = [];
+        var superbetData = { registrations: 0, ftds: 0, cpa: 0, revshare: 0 };
+        var superbetByAffiliate = [];
+
         document.addEventListener('DOMContentLoaded', async function() {
             if (!AdminAuth.requireAuth()) return;
             if (AdminAuth.currentAdmin) {
                 document.getElementById('adminName').textContent = AdminAuth.currentAdmin.name;
             }
-            loadReports();
+            await loadReports();
         });
 
-        function loadReports() {
-            const stats = AdminStats.getOverview();
-            const houses = BettingHouses.getAll();
-            const users = AffiliateManager.getAll();
+        async function fetchUsers() {
+            try {
+                var res = await fetch(SUPABASE_URL + '/rest/v1/users?select=id,name,email,affiliate_code,status,house_links,otg_affiliate_id&order=id.asc', {
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+                });
+                if (res.ok) return await res.json();
+            } catch (e) { console.error('[FETCH_USERS]', e); }
+            return [];
+        }
+
+        async function fetchSuperbetResults(groupBy) {
+            try {
+                var now = new Date();
+                var start = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+                var startStr = start.toISOString().split('T')[0];
+                var endStr = now.toISOString().split('T')[0];
+                var url = '/api/superbet?action=results&startDate=' + startStr + '&endDate=' + endStr;
+                if (groupBy) url += '&groupBy=' + groupBy;
+                var res = await fetch(url);
+                if (res.ok) {
+                    var json = await res.json();
+                    return (json.data && json.data.data) || json.data || [];
+                }
+            } catch (e) { console.error('[FETCH_SUPERBET]', e); }
+            return [];
+        }
+
+        async function loadReports() {
+            // Fetch all data in parallel
+            var results = await Promise.all([
+                fetchUsers(),
+                fetchSuperbetResults('affiliate'),
+                fetchSuperbetResults('')
+            ]);
+
+            allUsers = results[0];
+            superbetByAffiliate = Array.isArray(results[1]) ? results[1] : [];
+            var totalResults = Array.isArray(results[2]) ? results[2] : [];
+
+            // Aggregate Superbet totals
+            var sbTotals = { registrations: 0, ftds: 0, cpa: 0, revshare: 0 };
+            totalResults.forEach(function(r) {
+                sbTotals.registrations += (r.registrations || 0);
+                sbTotals.ftds += (r.ftds || r.qualifiedFtds || 0);
+                sbTotals.cpa += (r.cpaCommission || r.cpa || 0);
+                sbTotals.revshare += (r.revshareCommission || r.revshare || 0);
+            });
+            superbetData = sbTotals;
+
+            // Count affiliates per house
+            var sbAffiliates = 0;
+            var spAffiliates = 0;
+            allUsers.forEach(function(u) {
+                if (u.house_links) {
+                    if (u.house_links['1']) sbAffiliates++;
+                    if (u.house_links['2']) spAffiliates++;
+                }
+            });
+
+            var totalRevenue = sbTotals.cpa + sbTotals.revshare;
+            var totalConversions = sbTotals.ftds;
 
             // Update overview stats
-            document.getElementById('totalRevenue').textContent = Format.currency(stats.totalEarnings);
-            document.getElementById('totalConversionsReport').textContent = Format.number(stats.totalConversions);
-            document.getElementById('totalAffiliatesReport').textContent = stats.activeAffiliates;
-
-            const avgCPA = stats.totalConversions > 0 ? stats.totalEarnings / stats.totalConversions : 0;
+            document.getElementById('totalRevenue').textContent = Format.currency(totalRevenue);
+            document.getElementById('totalConversionsReport').textContent = Format.number(totalConversions);
+            document.getElementById('totalAffiliatesReport').textContent = allUsers.length;
+            var avgCPA = totalConversions > 0 ? totalRevenue / totalConversions : 0;
             document.getElementById('avgCPA').textContent = Format.currency(avgCPA);
 
-            // House report
-            document.getElementById('houseReportBody').innerHTML = houses.map(house => {
-                const convRate = house.totalClicks > 0 ? (house.totalConversions / house.totalClicks * 100) : 0;
-                return `
-                    <tr>
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <span style="font-size: 1.5rem;">${house.logo}</span>
-                                <span style="font-weight: 600;">${house.name}</span>
-                            </div>
-                        </td>
-                        <td>${house.totalAffiliates}</td>
-                        <td>${Format.number(house.totalClicks)}</td>
-                        <td style="color: var(--success); font-weight: 600;">${Format.number(house.totalConversions)}</td>
-                        <td>${Format.percentage(convRate)}</td>
-                        <td style="color: var(--accent-primary);">${Format.currency(house.cpa)}</td>
-                        <td style="color: var(--success); font-weight: 700;">${Format.currency(house.totalPaid)}</td>
-                    </tr>
-                `;
-            }).join('');
+            // House report table
+            var houseRows = '';
+            // Superbet row - real data
+            var sbConvRate = sbTotals.registrations > 0 ? (sbTotals.ftds / sbTotals.registrations * 100) : 0;
+            houseRows += '<tr>' +
+                '<td><div style="display:flex;align-items:center;gap:12px;">' +
+                    '<img src="../img/superbet-logo.png" style="width:32px;height:32px;border-radius:8px;object-fit:contain;background:#fff;padding:2px;">' +
+                    '<span style="font-weight:600;">Superbet</span></div></td>' +
+                '<td>' + sbAffiliates + '</td>' +
+                '<td>' + Format.number(sbTotals.registrations) + '</td>' +
+                '<td style="color:var(--green);font-weight:600;">' + Format.number(sbTotals.ftds) + '</td>' +
+                '<td>' + sbConvRate.toFixed(1) + '%</td>' +
+                '<td style="color:#E8590C;font-weight:600;">' + Format.currency(sbTotals.cpa) + '</td>' +
+                '<td style="color:var(--green);font-weight:700;">' + Format.currency(sbTotals.cpa + sbTotals.revshare) + '</td>' +
+            '</tr>';
 
-            // Top affiliates
-            const affiliatesWithStats = users.map(user => {
-                const stats = AffiliateManager.getStats(user.id);
-                return { ...user, ...stats };
-            }).sort((a, b) => b.totalEarnings - a.totalEarnings).slice(0, 10);
+            // Sportingbet row - sem API, mostra dados do Supabase
+            houseRows += '<tr>' +
+                '<td><div style="display:flex;align-items:center;gap:12px;">' +
+                    '<img src="../img/sportingbet-logo.png" style="width:32px;height:32px;border-radius:8px;object-fit:contain;background:#fff;padding:2px;">' +
+                    '<span style="font-weight:600;">Sportingbet</span></div></td>' +
+                '<td>' + spAffiliates + '</td>' +
+                '<td colspan="5" style="text-align:center;color:var(--text-3);font-style:italic;">Dados via Power BI — sem API</td>' +
+            '</tr>';
 
-            document.getElementById('topAffiliatesBody').innerHTML = affiliatesWithStats.map((user, index) => {
-                const convRate = user.total_clicks > 0 ? (user.total_conversions / user.total_clicks * 100) : 0;
-                return `
-                    <tr>
-                        <td style="font-weight: 700; color: ${index < 3 ? 'var(--accent-primary)' : 'var(--text-muted)'};">#${index + 1}</td>
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div class="user-avatar">${user.name.charAt(0)}</div>
-                                <span style="font-weight: 600;">${user.name}</span>
-                            </div>
-                        </td>
-                        <td><code style="background: var(--bg-input); padding: 4px 8px; border-radius: 4px;">${user.affiliate_code || 'N/A'}</code></td>
-                        <td>${Format.number(user.total_clicks)}</td>
-                        <td>${Format.number(user.total_conversions)}</td>
-                        <td>${Format.percentage(convRate)}</td>
-                        <td style="color: var(--success); font-weight: 700;">${Format.currency(user.total_earnings)}</td>
-                    </tr>
-                `;
-            }).join('') || `<tr><td colspan="7" style="text-align: center; padding: 30px; color: var(--text-muted);">Nenhum afiliado encontrado</td></tr>`;
+            document.getElementById('houseReportBody').innerHTML = houseRows;
 
-            // Recent conversions
-            const conversions = (Storage.get('conversions') || []).slice(-20).reverse();
-            document.getElementById('recentConversionsBody').innerHTML = conversions.map(conv => {
-                const user = users.find(u => u.id === conv.affiliateId);
-                return `
-                    <tr>
-                        <td>${Format.dateTime(conv.created_at)}</td>
-                        <td>${user?.name || 'N/A'}</td>
-                        <td>${conv.houseName}</td>
-                        <td style="color: var(--success); font-weight: 600;">${Format.currency(conv.amount)}</td>
-                    </tr>
-                `;
-            }).join('') || `<tr><td colspan="4" style="text-align: center; padding: 30px; color: var(--text-muted);">Nenhuma conversão registrada</td></tr>`;
+            // Top affiliates from Superbet API (by affiliate)
+            var affiliateRows = [];
+            superbetByAffiliate.forEach(function(r) {
+                var otgId = r.affiliateId || r.affiliate_id || '';
+                var ftds = r.ftds || r.qualifiedFtds || 0;
+                var cpa = r.cpaCommission || r.cpa || 0;
+                var revshare = r.revshareCommission || r.revshare || 0;
+                var regs = r.registrations || 0;
+                // Match OTG ID to our user
+                var user = allUsers.find(function(u) { return u.otg_affiliate_id == otgId; });
+                affiliateRows.push({
+                    name: user ? user.name : ('OTG #' + otgId),
+                    code: user ? (user.affiliate_code || 'N/A') : 'N/A',
+                    registrations: regs,
+                    ftds: ftds,
+                    earnings: cpa + revshare
+                });
+            });
+            affiliateRows.sort(function(a, b) { return b.earnings - a.earnings; });
+            affiliateRows = affiliateRows.slice(0, 10);
+
+            document.getElementById('topAffiliatesBody').innerHTML = affiliateRows.length > 0 ?
+                affiliateRows.map(function(u, i) {
+                    var convRate = u.registrations > 0 ? (u.ftds / u.registrations * 100) : 0;
+                    return '<tr>' +
+                        '<td style="font-weight:700;color:' + (i < 3 ? 'var(--accent)' : 'var(--text-3)') + ';">#' + (i + 1) + '</td>' +
+                        '<td><div style="display:flex;align-items:center;gap:12px;">' +
+                            '<div class="user-avatar">' + u.name.charAt(0) + '</div>' +
+                            '<span style="font-weight:600;">' + u.name + '</span></div></td>' +
+                        '<td><code style="background:var(--bg-2);padding:4px 8px;border-radius:4px;">' + u.code + '</code></td>' +
+                        '<td>' + Format.number(u.registrations) + '</td>' +
+                        '<td>' + Format.number(u.ftds) + '</td>' +
+                        '<td>' + convRate.toFixed(1) + '%</td>' +
+                        '<td style="color:var(--green);font-weight:700;">' + Format.currency(u.earnings) + '</td>' +
+                    '</tr>';
+                }).join('') :
+                '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-3);">Nenhum dado de afiliado disponivel ainda</td></tr>';
+
+            // Recent conversions - use date-grouped data
+            var dateResults = await fetchSuperbetResults('date');
+            dateResults = Array.isArray(dateResults) ? dateResults : [];
+            dateResults.sort(function(a, b) { return (b.date || '').localeCompare(a.date || ''); });
+            dateResults = dateResults.slice(0, 20);
+
+            document.getElementById('recentConversionsBody').innerHTML = dateResults.length > 0 ?
+                dateResults.map(function(r) {
+                    var ftds = r.ftds || r.qualifiedFtds || 0;
+                    var cpa = r.cpaCommission || r.cpa || 0;
+                    var revshare = r.revshareCommission || r.revshare || 0;
+                    return '<tr>' +
+                        '<td>' + (r.date || '-') + '</td>' +
+                        '<td>Todos (Superbet)</td>' +
+                        '<td>Superbet</td>' +
+                        '<td style="color:var(--green);font-weight:600;">' + Format.currency(cpa + revshare) + '</td>' +
+                    '</tr>';
+                }).join('') :
+                '<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--text-3);">Nenhuma conversao registrada</td></tr>';
         }
 
         function exportFullReport() {
-            const houses = BettingHouses.getAll();
-            const users = AffiliateManager.getAll();
-            const stats = AdminStats.getOverview();
-
-            let csv = 'RELATÓRIO FENIX AFILIADOS\n\n';
+            var csv = 'RELATÓRIO FENIX AFILIADOS\n\n';
             csv += 'RESUMO GERAL\n';
-            csv += `Total Afiliados,${stats.totalAffiliates}\n`;
-            csv += `Total Cliques,${stats.totalClicks}\n`;
-            csv += `Total Conversões,${stats.totalConversions}\n`;
-            csv += `Total Pago,${stats.totalEarnings}\n\n`;
+            csv += 'Total Afiliados,' + allUsers.length + '\n';
+            csv += 'Superbet Registros,' + superbetData.registrations + '\n';
+            csv += 'Superbet FTDs,' + superbetData.ftds + '\n';
+            csv += 'Superbet CPA,' + superbetData.cpa + '\n';
+            csv += 'Superbet RevShare,' + superbetData.revshare + '\n\n';
 
-            csv += 'CASAS DE APOSTAS\n';
-            csv += 'Casa,Afiliados,Cliques,Conversões,CPA,Total Pago\n';
-            houses.forEach(h => {
-                csv += `${h.name},${h.totalAffiliates},${h.totalClicks},${h.totalConversions},${h.cpa},${h.totalPaid}\n`;
+            csv += 'AFILIADOS\n';
+            csv += 'Nome,Email,Codigo,OTG ID\n';
+            allUsers.forEach(function(u) {
+                csv += u.name + ',' + u.email + ',' + (u.affiliate_code || 'N/A') + ',' + (u.otg_affiliate_id || '') + '\n';
             });
 
-            csv += '\nAFILIADOS\n';
-            csv += 'Nome,Email,Código,Status,Ganhos\n';
-            users.forEach(u => {
-                const stats = AffiliateManager.getStats(u.id);
-                csv += `${u.name},${u.email},${u.affiliate_code || 'N/A'},${u.status || 'approved'},${stats.totalEarnings}\n`;
+            csv += '\nSUPERBET POR AFILIADO\n';
+            csv += 'Afiliado,Registros,FTDs,CPA,RevShare\n';
+            superbetByAffiliate.forEach(function(r) {
+                var otgId = r.affiliateId || r.affiliate_id || '';
+                var user = allUsers.find(function(u) { return u.otg_affiliate_id == otgId; });
+                var name = user ? user.name : ('OTG #' + otgId);
+                csv += name + ',' + (r.registrations || 0) + ',' + (r.ftds || r.qualifiedFtds || 0) + ',' + (r.cpaCommission || r.cpa || 0) + ',' + (r.revshareCommission || r.revshare || 0) + '\n';
             });
 
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
+            var blob = new Blob([csv], { type: 'text/csv' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
             a.href = url;
-            a.download = `relatorio-fenix-${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = 'relatorio-fenix-' + new Date().toISOString().split('T')[0] + '.csv';
             a.click();
             window.URL.revokeObjectURL(url);
-
             Toast.success('Relatório exportado!');
         }
     </script>
