@@ -36,6 +36,11 @@ module.exports = async function handler(req, res) {
         destinationUrl = '';
     }
 
+    // Auto-fix missing protocol
+    if (destinationUrl && !destinationUrl.startsWith('http')) {
+        destinationUrl = 'https://' + destinationUrl.replace(/^[htps:\/]+/, '');
+    }
+
     // Validate
     if (!destinationUrl || !destinationUrl.startsWith('http')) {
         return res.status(400).json({
@@ -81,6 +86,11 @@ module.exports = async function handler(req, res) {
         }
     } catch (e) {
         console.error('[GO_SUPABASE_ERROR]', e.message);
+    }
+
+    // Auto-fix registration link protocol
+    if (registrationLink && !registrationLink.startsWith('http')) {
+        registrationLink = 'https://' + registrationLink.replace(/^[htps:\/]+/, '');
     }
 
     // If destination is already the registration link, just redirect
