@@ -706,6 +706,30 @@
             Modal.open('linksModal');
         }
 
+        // Auto-detect OTG affiliate by matching user name
+        async function autoDetectOtgId(userName) {
+            try {
+                var res = await fetch('/api/superbet?action=affiliates');
+                if (!res.ok) return null;
+                var json = await res.json();
+                var affiliates = (json.data && json.data.data) || json.data || [];
+                if (!Array.isArray(affiliates) || affiliates.length === 0) return null;
+
+                // Normalize name for comparison (remove spaces, lowercase)
+                var normalize = function(n) { return (n || '').toLowerCase().replace(/\s+/g, ''); };
+                var targetName = normalize(userName);
+
+                var match = affiliates.find(function(a) {
+                    return normalize(a.name) === targetName;
+                });
+
+                return match ? match.id : null;
+            } catch (err) {
+                console.error('Erro ao buscar afiliados OTG:', err);
+                return null;
+            }
+        }
+
         document.getElementById('linksForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             var userId = parseInt(document.getElementById('linksUserId').value);
@@ -725,7 +749,19 @@
 
             var otgId = document.getElementById('otgAffiliateId').value.trim();
             var updateData = { house_links: houseLinks };
-            if (otgId !== undefined) updateData.otg_affiliate_id = otgId || null;
+
+            // If no OTG ID manually set, try to auto-detect from Superbet API
+            if (!otgId) {
+                Toast.info('Buscando ID na API Superbet...');
+                var detectedId = await autoDetectOtgId(user.name);
+                if (detectedId) {
+                    otgId = detectedId;
+                    document.getElementById('otgAffiliateId').value = otgId;
+                    Toast.success('ID OTG detectado automaticamente!');
+                }
+            }
+
+            if (otgId) updateData.otg_affiliate_id = otgId;
 
             await SupabaseDB.updateUser(userId, updateData);
             await AffiliateManager.fetchAll();
