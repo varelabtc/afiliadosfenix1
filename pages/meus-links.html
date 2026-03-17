@@ -264,14 +264,14 @@
             return Auth.currentUser || null;
         }
 
+        var HOUSE_ID_MAP = { 'superbet': '1', 'sportingbet': '2' };
+
         function getOfferStatus(offerId) {
             const fullUser = getFullUserData();
             if (!fullUser) return { status: 'none', link: '' };
 
-            const houses = Storage.get('bettingHouses') || [];
-            const house = houses.find(h => h.slug === offerId || (h.name && h.name.toLowerCase().includes(offerId)));
-            const houseId = house ? house.id : null;
-            const adminLink = houseId ? (fullUser.house_links?.[houseId] || '') : '';
+            const houseId = HOUSE_ID_MAP[offerId] || null;
+            const adminLink = (houseId && fullUser.house_links) ? (fullUser.house_links[houseId] || '') : '';
 
             // Check if user requested access
             const requests = Storage.get('linkRequests_' + fullUser.id) || [];
@@ -287,9 +287,7 @@
 
         function getCPAValue(offerId, offer) {
             const fullUser = getFullUserData();
-            const houses = Storage.get('bettingHouses') || [];
-            const house = houses.find(h => h.slug === offerId || (h.name && h.name.toLowerCase().includes(offerId)));
-            const houseId = house ? house.id : null;
+            const houseId = HOUSE_ID_MAP[offerId] || null;
 
             if (fullUser?.deals?.[houseId]) {
                 const deal = fullUser.deals[houseId];
@@ -297,7 +295,6 @@
                 if (deal.type === 'hybrid') return deal.hybridCPA || offer.defaultCPA;
             }
             if (fullUser?.customCPA?.[houseId]) return fullUser.customCPA[houseId];
-            if (house?.cpa) return house.cpa;
             return offer.defaultCPA;
         }
 
