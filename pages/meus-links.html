@@ -246,11 +246,25 @@
             return base + '/api/go?a=' + user.id + '&h=' + houseSlug + '&url=' + encodeURIComponent(encoded);
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             if (!Auth.requireAuth()) return;
+            // Refresh user data from Supabase to get latest house_links
+            await refreshUserData();
             loadUserInfo();
             renderOffers();
         });
+
+        async function refreshUserData() {
+            var user = Auth.currentUser;
+            if (!user || !user.id) return;
+            try {
+                var fresh = await SupabaseDB.getUserById(user.id);
+                if (fresh) {
+                    Auth.currentUser = fresh;
+                    Storage.set('currentUser', fresh);
+                }
+            } catch (e) { console.error('[REFRESH]', e); }
+        }
 
         function loadUserInfo() {
             const user = Auth.currentUser;

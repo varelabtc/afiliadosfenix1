@@ -357,8 +357,17 @@
         var currentOffer = null;
         var baseTrackingLink = '';
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             if (!Auth.requireAuth()) return;
+
+            // Refresh user data from Supabase
+            var cached = Auth.currentUser;
+            if (cached && cached.id) {
+                try {
+                    var fresh = await SupabaseDB.getUserById(cached.id);
+                    if (fresh) { Auth.currentUser = fresh; Storage.set('currentUser', fresh); }
+                } catch (e) {}
+            }
 
             var user = Auth.currentUser;
             if (user) {
