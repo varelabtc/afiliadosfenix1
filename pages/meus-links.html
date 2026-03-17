@@ -205,13 +205,15 @@
                 name: 'Superbet',
                 subtitle: 'Superbet Brasil',
                 logo: '../img/superbet-logo.png',
-                baseline: 'R$0',
+                baseline: 'R$50',
+                bonus: 'R$200',
                 wager: '1x',
                 payment: 'Mensal - dia 15',
                 currency: 'BRL',
                 metaTypes: ['QFTD'],
                 models: [{ type: 'CPA', value: null }],
-                defaultCPA: 150,
+                defaultCPA: 50,
+                maxCPA: 200,
                 color: '#E8590C'
             },
             {
@@ -219,13 +221,15 @@
                 name: 'Sportingbet',
                 subtitle: 'Sportingbet Brasil',
                 logo: '../img/sportingbet-logo.png',
-                baseline: 'R$0',
+                baseline: 'R$30',
+                bonus: 'R$180',
                 wager: '1x',
                 payment: 'Mensal - dia 15',
                 currency: 'BRL',
                 metaTypes: ['QFTD'],
                 models: [{ type: 'CPA', value: null }],
-                defaultCPA: 100,
+                defaultCPA: 30,
+                maxCPA: 180,
                 color: '#22C55E'
             }
         ];
@@ -334,7 +338,7 @@
                             '<div class="oferta-name">' + offer.name + '</div>' +
                             '<div class="oferta-subtitle">' + offer.subtitle + '</div>' +
                             '<div class="oferta-details">' +
-                                '<span>Baseline: ' + offer.baseline + '</span>' +
+                                '<span>Deposite ' + offer.baseline + ' ganhe ' + offer.bonus + '</span>' +
                                 '<span>Wager: ' + offer.wager + '</span>' +
                                 '<span>Pagamento: ' + offer.payment + '</span>' +
                             '</div>' +
@@ -347,16 +351,16 @@
                     '<div class="oferta-right">' +
                         '<div class="oferta-meta-grid">' +
                             '<div class="oferta-meta-item">' +
-                                '<span class="oferta-meta-label">Tipo de meta</span>' +
-                                '<span class="oferta-meta-value">' + offer.metaTypes.join(', ') + '</span>' +
+                                '<span class="oferta-meta-label">Depósito mín.</span>' +
+                                '<span class="oferta-meta-value">' + offer.baseline + '</span>' +
                             '</div>' +
                             '<div class="oferta-meta-item">' +
-                                '<span class="oferta-meta-label">Modelos</span>' +
-                                '<span class="oferta-meta-value">CPA</span>' +
+                                '<span class="oferta-meta-label">Bônus</span>' +
+                                '<span class="oferta-meta-value" style="color: var(--green);">' + offer.bonus + '</span>' +
                             '</div>' +
                             '<div class="oferta-meta-item">' +
-                                '<span class="oferta-meta-label">Pagamento</span>' +
-                                '<span class="oferta-meta-value">' + Format.currency(cpa) + '</span>' +
+                                '<span class="oferta-meta-label">CPA</span>' +
+                                '<span class="oferta-meta-value">' + Format.currency(offer.defaultCPA) + ' - ' + Format.currency(offer.maxCPA) + '</span>' +
                             '</div>' +
                         '</div>' +
                         actionBtn +
