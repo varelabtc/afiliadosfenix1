@@ -298,6 +298,38 @@
                     </div>
                 </div>
 
+                <!-- Sportingbet Power BI -->
+                <div class="card" id="sportingbetCard">
+                    <div class="card-header">
+                        <h3>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" style="vertical-align: -3px; margin-right: 6px;"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                            Sportingbet — Relatório
+                        </h3>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button class="btn btn-secondary btn-sm" onclick="toggleSportingbet()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <span id="sbToggleText">Expandir</span>
+                            </button>
+                            <a href="https://otggrupo.com/sporting" target="_blank" class="btn btn-secondary btn-sm" style="text-decoration:none;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                Abrir
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body" id="sportingbetBody" style="display: none;">
+                        <div style="position: relative; width: 100%; padding-top: 56.25%; border-radius: 8px; overflow: hidden; background: var(--bg-input);">
+                            <iframe
+                                id="sportingbetIframe"
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                                allowfullscreen="true">
+                            </iframe>
+                        </div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; text-align: center;">
+                            Relatório Power BI da Sportingbet. Você precisa estar logado na conta OTG para visualizar.
+                        </p>
+                    </div>
+                </div>
+
                 <!-- Recent Activity -->
                 <div class="card">
                     <div class="card-header">
@@ -587,6 +619,24 @@
 
         // Auto-load Superbet data on page load
         setTimeout(loadSuperbetData, 500);
+
+        // Sportingbet Power BI toggle
+        var sportingbetLoaded = false;
+        function toggleSportingbet() {
+            var body = document.getElementById('sportingbetBody');
+            var text = document.getElementById('sbToggleText');
+            if (body.style.display === 'none') {
+                body.style.display = 'block';
+                text.textContent = 'Recolher';
+                if (!sportingbetLoaded) {
+                    document.getElementById('sportingbetIframe').src = 'https://app.powerbi.com/reportEmbed?reportId=cfc6cb43-333b-408a-9de8-1daf416b6659&autoAuth=true&ctid=9bfaab99-1140-4254-825c-7b2a5d5f022c';
+                    sportingbetLoaded = true;
+                }
+            } else {
+                body.style.display = 'none';
+                text.textContent = 'Expandir';
+            }
+        }
 
     </script>
 
