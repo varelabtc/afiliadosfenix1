@@ -124,7 +124,7 @@
                             </div>
                             <div>
                                 <span class="od-label">Pagamento</span>
-                                <div class="od-value od-accent" id="odPagamento">-</div>
+                                <div class="od-value od-accent" id="odPagamento">R$ 150</div>
                             </div>
                         </div>
                         <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
@@ -204,6 +204,10 @@
                                 </button>
                             </div>
                         </div>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px; cursor: pointer; font-size: 0.8rem; color: var(--text-3);">
+                            <input type="checkbox" id="shortenToggle_superbet" style="accent-color: #E8590C; width: 16px; height: 16px; cursor: pointer;">
+                            Encurtar link
+                        </label>
 
                         <div id="customResult_superbet" style="display: none;">
                             <div class="od-field-block">
@@ -261,6 +265,10 @@
                                 </button>
                             </div>
                         </div>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px; cursor: pointer; font-size: 0.8rem; color: var(--text-3);">
+                            <input type="checkbox" id="shortenToggle_sportingbet" style="accent-color: #22C55E; width: 16px; height: 16px; cursor: pointer;">
+                            Encurtar link
+                        </label>
 
                         <div id="customResult_sportingbet" style="display: none;">
                             <div class="od-field-block">
@@ -433,29 +441,10 @@
             var genCard = document.getElementById('generatorCard_' + offer.slug);
             if (genCard) genCard.style.display = '';
 
-            // Generate Fenix tracking link (short)
+            // Generate Fenix tracking link
             var encoded = btoa(rawLink);
-            var longLink = window.location.origin + '/api/go?a=' + user.id + '&h=' + offer.slug + '&url=' + encodeURIComponent(encoded);
-            baseTrackingLink = longLink;
+            baseTrackingLink = window.location.origin + '/api/go?a=' + user.id + '&h=' + offer.slug + '&url=' + encodeURIComponent(encoded);
             updateTrackingLink();
-
-            // Try to get/create short version
-            try {
-                var shortResp = await fetch('/api/l', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        affiliate_id: user.id,
-                        house: offer.slug,
-                        url: rawLink
-                    })
-                });
-                if (shortResp.ok) {
-                    var shortData = await shortResp.json();
-                    baseTrackingLink = shortData.short_url;
-                    updateTrackingLink();
-                }
-            } catch (e) {}
         }
 
         function updateTrackingLink() {
@@ -491,7 +480,7 @@
             });
         }
 
-        // ── Custom Link Generator (per house) with URL shortener ──
+        // ── Custom Link Generator (per house) ──
         async function generateCustomLink(house) {
             var linkName = document.getElementById('customLinkName_' + house).value.trim();
             var rawUrl = document.getElementById('customUrlInput_' + house).value.trim();
@@ -510,42 +499,34 @@
             var user = Auth.currentUser;
             if (!user) { Toast.error('Faca login primeiro'); return; }
 
-            // Generate short link via API
-            try {
-                var resp = await fetch('/api/l', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        affiliate_id: user.id,
-                        house: house,
-                        url: rawUrl
-                    })
-                });
+            var encoded = btoa(rawUrl);
+            var fenixLink = window.location.origin + '/api/go?a=' + user.id + '&h=' + house + '&url=' + encodeURIComponent(encoded);
 
-                if (!resp.ok) throw new Error('Erro ao gerar link curto');
-
-                var result = await resp.json();
-                var fenixLink = result.short_url;
-
-                document.getElementById('customGeneratedLink_' + house).value = fenixLink;
-                document.getElementById('customResult_' + house).style.display = 'block';
-
-                saveCustomLink(house, linkName, rawUrl, fenixLink);
-                document.getElementById('customLinkName_' + house).value = '';
-                document.getElementById('customUrlInput_' + house).value = '';
-                Toast.success('Link "' + linkName + '" gerado com sucesso!');
-            } catch (e) {
-                console.error('Shortener error:', e);
-                // Fallback to long link
-                var encoded = btoa(rawUrl);
-                var fenixLink = window.location.origin + '/api/go?a=' + user.id + '&h=' + house + '&url=' + encodeURIComponent(encoded);
-                document.getElementById('customGeneratedLink_' + house).value = fenixLink;
-                document.getElementById('customResult_' + house).style.display = 'block';
-                saveCustomLink(house, linkName, rawUrl, fenixLink);
-                document.getElementById('customLinkName_' + house).value = '';
-                document.getElementById('customUrlInput_' + house).value = '';
-                Toast.success('Link "' + linkName + '" gerado (formato longo)');
+            // Check if user wants short link
+            var shortenCheckbox = document.getElementById('shortenToggle_' + house);
+            if (shortenCheckbox && shortenCheckbox.checked) {
+                try {
+                    var resp = await fetch('/api/l', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ affiliate_id: user.id, house: house, url: rawUrl })
+                    });
+                    if (resp.ok) {
+                        var result = await resp.json();
+                        fenixLink = result.short_url;
+                    }
+                } catch (e) {
+                    console.error('Shortener error:', e);
+                }
             }
+
+            document.getElementById('customGeneratedLink_' + house).value = fenixLink;
+            document.getElementById('customResult_' + house).style.display = 'block';
+
+            saveCustomLink(house, linkName, rawUrl, fenixLink);
+            document.getElementById('customLinkName_' + house).value = '';
+            document.getElementById('customUrlInput_' + house).value = '';
+            Toast.success('Link "' + linkName + '" gerado com sucesso!');
         }
 
         function saveCustomLink(house, name, originalUrl, fenixLink) {
