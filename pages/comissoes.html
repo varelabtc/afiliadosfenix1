@@ -358,6 +358,29 @@
                 }
             }
 
+            // Fetch Sportingbet manual CPAs
+            try {
+                var startDate2 = document.getElementById('startDate').value;
+                var endDate2 = document.getElementById('endDate').value;
+                var sbUrl = '/api/sportingbet-cpa?affiliate_id=' + user.id + '&startDate=' + startDate2 + '&endDate=' + endDate2;
+                var sbRes = await fetch(sbUrl);
+                if (sbRes.ok) {
+                    var sbData = await sbRes.json();
+                    if (Array.isArray(sbData)) {
+                        sbData.forEach(function(r) {
+                            allCommissions.push({
+                                type: 'cpa',
+                                platform: 'sportingbet',
+                                description: 'CPA Sportingbet - ' + (r.ftds || 1) + ' FTD(s)',
+                                amount: r.amount || 180,
+                                date: r.date || '',
+                                status: r.status || 'approved'
+                            });
+                        });
+                    }
+                }
+            } catch (e) {}
+
             // Calculate totals
             var totalCPA = allCommissions.filter(function(c) { return c.type === 'cpa'; }).reduce(function(sum, c) { return sum + c.amount; }, 0);
             var totalRevShare = allCommissions.filter(function(c) { return c.type === 'revshare'; }).reduce(function(sum, c) { return sum + c.amount; }, 0);
@@ -384,7 +407,7 @@
                 container.innerHTML = '<div class="empty-state">' +
                     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>' +
                     '<h3>Nenhuma comissão ' + (currentFilter !== 'all' ? 'deste tipo' : '') + '</h3>' +
-                    '<p>Suas comissões aparecerão aqui quando houver dados na Superbet</p>' +
+                    '<p>Suas comissões aparecerão aqui quando houver dados</p>' +
                 '</div>';
                 return;
             }
@@ -396,7 +419,7 @@
                     '<td>' + (c.date || '-') + '</td>' +
                     '<td><span class="commission-type-badge ' + typeClass + '">' + typeLabel + '</span></td>' +
                     '<td>' + c.description + '</td>' +
-                    '<td><span class="platform-badge superbet">Superbet</span></td>' +
+                    '<td><span class="platform-badge ' + (c.platform || 'superbet') + '">' + (c.platform === 'sportingbet' ? 'Sportingbet' : 'Superbet') + '</span></td>' +
                     '<td style="font-weight: 700; color: var(--success);">' + Format.currency(c.amount) + '</td>' +
                     '<td><span class="status-badge active"><span class="status-dot"></span>Pago</span></td>' +
                 '</tr>';
@@ -431,7 +454,7 @@
             }
             var csv = 'Data,Tipo,Descrição,Plataforma,Valor\n';
             allCommissions.forEach(function(c) {
-                csv += c.date + ',' + c.type + ',"' + c.description + '",Superbet,' + c.amount.toFixed(2) + '\n';
+                csv += c.date + ',' + c.type + ',"' + c.description + '",' + (c.platform === 'sportingbet' ? 'Sportingbet' : 'Superbet') + ',' + c.amount.toFixed(2) + '\n';
             });
             var blob = new Blob([csv], { type: 'text/csv' });
             var a = document.createElement('a');

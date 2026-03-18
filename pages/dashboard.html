@@ -311,23 +311,46 @@
 
             superbetCache = { stats: stats, daily: dailyData };
 
-            // Update UI with real data
-            var totalEarnings = stats.lucro_tipster + stats.rvs;
-            document.getElementById('emConversao').textContent = Format.currency(stats.rvs);
-            document.getElementById('depositantes').textContent = Math.round(stats.first_deposits);
-            document.getElementById('meusLinks').textContent = Math.round(stats.qualified_cpa);
+            // Fetch Sportingbet manual CPAs for this affiliate
+            var sbStats = { ftds: 0, amount: 0 };
+            try {
+                var end2 = new Date();
+                var start2 = new Date();
+                start2.setDate(end2.getDate() - days);
+                var fmt2 = function(d) { return d.toISOString().split('T')[0]; };
+                var sbRes = await fetch('/api/sportingbet-cpa?affiliate_id=' + user.id + '&startDate=' + fmt2(start2) + '&endDate=' + fmt2(end2));
+                if (sbRes.ok) {
+                    var sbData = await sbRes.json();
+                    if (Array.isArray(sbData)) {
+                        sbData.forEach(function(r) {
+                            sbStats.ftds += (r.ftds || 0);
+                            sbStats.amount += (r.amount || 0);
+                        });
+                    }
+                }
+            } catch (e) {}
 
-            // Performance
+            // Update UI with combined data (Superbet + Sportingbet)
+            var superbetEarnings = stats.lucro_tipster + stats.rvs;
+            var sportingbetEarnings = sbStats.amount;
+            var totalEarnings = superbetEarnings + sportingbetEarnings;
+
+            document.getElementById('emConversao').textContent = Format.currency(stats.rvs);
+            document.getElementById('depositantes').textContent = Math.round(stats.first_deposits + sbStats.ftds);
+            document.getElementById('meusLinks').textContent = Math.round(stats.qualified_cpa + sbStats.ftds);
+
+            // Performance (combined)
             document.getElementById('perfRegistros').textContent = Math.round(stats.registrations);
-            document.getElementById('perfFTDs').textContent = Math.round(stats.first_deposits);
-            document.getElementById('perfCPAs').textContent = Math.round(stats.qualified_cpa);
+            document.getElementById('perfFTDs').textContent = Math.round(stats.first_deposits + sbStats.ftds);
+            document.getElementById('perfCPAs').textContent = Math.round(stats.qualified_cpa + sbStats.ftds);
             document.getElementById('perfDepositos').textContent = Format.currency(totalEarnings);
 
-            // Platform breakdown - Superbet is the real data
-            document.getElementById('superbetValue').textContent = Format.currency(totalEarnings);
-            document.getElementById('sportingbetValue').textContent = Format.currency(0);
-            document.getElementById('superbetBar').style.width = totalEarnings > 0 ? '100%' : '0%';
-            document.getElementById('sportingbetBar').style.width = '0%';
+            // Platform breakdown
+            document.getElementById('superbetValue').textContent = Format.currency(superbetEarnings);
+            document.getElementById('sportingbetValue').textContent = Format.currency(sportingbetEarnings);
+            var maxVal = Math.max(superbetEarnings, sportingbetEarnings) || 1;
+            document.getElementById('superbetBar').style.width = (superbetEarnings / maxVal * 100) + '%';
+            document.getElementById('sportingbetBar').style.width = (sportingbetEarnings / maxVal * 100) + '%';
 
             // Recent commissions from daily data
             loadRecentCommissions(dailyData);
