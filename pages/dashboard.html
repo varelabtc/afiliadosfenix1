@@ -141,7 +141,7 @@
                             </div>
                             <div class="perf-item">
                                 <div class="perf-value" id="perfDepositos">R$ 0</div>
-                                <div class="perf-label">Depósitos</div>
+                                <div class="perf-label">Lucro</div>
                             </div>
                         </div>
 
@@ -336,7 +336,8 @@
             var sportingbetEarnings = sbStats.amount;
             var totalEarnings = superbetEarnings + sportingbetEarnings;
 
-            document.getElementById('emConversao').textContent = Format.currency(totalEarnings);
+            document.getElementById('totalSaque').textContent = Format.currency(totalEarnings);
+            document.getElementById('emConversao').textContent = Format.currency(0);
             document.getElementById('depositantes').textContent = Math.round(stats.first_deposits + sbStats.ftds);
             document.getElementById('meusLinks').textContent = Math.round(stats.qualified_cpa + sbStats.ftds);
 
