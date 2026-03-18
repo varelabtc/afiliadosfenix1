@@ -328,24 +328,14 @@
                         if (Array.isArray(rows)) {
                             rows.forEach(function(r) {
                                 var date = r.id || r.label || r.date || '';
-                                // CPA commission
-                                if ((r.cpa || 0) > 0 || (r.qualified_cpa || 0) > 0) {
+                                var qcpa = Math.round(r.qualified_cpa || 0);
+                                // CPA commission - R$200 per qualified CPA
+                                if (qcpa > 0) {
                                     allCommissions.push({
                                         type: 'cpa',
                                         platform: 'superbet',
-                                        description: 'CPA - ' + Math.round(r.qualified_cpa || 0) + ' qualificados',
-                                        amount: r.lucro_tipster || 0,
-                                        date: date,
-                                        status: 'paid'
-                                    });
-                                }
-                                // RevShare commission
-                                if ((r.rvs || 0) > 0) {
-                                    allCommissions.push({
-                                        type: 'revshare',
-                                        platform: 'superbet',
-                                        description: 'Revenue Share - ' + Math.round(r.first_deposits || 0) + ' FTDs',
-                                        amount: r.rvs || 0,
+                                        description: 'CPA Superbet - ' + qcpa + ' qualificado(s)',
+                                        amount: qcpa * 200,
                                         date: date,
                                         status: 'paid'
                                     });

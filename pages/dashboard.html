@@ -331,11 +331,12 @@
             } catch (e) {}
 
             // Update UI with combined data (Superbet + Sportingbet)
-            var superbetEarnings = stats.lucro_tipster + stats.rvs;
+            // Superbet: R$200 per qualified CPA | Sportingbet: R$180 per CPA (manual)
+            var superbetEarnings = Math.round(stats.qualified_cpa) * 200;
             var sportingbetEarnings = sbStats.amount;
             var totalEarnings = superbetEarnings + sportingbetEarnings;
 
-            document.getElementById('emConversao').textContent = Format.currency(stats.rvs);
+            document.getElementById('emConversao').textContent = Format.currency(totalEarnings);
             document.getElementById('depositantes').textContent = Math.round(stats.first_deposits + sbStats.ftds);
             document.getElementById('meusLinks').textContent = Math.round(stats.qualified_cpa + sbStats.ftds);
 
@@ -392,7 +393,7 @@
 
             container.innerHTML = recent.map(function(r) {
                 var date = r.id || r.label || r.date || '-';
-                var earnings = (r.lucro_tipster || 0) + (r.rvs || 0);
+                var earnings = Math.round(r.qualified_cpa || 0) * 200;
                 return '<div class="commission-row">' +
                     '<div>' +
                         '<div class="commission-name">Superbet - ' + date + '</div>' +

@@ -479,7 +479,8 @@
                 }
             } catch (e) { console.error('Erro API casas:', e); }
 
-            var superbetTotal = sbStats.lucro + sbStats.rvs;
+            // R$200 per qualified CPA
+            var superbetTotal = Math.round(sbStats.qualified_cpa) * 200;
 
             // Fetch Sportingbet manual CPA totals
             var sbManualStats = { registrations: 0, ftds: 0, amount: 0 };
