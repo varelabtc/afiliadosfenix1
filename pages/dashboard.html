@@ -331,9 +331,12 @@
             } catch (e) {}
 
             // Update UI with combined data (Superbet + Sportingbet)
-            // Superbet: R$200 per qualified CPA | Sportingbet: R$180 per CPA (manual)
-            var superbetEarnings = Math.round(stats.qualified_cpa) * 200;
-            var sportingbetEarnings = sbStats.amount;
+            // Use custom CPA deals if set, otherwise defaults
+            var deals = user.cpa_deals || { superbet: 200, sportingbet: 180 };
+            var cpaSuperbet = deals.superbet || 200;
+            var cpaSportingbet = deals.sportingbet || 180;
+            var superbetEarnings = Math.round(stats.qualified_cpa) * cpaSuperbet;
+            var sportingbetEarnings = sbStats.ftds * cpaSportingbet;
             var totalEarnings = superbetEarnings + sportingbetEarnings;
 
             document.getElementById('totalSaque').textContent = Format.currency(totalEarnings);
@@ -354,8 +357,13 @@
             document.getElementById('superbetBar').style.width = (superbetEarnings / maxVal * 100) + '%';
             document.getElementById('sportingbetBar').style.width = (sportingbetEarnings / maxVal * 100) + '%';
 
-            // Recent commissions from daily data
-            loadRecentCommissions(dailyData);
+            // Recent commissions from daily data + sportingbet
+            var sbCpaList = [];
+            try {
+                var sbRes2 = await fetch('/api/sportingbet-cpa?affiliate_id=' + user.id + '&startDate=' + fmt(start) + '&endDate=' + fmt(end));
+                if (sbRes2.ok) sbCpaList = await sbRes2.json();
+            } catch(e) {}
+            loadRecentCommissions(dailyData, sbCpaList, cpaSuperbet, cpaSportingbet);
         }
 
         function initChart() {
@@ -385,22 +393,45 @@
             chartLabels.innerHTML = days.map(d => '<span>' + d + '</span>').join('');
         }
 
-        function loadRecentCommissions(dailyData) {
+        function loadRecentCommissions(dailyData, sbCpaList, cpaSuperbet, cpaSportingbet) {
             const container = document.getElementById('ultimasComissoes');
-            if (!dailyData || dailyData.length === 0) return;
+            if (!container) return;
 
-            var recent = dailyData.filter(function(r) { return (r.qualified_cpa || 0) > 0; }).slice(0, 4);
-            if (recent.length === 0) return;
+            var items = [];
 
-            container.innerHTML = recent.map(function(r) {
-                var date = r.id || r.label || r.date || '-';
-                var earnings = Math.round(r.qualified_cpa || 0) * 200;
+            // Superbet commissions
+            if (dailyData && dailyData.length > 0) {
+                dailyData.filter(function(r) {
+                    return (r.qualified_cpa || 0) > 0;
+                }).forEach(function(r) {
+                    var date = r.id || r.label || r.date || '-';
+                    var qty = Math.round(r.qualified_cpa || 0);
+                    items.push({ date: date, house: 'Superbet', detail: qty + ' CPA qualificado', amount: qty * (cpaSuperbet || 200) });
+                });
+            }
+
+            // Sportingbet commissions
+            if (Array.isArray(sbCpaList)) {
+                sbCpaList.forEach(function(r) {
+                    var qty = r.ftds || 1;
+                    items.push({ date: r.date || '-', house: 'Sportingbet', detail: qty + ' CPA qualificado', amount: qty * (cpaSportingbet || 180) });
+                });
+            }
+
+            if (items.length === 0) {
+                container.innerHTML = '<div class="commission-row"><div><div class="commission-detail">Nenhuma comissão neste período.</div></div></div>';
+                return;
+            }
+
+            items.sort(function(a, b) { return b.date.localeCompare(a.date); });
+
+            container.innerHTML = items.slice(0, 10).map(function(item) {
                 return '<div class="commission-row">' +
                     '<div>' +
-                        '<div class="commission-name">Superbet - ' + date + '</div>' +
-                        '<div class="commission-detail">' + Math.round(r.qualified_cpa || 0) + ' CPA qualificado</div>' +
+                        '<div class="commission-name">' + item.house + ' - ' + item.date + '</div>' +
+                        '<div class="commission-detail">' + item.detail + '</div>' +
                     '</div>' +
-                    '<span class="commission-amount text-green">+' + Format.currency(earnings) + '</span>' +
+                    '<span class="commission-amount text-green">+' + Format.currency(item.amount) + '</span>' +
                 '</div>';
             }).join('');
         }
