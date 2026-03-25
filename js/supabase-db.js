@@ -49,7 +49,8 @@ const SupabaseDB = {
             const err = await res.json().catch(function() { return {}; });
             return { error: err };
         }
-        const rows = await res.json();
+        if (res.status === 204) return { data: data };
+        const rows = await res.json().catch(function() { return data; });
         return { data: rows[0] || rows };
     },
 
