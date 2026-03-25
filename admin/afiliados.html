@@ -349,7 +349,10 @@
                                 </div>
                             </div>
                         </td>
-                        <td><code style="background: var(--bg-input); padding: 4px 8px; border-radius: 4px;">${user.affiliate_code || 'N/A'}</code></td>
+                        <td>
+                            <code style="background: var(--bg-input); padding: 4px 8px; border-radius: 4px;">${user.affiliate_code || 'N/A'}</code>
+                            ${(user.link_requests && user.link_requests.length > 0) ? '<span style="display:inline-block;margin-left:6px;padding:2px 8px;background:#E8590C;color:white;border-radius:10px;font-size:0.65rem;font-weight:700;">PEDIDO</span>' : ''}
+                        </td>
                         <td>${getDealBadge(user)}</td>
                         <td>${Format.number(stats.totalConversions)}</td>
                         <td style="color: var(--success); font-weight: 600;">${Format.currency(stats.totalEarnings)}</td>
@@ -425,6 +428,8 @@
         async function saveCpaDeals(userId) {
             var superbet = parseFloat(document.getElementById('dealSuperbet').value) || 200;
             var sportingbet = parseFloat(document.getElementById('dealSportingbet').value) || 180;
+            var estrelabet = parseFloat(document.getElementById('dealEstrelabet').value) || 110;
+            var vupi = parseFloat(document.getElementById('dealVupi').value) || 80;
             try {
                 var resp = await fetch('https://zaopgwnrzadisqtxrlst.supabase.co/rest/v1/users?id=eq.' + userId, {
                     method: 'PATCH',
@@ -433,10 +438,10 @@
                         'Authorization': 'Bearer sb_publishable_5IHTgZdNubSyGzyuKWPPUg_cxXH_KCH',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ cpa_deals: { superbet: superbet, sportingbet: sportingbet } })
+                    body: JSON.stringify({ cpa_deals: { superbet: superbet, sportingbet: sportingbet, estrelabet: estrelabet, vupi: vupi } })
                 });
                 if (resp.ok) {
-                    Toast.success('Acordos CPA salvos! Superbet: R$' + superbet + ' | Sportingbet: R$' + sportingbet);
+                    Toast.success('Acordos salvos! SB:R$' + superbet + ' | SP:R$' + sportingbet + ' | ES:R$' + estrelabet + ' | VU:R$' + vupi);
                 } else {
                     Toast.error('Erro ao salvar acordos');
                 }
@@ -549,18 +554,42 @@
                     })()}</p>
                 </div>
 
+                ${(function() {
+                    var reqs = user.link_requests || [];
+                    if (reqs.length === 0) return '';
+                    var houseNames = { superbet: 'Superbet', sportingbet: 'Sportingbet', estrelabet: 'Estrelabet', vupi: 'VUPI' };
+                    var houseColors = { superbet: '#E8590C', sportingbet: '#22C55E', estrelabet: '#1a2744', vupi: '#2d1b69' };
+                    return '<div style="background: rgba(232,89,12,0.08); border: 1px solid rgba(232,89,12,0.25); padding: 16px; border-radius: 12px; margin-bottom: 20px;">' +
+                        '<h4 style="margin-bottom: 12px; color: #E8590C;">Solicitacoes de Link</h4>' +
+                        reqs.map(function(r) {
+                            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg-elevated);border-radius:8px;margin-bottom:6px;">' +
+                                '<span style="font-weight:600;color:' + (houseColors[r] || '#fff') + ';">' + (houseNames[r] || r) + '</span>' +
+                                '<span style="font-size:0.75rem;color:var(--text-muted);">Aguardando link</span>' +
+                            '</div>';
+                        }).join('') +
+                    '</div>';
+                })()}
+
                 <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
                     <h4 style="margin-bottom: 12px;">Acordos CPA</h4>
                     ${(function() {
-                        var deals = user.cpa_deals || { superbet: 200, sportingbet: 180 };
-                        return '<div style="display: flex; gap: 12px; margin-bottom: 10px;">' +
-                            '<div style="flex:1;">' +
+                        var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80 };
+                        return '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 10px;">' +
+                            '<div>' +
                                 '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Superbet (R$)</label>' +
                                 '<input type="number" id="dealSuperbet" value="' + (deals.superbet || 200) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
                             '</div>' +
-                            '<div style="flex:1;">' +
+                            '<div>' +
                                 '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Sportingbet (R$)</label>' +
                                 '<input type="number" id="dealSportingbet" value="' + (deals.sportingbet || 180) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
+                            '</div>' +
+                            '<div>' +
+                                '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Estrelabet (R$)</label>' +
+                                '<input type="number" id="dealEstrelabet" value="' + (deals.estrelabet || 110) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
+                            '</div>' +
+                            '<div>' +
+                                '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">VUPI (R$)</label>' +
+                                '<input type="number" id="dealVupi" value="' + (deals.vupi || 80) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
                             '</div>' +
                         '</div>' +
                         '<button onclick="saveCpaDeals(' + user.id + ')" style="padding: 8px 20px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Salvar Acordos</button>';

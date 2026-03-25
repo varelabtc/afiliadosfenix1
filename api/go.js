@@ -17,7 +17,9 @@ const SUPABASE_KEY = 'sb_publishable_5IHTgZdNubSyGzyuKWPPUg_cxXH_KCH';
 // Map house slugs to bettingHouses IDs
 const HOUSE_IDS = {
     'superbet': '1',
-    'sportingbet': '2'
+    'sportingbet': '2',
+    'estrelabet': '3',
+    'vupi': '4'
 };
 
 module.exports = async function handler(req, res) {

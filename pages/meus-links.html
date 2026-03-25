@@ -231,6 +231,38 @@
                 defaultCPA: 30,
                 maxCPA: 180,
                 color: '#22C55E'
+            },
+            {
+                id: 'estrelabet',
+                name: 'Estrelabet',
+                subtitle: 'Estrelabet Brasil',
+                logo: '../img/estrelabet-logo.png',
+                baseline: 'R$50',
+                bonus: 'R$110',
+                wager: '2x',
+                payment: 'Mensal - dia 15',
+                currency: 'BRL',
+                metaTypes: ['QFTD'],
+                models: [{ type: 'CPA', value: null }],
+                defaultCPA: 50,
+                maxCPA: 110,
+                color: '#1a2744'
+            },
+            {
+                id: 'vupi',
+                name: 'VUPI',
+                subtitle: 'VUPI Brasil',
+                logo: '../img/vupi-logo.webp',
+                baseline: 'R$50',
+                bonus: 'R$80',
+                wager: '2x',
+                payment: 'Mensal - dia 15',
+                currency: 'BRL',
+                metaTypes: ['QFTD'],
+                models: [{ type: 'CPA', value: null }],
+                defaultCPA: 50,
+                maxCPA: 80,
+                color: '#2d1b69'
             }
         ];
 
@@ -278,7 +310,7 @@
             return Auth.currentUser || null;
         }
 
-        var HOUSE_ID_MAP = { 'superbet': '1', 'sportingbet': '2' };
+        var HOUSE_ID_MAP = { 'superbet': '1', 'sportingbet': '2', 'estrelabet': '3', 'vupi': '4' };
 
         function getOfferStatus(offerId) {
             const fullUser = getFullUserData();
@@ -287,9 +319,10 @@
             const houseId = HOUSE_ID_MAP[offerId] || null;
             const adminLink = (houseId && fullUser.house_links) ? (fullUser.house_links[houseId] || '') : '';
 
-            // Check if user requested access
-            const requests = Storage.get('linkRequests_' + fullUser.id) || [];
-            const requested = requests.includes(offerId);
+            // Check if user requested access (Supabase first, then localStorage fallback)
+            const supaRequests = fullUser.link_requests || [];
+            const localRequests = Storage.get('linkRequests_' + fullUser.id) || [];
+            const requested = supaRequests.includes(offerId) || localRequests.includes(offerId);
 
             if (adminLink) {
                 return { status: 'active', link: adminLink, houseId };
@@ -417,14 +450,28 @@
             Modal.open('requestModal');
         }
 
-        function submitRequest() {
+        async function submitRequest() {
             const user = Auth.currentUser;
             if (!user) return;
+
+            // Save locally
             const requests = Storage.get('linkRequests_' + user.id) || [];
             if (!requests.includes(currentRequestHouse)) {
                 requests.push(currentRequestHouse);
                 Storage.set('linkRequests_' + user.id, requests);
             }
+
+            // Save to Supabase (link_requests column on user)
+            try {
+                var currentRequests = user.link_requests || [];
+                if (!currentRequests.includes(currentRequestHouse)) {
+                    currentRequests.push(currentRequestHouse);
+                    await SupabaseDB.updateUser(user.id, { link_requests: currentRequests });
+                    user.link_requests = currentRequests;
+                    Storage.set('currentUser', user);
+                }
+            } catch(e) { console.error(e); }
+
             Modal.close('requestModal');
             Toast.success('Solicitacao enviada! Aguarde aprovacao do administrador.');
             renderOffers();

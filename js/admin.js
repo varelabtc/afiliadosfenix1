@@ -97,7 +97,7 @@ const BettingHouses = {
                 logo: '⚽',
                 color: '#00A651',
                 baseUrl: 'https://sportingbet.com',
-                cpa: 120.00,
+                cpa: 180.00,
                 revShare: 25,
                 minDeposit: 30.00,
                 status: 'active',
@@ -105,14 +105,48 @@ const BettingHouses = {
                 totalClicks: 9800,
                 totalConversions: 245,
                 totalPaid: 29400.00
+            },
+            {
+                id: 3,
+                name: 'Estrelabet',
+                slug: 'estrelabet',
+                logo: '⭐',
+                color: '#1a2744',
+                baseUrl: 'https://estrelabet.com',
+                cpa: 110.00,
+                revShare: 0,
+                minDeposit: 50.00,
+                status: 'active',
+                totalAffiliates: 0,
+                totalClicks: 0,
+                totalConversions: 0,
+                totalPaid: 0
+            },
+            {
+                id: 4,
+                name: 'VUPI',
+                slug: 'vupi',
+                logo: '🟣',
+                color: '#2d1b69',
+                baseUrl: 'https://vupi.com',
+                cpa: 80.00,
+                revShare: 0,
+                minDeposit: 50.00,
+                status: 'active',
+                totalAffiliates: 0,
+                totalClicks: 0,
+                totalConversions: 0,
+                totalPaid: 0
             }
         ];
 
-        if (!Storage.get('bettingHouses')) {
+        var stored = Storage.get('bettingHouses');
+        if (!stored || stored.length < defaults.length) {
             Storage.set('bettingHouses', defaults);
+            stored = defaults;
         }
 
-        return Storage.get('bettingHouses');
+        return stored;
     },
 
     getById(id) {
