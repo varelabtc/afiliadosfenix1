@@ -450,9 +450,14 @@
             const user = users.find(u => u.id === userId);
             if (!user) return;
 
-            // Fetch real stats from Superbet API + Sportingbet manual
             var deals = user.cpa_deals || { superbet: 200, sportingbet: 180 };
             var realStats = { registrations: 0, ftds: 0, qualified_cpa: 0, superbetEarnings: 0, sportingbetEarnings: 0, sbFtds: 0 };
+            var totalEarnings = 0;
+            var totalFtds = 0;
+
+            // Show modal immediately with loading, then update
+            renderAffiliateModal(user, realStats, totalEarnings, deals);
+            Modal.open('affiliateModal');
 
             try {
                 if (user.otg_affiliate_id) {
@@ -478,8 +483,14 @@
                 }
             } catch(e) { console.error('Erro ao buscar stats:', e); }
 
-            var totalEarnings = realStats.superbetEarnings + realStats.sportingbetEarnings;
-            var totalFtds = realStats.ftds + realStats.sbFtds;
+            totalEarnings = realStats.superbetEarnings + realStats.sportingbetEarnings;
+            totalFtds = realStats.ftds + realStats.sbFtds;
+
+            // Re-render with real data
+            renderAffiliateModal(user, realStats, totalEarnings, deals);
+        }
+
+        function renderAffiliateModal(user, realStats, totalEarnings, deals) {
 
             document.getElementById('affiliateDetails').innerHTML = `
                 <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 24px;">
@@ -601,8 +612,6 @@
                     ` : '<p style="font-size: 0.875rem; color: var(--text-muted);">Nenhum documento enviado pelo afiliado.</p>'}
                 </div>
             `;
-
-            Modal.open('affiliateModal');
         }
 
         function openCPAModal(userId) {
