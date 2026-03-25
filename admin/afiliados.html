@@ -461,7 +461,7 @@
 
             try {
                 if (user.otg_affiliate_id) {
-                    var sbRes = await fetch('/api/superbet?action=results&startDate=2025-01-01&endDate=2030-01-01&affiliateIds=' + encodeURIComponent(user.otg_affiliate_id) + '&limit=500');
+                    var sbRes = await fetch('/api/superbet?action=results&startDate=2025-01-01&endDate=2030-01-01&affiliateIds=' + encodeURIComponent(user.otg_affiliate_id) + '&limit=100');
                     if (sbRes.ok) {
                         var sbJson = await sbRes.json();
                         var rows = (sbJson.data && sbJson.data.data) || [];
