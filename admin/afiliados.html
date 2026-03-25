@@ -711,49 +711,28 @@
             }
         }
 
-        document.getElementById('cpaForm').addEventListener('submit', function(e) {
+        document.getElementById('cpaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const userId = parseInt(document.getElementById('cpaUserId').value);
             const houses = BettingHouses.getAll();
+            var slugMap = { 1: 'superbet', 2: 'sportingbet', 3: 'estrelabet', 4: 'vupi' };
+            var cpaDeals = {};
 
-            houses.forEach(house => {
-                const typeSelect = this.querySelector('[name="deal_type_' + house.id + '"]');
-                const cpaInput = this.querySelector('[name="cpa_value_' + house.id + '"]');
-                const revInput = this.querySelector('[name="rev_value_' + house.id + '"]');
-
-                if (!typeSelect) return;
-
-                const dealType = typeSelect.value;
-                const cpaValue = parseFloat(cpaInput?.value) || 0;
-                const revValue = parseFloat(revInput?.value) || 0;
-
-                const dealData = { type: dealType };
-
-                if (dealType === 'cpa') {
-                    dealData.cpaValue = cpaValue;
-                    dealData.revShare = 0;
-                    dealData.hybridCPA = 0;
-                    dealData.hybridRevShare = 0;
-                    AffiliateManager.updateCPA(userId, house.id, cpaValue);
-                } else if (dealType === 'revshare') {
-                    dealData.cpaValue = 0;
-                    dealData.revShare = revValue;
-                    dealData.hybridCPA = 0;
-                    dealData.hybridRevShare = 0;
-                } else {
-                    dealData.cpaValue = cpaValue;
-                    dealData.revShare = revValue;
-                    dealData.hybridCPA = cpaValue;
-                    dealData.hybridRevShare = revValue;
-                    AffiliateManager.updateCPA(userId, house.id, cpaValue);
-                }
-
-                AffiliateManager.updateDeal(userId, house.id, dealData);
+            houses.forEach(function(house) {
+                var cpaInput = document.querySelector('[name="cpa_value_' + house.id + '"]');
+                var slug = slugMap[house.id] || house.slug;
+                cpaDeals[slug] = parseFloat(cpaInput?.value) || house.cpa;
             });
 
-            Toast.success('Acordo atualizado com sucesso!');
-            Modal.close('cpaModal');
-            loadAffiliates();
+            try {
+                await SupabaseDB.updateUser(userId, { cpa_deals: cpaDeals });
+                Toast.success('Acordo salvo! ' + Object.entries(cpaDeals).map(function(e) { return e[0] + ': R$' + e[1]; }).join(' | '));
+                Modal.close('cpaModal');
+                await AffiliateManager.fetchAll();
+                loadAffiliates();
+            } catch(err) {
+                Toast.error('Erro ao salvar: ' + err.message);
+            }
         });
 
         async function approveAffiliate(userId) {
