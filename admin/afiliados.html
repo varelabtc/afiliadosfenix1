@@ -445,12 +445,41 @@
             }
         }
 
-        function viewAffiliate(userId) {
+        async function viewAffiliate(userId) {
             const users = AffiliateManager.getAll();
             const user = users.find(u => u.id === userId);
             if (!user) return;
 
-            const stats = AffiliateManager.getStats(userId);
+            // Fetch real stats from Superbet API + Sportingbet manual
+            var deals = user.cpa_deals || { superbet: 200, sportingbet: 180 };
+            var realStats = { registrations: 0, ftds: 0, qualified_cpa: 0, superbetEarnings: 0, sportingbetEarnings: 0, sbFtds: 0 };
+
+            try {
+                if (user.otg_affiliate_id) {
+                    var sbRes = await fetch('/api/superbet?action=results&startDate=2025-01-01&endDate=2030-01-01&affiliateIds=' + encodeURIComponent(user.otg_affiliate_id) + '&limit=500');
+                    if (sbRes.ok) {
+                        var sbJson = await sbRes.json();
+                        var rows = (sbJson.data && sbJson.data.data) || [];
+                        rows.forEach(function(r) {
+                            realStats.registrations += (r.registrations || 0);
+                            realStats.ftds += (r.first_deposits || 0);
+                            realStats.qualified_cpa += (r.qualified_cpa || 0);
+                        });
+                        realStats.superbetEarnings = realStats.qualified_cpa * (deals.superbet || 200);
+                    }
+                }
+                var spRes = await fetch('/api/sportingbet-cpa?affiliate_id=' + user.id);
+                if (spRes.ok) {
+                    var spData = await spRes.json();
+                    if (Array.isArray(spData)) {
+                        spData.forEach(function(r) { realStats.sbFtds += (r.ftds || 0); });
+                        realStats.sportingbetEarnings = realStats.sbFtds * (deals.sportingbet || 180);
+                    }
+                }
+            } catch(e) { console.error('Erro ao buscar stats:', e); }
+
+            var totalEarnings = realStats.superbetEarnings + realStats.sportingbetEarnings;
+            var totalFtds = realStats.ftds + realStats.sbFtds;
 
             document.getElementById('affiliateDetails').innerHTML = `
                 <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 24px;">
@@ -464,15 +493,15 @@
 
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px;">
                     <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">${Format.number(stats.totalClicks)}</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">Total Cliques</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">${realStats.registrations}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Registros</div>
                     </div>
                     <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--success);">${Format.number(stats.totalConversions)}</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">Conversões</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--success);">${totalFtds}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">FTDs / CPAs</div>
                     </div>
                     <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">${Format.currency(stats.totalEarnings)}</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">${Format.currency(totalEarnings)}</div>
                         <div style="font-size: 0.8rem; color: var(--text-muted);">Total Ganho</div>
                     </div>
                     <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
