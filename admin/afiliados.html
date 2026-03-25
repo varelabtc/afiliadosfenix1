@@ -871,6 +871,17 @@
 
             if (otgId) updateData.otg_affiliate_id = otgId;
 
+            // Clear link_requests for houses that now have links
+            var slugMap = { 1: 'superbet', 2: 'sportingbet', 3: 'estrelabet', 4: 'vupi' };
+            var currentRequests = user.link_requests || [];
+            if (currentRequests.length > 0) {
+                var remaining = currentRequests.filter(function(req) {
+                    var houseId = Object.keys(slugMap).find(function(k) { return slugMap[k] === req; });
+                    return !houseId || !houseLinks[houseId];
+                });
+                updateData.link_requests = remaining;
+            }
+
             await SupabaseDB.updateUser(userId, updateData);
             await AffiliateManager.fetchAll();
             Toast.success('Links salvos com sucesso!');
