@@ -208,6 +208,10 @@
                             <input type="checkbox" id="shortenToggle_superbet" style="accent-color: #E8590C; width: 16px; height: 16px; cursor: pointer;">
                             Encurtar link
                         </label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-top: 6px; cursor: pointer; font-size: 0.8rem; color: var(--text-3);">
+                            <input type="checkbox" id="directToggle_superbet" style="accent-color: #E8590C; width: 16px; height: 16px; cursor: pointer;">
+                            Link direto da casa (sem fenixafiliados)
+                        </label>
 
                         <div id="customResult_superbet" style="display: none;">
                             <div class="od-field-block">
@@ -269,6 +273,10 @@
                             <input type="checkbox" id="shortenToggle_sportingbet" style="accent-color: #22C55E; width: 16px; height: 16px; cursor: pointer;">
                             Encurtar link
                         </label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-top: 6px; cursor: pointer; font-size: 0.8rem; color: var(--text-3);">
+                            <input type="checkbox" id="directToggle_sportingbet" style="accent-color: #22C55E; width: 16px; height: 16px; cursor: pointer;">
+                            Link direto da casa (sem fenixafiliados)
+                        </label>
 
                         <div id="customResult_sportingbet" style="display: none;">
                             <div class="od-field-block">
@@ -328,6 +336,10 @@
                         <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px; cursor: pointer; font-size: 0.8rem; color: var(--text-3);">
                             <input type="checkbox" id="shortenToggle_estrelabet" style="accent-color: #FFD700; width: 16px; height: 16px; cursor: pointer;">
                             Encurtar link
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-top: 6px; cursor: pointer; font-size: 0.8rem; color: var(--text-3);">
+                            <input type="checkbox" id="directToggle_estrelabet" style="accent-color: #FFD700; width: 16px; height: 16px; cursor: pointer;">
+                            Link direto da casa (sem fenixafiliados)
                         </label>
 
                         <div id="customResult_estrelabet" style="display: none;">
@@ -389,6 +401,10 @@
                         <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px; cursor: pointer; font-size: 0.8rem; color: var(--text-3);">
                             <input type="checkbox" id="shortenToggle_vupi" style="accent-color: #7C3AED; width: 16px; height: 16px; cursor: pointer;">
                             Encurtar link
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-top: 6px; cursor: pointer; font-size: 0.8rem; color: var(--text-3);">
+                            <input type="checkbox" id="directToggle_vupi" style="accent-color: #7C3AED; width: 16px; height: 16px; cursor: pointer;">
+                            Link direto da casa (sem fenixafiliados)
                         </label>
 
                         <div id="customResult_vupi" style="display: none;">
@@ -639,6 +655,26 @@
 
             var user = Auth.currentUser;
             if (!user) { Toast.error('Faca login primeiro'); return; }
+
+            // Check if user wants direct house link
+            var directCheckbox = document.getElementById('directToggle_' + house);
+            if (directCheckbox && directCheckbox.checked) {
+                var fullUser = getFullUserData();
+                var houseId = currentOffer.houseId;
+                var registrationLink = (fullUser && fullUser.house_links && fullUser.house_links[houseId]) || '';
+                if (registrationLink) {
+                    document.getElementById('customGeneratedLink_' + house).value = registrationLink;
+                    document.getElementById('customResult_' + house).style.display = 'block';
+                    saveCustomLink(house, linkName, rawUrl, registrationLink);
+                    document.getElementById('customLinkName_' + house).value = '';
+                    document.getElementById('customUrlInput_' + house).value = '';
+                    Toast.success('Link direto "' + linkName + '" gerado!');
+                    return;
+                } else {
+                    Toast.error('Link de registro da casa nao encontrado');
+                    return;
+                }
+            }
 
             var encoded = btoa(rawUrl);
             var fenixLink = window.location.origin + '/api/go?a=' + user.id + '&h=' + house + '&url=' + encodeURIComponent(encoded);
