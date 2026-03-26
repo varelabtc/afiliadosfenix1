@@ -354,8 +354,8 @@
                             ${(user.link_requests && user.link_requests.length > 0) ? '<span style="display:inline-block;margin-left:6px;padding:2px 8px;background:#E8590C;color:white;border-radius:10px;font-size:0.65rem;font-weight:700;">PEDIDO</span>' : ''}
                         </td>
                         <td>${getDealBadge(user)}</td>
-                        <td>${Format.number(stats.totalConversions)}</td>
-                        <td style="color: var(--success); font-weight: 600;">${Format.currency(stats.totalEarnings)}</td>
+                        <td id="conv_${user.id}">${Format.number(stats.totalConversions)}</td>
+                        <td id="earn_${user.id}" style="color: var(--success); font-weight: 600;">${Format.currency(stats.totalEarnings)}</td>
                         <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusText}</span></td>
                         <td>
                             <div style="display: flex; gap: 8px;">
@@ -407,6 +407,68 @@
                     </tr>
                 `;
             }).join('');
+
+            // Load real earnings asynchronously
+            loadRealEarnings(filteredUsers);
+        }
+
+        async function loadRealEarnings(users) {
+            try {
+                // Fetch all Superbet results
+                var sbRes = await fetch('/api/superbet?action=results&startDate=2025-01-01&endDate=2030-01-01&limit=100');
+                var sbData = {};
+                if (sbRes.ok) {
+                    var sbJson = await sbRes.json();
+                    var rows = (sbJson.data && sbJson.data.data) || [];
+                    rows.forEach(function(r) {
+                        var aid = r.affiliateId;
+                        if (!sbData[aid]) sbData[aid] = { qualified_cpa: 0, ftds: 0, regs: 0 };
+                        sbData[aid].qualified_cpa += (r.qualified_cpa || 0);
+                        sbData[aid].ftds += (r.first_deposits || 0);
+                        sbData[aid].regs += (r.registrations || 0);
+                    });
+                }
+
+                // Fetch all Sportingbet CPAs
+                var spRes = await fetch('/api/sportingbet-cpa?all=true');
+                var spData = {};
+                if (spRes.ok) {
+                    var spJson = await spRes.json();
+                    if (Array.isArray(spJson)) {
+                        spJson.forEach(function(r) {
+                            var aid = r.affiliate_id;
+                            if (!spData[aid]) spData[aid] = { ftds: 0 };
+                            spData[aid].ftds += (r.ftds || 0);
+                        });
+                    }
+                }
+
+                // Update each user row
+                users.forEach(function(user) {
+                    var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80 };
+                    var totalEarnings = 0;
+                    var totalConv = 0;
+
+                    // Superbet earnings
+                    if (user.otg_affiliate_id && sbData[user.otg_affiliate_id]) {
+                        var sb = sbData[user.otg_affiliate_id];
+                        totalEarnings += sb.qualified_cpa * (deals.superbet || 200);
+                        totalConv += sb.qualified_cpa;
+                    }
+
+                    // Sportingbet earnings
+                    if (spData[user.id]) {
+                        var sp = spData[user.id];
+                        totalEarnings += sp.ftds * (deals.sportingbet || 180);
+                        totalConv += sp.ftds;
+                    }
+
+                    var convEl = document.getElementById('conv_' + user.id);
+                    var earnEl = document.getElementById('earn_' + user.id);
+                    if (convEl) convEl.textContent = totalConv;
+                    if (earnEl) earnEl.textContent = Format.currency(totalEarnings);
+                });
+            } catch(e) { console.error('Erro ao carregar ganhos reais:', e); }
         }
 
         function getDealBadge(user) {
