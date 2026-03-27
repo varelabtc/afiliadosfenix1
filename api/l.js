@@ -8,8 +8,17 @@ const SUPABASE_KEY = 'sb_publishable_5IHTgZdNubSyGzyuKWPPUg_cxXH_KCH';
 
 const HOUSE_IDS = {
     'superbet': '1',
-    'sportingbet': '2'
+    'sportingbet': '2',
+    'estrelabet': '3',
+    'vupi': '4'
 };
+
+function extractUrl(text) {
+    if (!text) return text;
+    var matches = text.match(/https?:\/\/[^\s]+/g);
+    if (matches && matches.length > 0) return matches[matches.length - 1];
+    return text;
+}
 
 function generateCode(len) {
     var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
@@ -32,6 +41,9 @@ module.exports = async function handler(req, res) {
             if (!affiliateId || !house || !url) {
                 return res.status(400).json({ error: 'affiliate_id, house, and url are required' });
             }
+
+            // Extract URL if user pasted share message text
+            url = extractUrl(url);
 
             // Generate unique code (try up to 5 times)
             var code = '';
@@ -107,7 +119,7 @@ module.exports = async function handler(req, res) {
     var link = links[0];
     var affiliateId = link.affiliate_id;
     var house = link.house;
-    var destinationUrl = link.url;
+    var destinationUrl = extractUrl(link.url);
 
     // Auto-fix protocol
     if (destinationUrl && !destinationUrl.startsWith('http')) {
