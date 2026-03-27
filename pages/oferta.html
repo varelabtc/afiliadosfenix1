@@ -634,6 +634,12 @@
                 Toast.error('Cole um link antes de gerar');
                 return;
             }
+            // Extract URL if user pasted text with a link (e.g. share messages)
+            var urlMatch = rawUrl.match(/https?:\/\/[^\s]+/g);
+            if (urlMatch && urlMatch.length > 0) {
+                // Use the last URL found (usually the actual link in share messages)
+                rawUrl = urlMatch[urlMatch.length - 1];
+            }
             if (!rawUrl.startsWith('http')) {
                 rawUrl = 'https://' + rawUrl;
             }
