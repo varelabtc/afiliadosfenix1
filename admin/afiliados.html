@@ -556,19 +556,15 @@
             totalEarnings = realStats.superbetEarnings + realStats.sportingbetEarnings;
             totalFtds = realStats.ftds + realStats.sbFtds;
 
-            // Update only stats without re-rendering entire modal (avoids overwriting CPA deal inputs)
-            var statEls = document.querySelectorAll('#affiliateDetails .stat-value');
-            if (statEls.length >= 4) {
-                statEls[0].textContent = realStats.registrations + realStats.sbFtds;
-                statEls[1].textContent = totalFtds;
-                statEls[2].textContent = Format.currency(totalEarnings);
-                statEls[3].textContent = Format.currency(user.balance || 0);
-            }
-            // Update platform breakdown
-            var sbVal = document.getElementById('modalSuperbetVal');
-            var spVal = document.getElementById('modalSportingbetVal');
-            if (sbVal) sbVal.textContent = Format.currency(realStats.superbetEarnings);
-            if (spVal) spVal.textContent = Format.currency(realStats.sportingbetEarnings);
+            // Update stats by ID without re-rendering (avoids overwriting CPA deal inputs)
+            var el;
+            el = document.getElementById('modalSbRegs'); if (el) el.textContent = realStats.registrations;
+            el = document.getElementById('modalSbCpas'); if (el) el.textContent = realStats.qualified_cpa;
+            el = document.getElementById('modalSuperbetVal'); if (el) el.textContent = Format.currency(realStats.superbetEarnings);
+            el = document.getElementById('modalSpFtds'); if (el) el.textContent = realStats.sbFtds;
+            el = document.getElementById('modalSpCpas'); if (el) el.textContent = realStats.sbFtds;
+            el = document.getElementById('modalSportingbetVal'); if (el) el.textContent = Format.currency(realStats.sportingbetEarnings);
+            el = document.getElementById('modalTotalEarnings'); if (el) el.textContent = Format.currency(totalEarnings);
         }
 
         function renderAffiliateModal(user, realStats, totalEarnings, deals) {
@@ -589,8 +585,8 @@
                         <h4 style="margin: 0; color: var(--accent);">Superbet</h4>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-                        <div><div style="font-size: 1.3rem; font-weight: 700;">${realStats.registrations}</div><div style="font-size: 0.75rem; color: var(--text-muted);">Registros</div></div>
-                        <div><div style="font-size: 1.3rem; font-weight: 700; color: var(--success);">${realStats.qualified_cpa}</div><div style="font-size: 0.75rem; color: var(--text-muted);">CPAs</div></div>
+                        <div><div id="modalSbRegs" style="font-size: 1.3rem; font-weight: 700;">${realStats.registrations}</div><div style="font-size: 0.75rem; color: var(--text-muted);">Registros</div></div>
+                        <div><div id="modalSbCpas" style="font-size: 1.3rem; font-weight: 700; color: var(--success);">${realStats.qualified_cpa}</div><div style="font-size: 0.75rem; color: var(--text-muted);">CPAs</div></div>
                         <div><div id="modalSuperbetVal" style="font-size: 1.3rem; font-weight: 700; color: var(--accent-primary);">${Format.currency(realStats.superbetEarnings)}</div><div style="font-size: 0.75rem; color: var(--text-muted);">Ganho</div></div>
                     </div>
                 </div>
@@ -601,15 +597,15 @@
                         <h4 style="margin: 0; color: #4CAF50;">Sportingbet</h4>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-                        <div><div style="font-size: 1.3rem; font-weight: 700;">${realStats.sbFtds}</div><div style="font-size: 0.75rem; color: var(--text-muted);">FTDs</div></div>
-                        <div><div style="font-size: 1.3rem; font-weight: 700; color: var(--success);">${realStats.sbFtds}</div><div style="font-size: 0.75rem; color: var(--text-muted);">CPAs</div></div>
+                        <div><div id="modalSpFtds" style="font-size: 1.3rem; font-weight: 700;">${realStats.sbFtds}</div><div style="font-size: 0.75rem; color: var(--text-muted);">FTDs</div></div>
+                        <div><div id="modalSpCpas" style="font-size: 1.3rem; font-weight: 700; color: var(--success);">${realStats.sbFtds}</div><div style="font-size: 0.75rem; color: var(--text-muted);">CPAs</div></div>
                         <div><div id="modalSportingbetVal" style="font-size: 1.3rem; font-weight: 700; color: #4CAF50;">${Format.currency(realStats.sportingbetEarnings)}</div><div style="font-size: 0.75rem; color: var(--text-muted);">Ganho</div></div>
                     </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px;">
                     <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">${Format.currency(totalEarnings)}</div>
+                        <div id="modalTotalEarnings" style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">${Format.currency(totalEarnings)}</div>
                         <div style="font-size: 0.8rem; color: var(--text-muted);">Total Ganho</div>
                     </div>
                     <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
