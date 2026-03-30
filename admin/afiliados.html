@@ -521,7 +521,7 @@
             if (!user) return;
 
             var deals = user.cpa_deals || { superbet: 200, sportingbet: 180 };
-            var realStats = { registrations: 0, ftds: 0, qualified_cpa: 0, deposit: 0, cpa_api: 0, rvs: 0, total_commission: 0, superbetEarnings: 0, sportingbetEarnings: 0, sbFtds: 0 };
+            var realStats = { registrations: 0, ftds: 0, qualified_cpa: 0, deposit: 0, cpa_api: 0, rvs: 0, total_commission: 0, superbetEarnings: 0, sportingbetEarnings: 0, sbFtds: 0, vupiVisitas: 0, vupiRegs: 0, vupiFtds: 0, vupiFtdsAmount: 0, vupiQftds: 0, vupiDepositos: 0, vupiDepAmount: 0, vupiGgr: 0, vupiNgr: 0, vupiCpa: 0, vupiRevshare: 0, vupiEarnings: 0 };
             var totalEarnings = 0;
             var totalFtds = 0;
 
@@ -555,10 +555,31 @@
                         realStats.sportingbetEarnings = realStats.sbFtds * (deals.sportingbet || 180);
                     }
                 }
+                // Fetch VUPI data
+                var vupiRes = await fetch('/api/vupi?affiliate_id=' + user.id);
+                if (vupiRes.ok) {
+                    var vupiData = await vupiRes.json();
+                    if (Array.isArray(vupiData)) {
+                        vupiData.forEach(function(r) {
+                            realStats.vupiVisitas += (r.visitas || 0);
+                            realStats.vupiRegs += (r.registros || 0);
+                            realStats.vupiFtds += (r.ftds || 0);
+                            realStats.vupiFtdsAmount += parseFloat(r.ftds_amount || 0);
+                            realStats.vupiQftds += (r.qftds || 0);
+                            realStats.vupiDepositos += (r.depositos || 0);
+                            realStats.vupiDepAmount += parseFloat(r.deposito_amount || 0);
+                            realStats.vupiGgr += parseFloat(r.ggr || 0);
+                            realStats.vupiNgr += parseFloat(r.ngr || 0);
+                            realStats.vupiCpa += parseFloat(r.cpa || 0);
+                            realStats.vupiRevshare += parseFloat(r.revshare || 0);
+                        });
+                        realStats.vupiEarnings = realStats.vupiQftds * (deals.vupi || 80);
+                    }
+                }
             } catch(e) { console.error('Erro ao buscar stats:', e); }
 
-            totalEarnings = realStats.superbetEarnings + realStats.sportingbetEarnings;
-            totalFtds = realStats.ftds + realStats.sbFtds;
+            totalEarnings = realStats.superbetEarnings + realStats.sportingbetEarnings + realStats.vupiEarnings;
+            totalFtds = realStats.ftds + realStats.sbFtds + realStats.vupiQftds;
 
             // Update stats by ID without re-rendering (avoids overwriting CPA deal inputs)
             var updates = {
@@ -573,6 +594,18 @@
                 'modalSpFtds': realStats.sbFtds,
                 'modalSpCpas': realStats.sbFtds,
                 'modalSportingbetVal': Format.currency(realStats.sportingbetEarnings),
+                'modalVupiVisitas': realStats.vupiVisitas,
+                'modalVupiRegs': realStats.vupiRegs,
+                'modalVupiFtds': realStats.vupiFtds,
+                'modalVupiFtdsAmt': Format.currency(realStats.vupiFtdsAmount),
+                'modalVupiQftds': realStats.vupiQftds,
+                'modalVupiDeps': realStats.vupiDepositos,
+                'modalVupiDepAmt': Format.currency(realStats.vupiDepAmount),
+                'modalVupiGgr': Format.currency(realStats.vupiGgr),
+                'modalVupiNgr': Format.currency(realStats.vupiNgr),
+                'modalVupiCpa': Format.currency(realStats.vupiCpa),
+                'modalVupiRevshare': Format.currency(realStats.vupiRevshare),
+                'modalVupiEarnings': Format.currency(realStats.vupiEarnings),
                 'modalTotalEarnings': Format.currency(totalEarnings)
             };
             Object.keys(updates).forEach(function(id) {
@@ -621,6 +654,31 @@
                         <div><div id="modalSpFtds" style="font-size: 1.2rem; font-weight: 700;">${realStats.sbFtds}</div><div style="font-size: 0.7rem; color: var(--text-muted);">FTDs</div></div>
                         <div><div id="modalSpCpas" style="font-size: 1.2rem; font-weight: 700; color: var(--success);">${realStats.sbFtds}</div><div style="font-size: 0.7rem; color: var(--text-muted);">CPAs</div></div>
                         <div><div id="modalSportingbetVal" style="font-size: 1.2rem; font-weight: 700; color: #4CAF50;">${Format.currency(realStats.sportingbetEarnings)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Ganho Fenix</div></div>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                        <span style="font-size: 1.1rem;">🎯</span>
+                        <h4 style="margin: 0; color: #7C3AED;">VUPI</h4>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px;">
+                        <div><div id="modalVupiVisitas" style="font-size: 1.2rem; font-weight: 700;">${realStats.vupiVisitas}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Visitas</div></div>
+                        <div><div id="modalVupiRegs" style="font-size: 1.2rem; font-weight: 700;">${realStats.vupiRegs}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Registros</div></div>
+                        <div><div id="modalVupiFtds" style="font-size: 1.2rem; font-weight: 700;">${realStats.vupiFtds}</div><div style="font-size: 0.7rem; color: var(--text-muted);">FTDs</div></div>
+                        <div><div id="modalVupiFtdsAmt" style="font-size: 1.2rem; font-weight: 700; color: var(--info);">${Format.currency(realStats.vupiFtdsAmount)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">FTDs Amount</div></div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px;">
+                        <div><div id="modalVupiQftds" style="font-size: 1.2rem; font-weight: 700; color: var(--success);">${realStats.vupiQftds}</div><div style="font-size: 0.7rem; color: var(--text-muted);">QFTDs</div></div>
+                        <div><div id="modalVupiDeps" style="font-size: 1.2rem; font-weight: 700;">${realStats.vupiDepositos}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Depositos</div></div>
+                        <div><div id="modalVupiDepAmt" style="font-size: 1.2rem; font-weight: 700; color: var(--info);">${Format.currency(realStats.vupiDepAmount)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Dep Amount</div></div>
+                        <div><div id="modalVupiGgr" style="font-size: 1.2rem; font-weight: 700; color: #F59E0B;">${Format.currency(realStats.vupiGgr)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">GGR</div></div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <div><div id="modalVupiNgr" style="font-size: 1.2rem; font-weight: 700; color: #3B82F6;">${Format.currency(realStats.vupiNgr)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">NGR</div></div>
+                        <div><div id="modalVupiCpa" style="font-size: 1.2rem; font-weight: 700; color: #22C55E;">${Format.currency(realStats.vupiCpa)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">CPA</div></div>
+                        <div><div id="modalVupiRevshare" style="font-size: 1.2rem; font-weight: 700; color: #8B5CF6;">${Format.currency(realStats.vupiRevshare)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">RevShare</div></div>
+                        <div><div id="modalVupiEarnings" style="font-size: 1.2rem; font-weight: 700; color: #7C3AED;">${Format.currency(realStats.vupiEarnings)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Ganho Fenix</div></div>
                     </div>
                 </div>
 
