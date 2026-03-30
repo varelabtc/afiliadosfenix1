@@ -137,6 +137,22 @@ const BettingHouses = {
                 totalClicks: 0,
                 totalConversions: 0,
                 totalPaid: 0
+            },
+            {
+                id: 5,
+                name: 'Blaze',
+                slug: 'blaze',
+                logo: '🔥',
+                color: '#E53935',
+                baseUrl: 'https://blaze.com',
+                cpa: 150.00,
+                revShare: 0,
+                minDeposit: 20.00,
+                status: 'active',
+                totalAffiliates: 0,
+                totalClicks: 0,
+                totalConversions: 0,
+                totalPaid: 0
             }
         ];
 
