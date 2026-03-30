@@ -105,7 +105,7 @@
                     </div>
                 </div>
 
-                <!-- Performance -->
+                <!-- Performance por Casa -->
                 <div class="card">
                     <div class="card-header">
                         <h3>Performance</h3>
@@ -115,6 +115,14 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <!-- House tabs -->
+                        <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                            <button class="house-tab active" data-house="all" onclick="switchHouse('all')" style="padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--accent); color: white; font-size: 0.8rem; font-weight: 600; cursor: pointer;">Todas</button>
+                            <button class="house-tab" data-house="superbet" onclick="switchHouse('superbet')" style="padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-input); color: var(--text-primary); font-size: 0.8rem; font-weight: 600; cursor: pointer;">Superbet</button>
+                            <button class="house-tab" data-house="sportingbet" onclick="switchHouse('sportingbet')" style="padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-input); color: var(--text-primary); font-size: 0.8rem; font-weight: 600; cursor: pointer;">Sportingbet</button>
+                            <button class="house-tab" data-house="vupi" onclick="switchHouse('vupi')" style="padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-input); color: var(--text-primary); font-size: 0.8rem; font-weight: 600; cursor: pointer;">VUPI</button>
+                        </div>
+
                         <div class="perf-grid">
                             <div class="perf-item">
                                 <div class="perf-value" id="perfRegistros">0</div>
@@ -131,6 +139,28 @@
                             <div class="perf-item">
                                 <div class="perf-value" id="perfDepositos">R$ 0</div>
                                 <div class="perf-label">Lucro</div>
+                            </div>
+                        </div>
+
+                        <!-- VUPI extra stats (hidden by default) -->
+                        <div id="vupiExtraStats" style="display: none; margin-top: 12px;">
+                            <div class="perf-grid">
+                                <div class="perf-item">
+                                    <div class="perf-value" id="perfVupiVisitas">0</div>
+                                    <div class="perf-label">Visitas</div>
+                                </div>
+                                <div class="perf-item">
+                                    <div class="perf-value" id="perfVupiDeps">0</div>
+                                    <div class="perf-label">Depositos</div>
+                                </div>
+                                <div class="perf-item">
+                                    <div class="perf-value" id="perfVupiGgr">R$ 0</div>
+                                    <div class="perf-label">GGR</div>
+                                </div>
+                                <div class="perf-item">
+                                    <div class="perf-value" id="perfVupiNgr">R$ 0</div>
+                                    <div class="perf-label">NGR</div>
+                                </div>
                             </div>
                         </div>
 
@@ -187,8 +217,15 @@
                                 <span class="platform-name">Sportingbet</span>
                                 <span class="platform-value" id="sportingbetValue">R$ 0</span>
                             </div>
+                            <div class="progress-bar" style="margin-bottom: 16px;">
+                                <div class="progress-fill" id="sportingbetBar" style="width: 0%; background: #22C55E;"></div>
+                            </div>
+                            <div class="platform-row">
+                                <span class="platform-name">VUPI</span>
+                                <span class="platform-value" id="vupiValue">R$ 0</span>
+                            </div>
                             <div class="progress-bar">
-                                <div class="progress-fill" id="sportingbetBar" style="width: 0%; background: var(--yellow);"></div>
+                                <div class="progress-fill" id="vupiBar" style="width: 0%; background: #7C3AED;"></div>
                             </div>
                         </div>
                     </div>
@@ -219,6 +256,8 @@
     <script src="../js/main.js?v=4"></script>
     <script>
         var superbetCache = null;
+        var allHouseStats = { superbet: {}, sportingbet: {}, vupi: {}, all: {} };
+        var currentHouse = 'all';
 
         document.addEventListener('DOMContentLoaded', async function() {
             if (!Auth.requireAuth()) return;
@@ -319,40 +358,111 @@
                 }
             } catch (e) {}
 
-            // Update UI with combined data (Superbet + Sportingbet)
-            // Use custom CPA deals if set, otherwise defaults
-            var deals = user.cpa_deals || { superbet: 200, sportingbet: 180 };
+            // Fetch VUPI data
+            var vupiStats = { visitas: 0, registros: 0, ftds: 0, ftds_amount: 0, qftds: 0, depositos: 0, deposito_amount: 0, ggr: 0, ngr: 0, cpa: 0, revshare: 0 };
+            try {
+                var vupiRes = await fetch('/api/vupi?affiliate_id=' + user.id);
+                if (vupiRes.ok) {
+                    var vupiData = await vupiRes.json();
+                    if (Array.isArray(vupiData)) {
+                        vupiData.forEach(function(r) {
+                            vupiStats.visitas += (r.visitas || 0);
+                            vupiStats.registros += (r.registros || 0);
+                            vupiStats.ftds += (r.ftds || 0);
+                            vupiStats.ftds_amount += parseFloat(r.ftds_amount || 0);
+                            vupiStats.qftds += (r.qftds || 0);
+                            vupiStats.depositos += (r.depositos || 0);
+                            vupiStats.deposito_amount += parseFloat(r.deposito_amount || 0);
+                            vupiStats.ggr += parseFloat(r.ggr || 0);
+                            vupiStats.ngr += parseFloat(r.ngr || 0);
+                            vupiStats.cpa += parseFloat(r.cpa || 0);
+                            vupiStats.revshare += parseFloat(r.revshare || 0);
+                        });
+                    }
+                }
+            } catch(e) {}
+
+            // CPA deals
+            var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, vupi: 80 };
             var cpaSuperbet = deals.superbet || 200;
             var cpaSportingbet = deals.sportingbet || 180;
+            var cpaVupi = deals.vupi || 80;
+
             var superbetEarnings = Math.round(stats.qualified_cpa) * cpaSuperbet;
             var sportingbetEarnings = sbStats.ftds * cpaSportingbet;
-            var totalEarnings = superbetEarnings + sportingbetEarnings;
+            var vupiEarnings = vupiStats.qftds * cpaVupi;
+            var totalEarnings = superbetEarnings + sportingbetEarnings + vupiEarnings;
 
+            // Store per-house stats
+            allHouseStats.superbet = { regs: stats.registrations, ftds: stats.first_deposits, cpas: stats.qualified_cpa, lucro: superbetEarnings };
+            allHouseStats.sportingbet = { regs: 0, ftds: sbStats.ftds, cpas: sbStats.ftds, lucro: sportingbetEarnings };
+            allHouseStats.vupi = { regs: vupiStats.registros, ftds: vupiStats.ftds, cpas: vupiStats.qftds, lucro: vupiEarnings, visitas: vupiStats.visitas, depositos: vupiStats.depositos, ggr: vupiStats.ggr, ngr: vupiStats.ngr };
+            allHouseStats.all = {
+                regs: stats.registrations + vupiStats.registros,
+                ftds: stats.first_deposits + sbStats.ftds + vupiStats.ftds,
+                cpas: stats.qualified_cpa + sbStats.ftds + vupiStats.qftds,
+                lucro: totalEarnings
+            };
+
+            // Top stats
             document.getElementById('totalSaque').textContent = Format.currency(totalEarnings);
             document.getElementById('emConversao').textContent = Format.currency(0);
-            document.getElementById('depositantes').textContent = Math.round(stats.first_deposits + sbStats.ftds);
-            document.getElementById('meusLinks').textContent = Math.round(stats.qualified_cpa + sbStats.ftds);
-
-            // Performance (combined)
-            document.getElementById('perfRegistros').textContent = Math.round(stats.registrations);
-            document.getElementById('perfFTDs').textContent = Math.round(stats.first_deposits + sbStats.ftds);
-            document.getElementById('perfCPAs').textContent = Math.round(stats.qualified_cpa + sbStats.ftds);
-            document.getElementById('perfDepositos').textContent = Format.currency(totalEarnings);
+            document.getElementById('depositantes').textContent = allHouseStats.all.ftds;
+            document.getElementById('meusLinks').textContent = allHouseStats.all.cpas;
 
             // Platform breakdown
             document.getElementById('superbetValue').textContent = Format.currency(superbetEarnings);
             document.getElementById('sportingbetValue').textContent = Format.currency(sportingbetEarnings);
-            var maxVal = Math.max(superbetEarnings, sportingbetEarnings) || 1;
+            document.getElementById('vupiValue').textContent = Format.currency(vupiEarnings);
+            var maxVal = Math.max(superbetEarnings, sportingbetEarnings, vupiEarnings) || 1;
             document.getElementById('superbetBar').style.width = (superbetEarnings / maxVal * 100) + '%';
             document.getElementById('sportingbetBar').style.width = (sportingbetEarnings / maxVal * 100) + '%';
+            document.getElementById('vupiBar').style.width = (vupiEarnings / maxVal * 100) + '%';
 
-            // Recent commissions from daily data + sportingbet
+            // Show current house performance
+            switchHouse(currentHouse);
+
+            // Recent commissions
             var sbCpaList = [];
             try {
                 var sbRes2 = await fetch('/api/sportingbet-cpa?affiliate_id=' + user.id + '&startDate=' + fmt(start) + '&endDate=' + fmt(end));
                 if (sbRes2.ok) sbCpaList = await sbRes2.json();
             } catch(e) {}
             loadRecentCommissions(dailyData, sbCpaList, cpaSuperbet, cpaSportingbet);
+        }
+
+        function switchHouse(house) {
+            currentHouse = house;
+            var s = allHouseStats[house] || allHouseStats.all;
+
+            // Update tabs style
+            document.querySelectorAll('.house-tab').forEach(function(btn) {
+                if (btn.dataset.house === house) {
+                    btn.style.background = 'var(--accent)';
+                    btn.style.color = 'white';
+                } else {
+                    btn.style.background = 'var(--bg-input)';
+                    btn.style.color = 'var(--text-primary)';
+                }
+            });
+
+            // Update performance numbers
+            document.getElementById('perfRegistros').textContent = Math.round(s.regs || 0);
+            document.getElementById('perfFTDs').textContent = Math.round(s.ftds || 0);
+            document.getElementById('perfCPAs').textContent = Math.round(s.cpas || 0);
+            document.getElementById('perfDepositos').textContent = Format.currency(s.lucro || 0);
+
+            // Show/hide VUPI extra stats
+            var vupiExtra = document.getElementById('vupiExtraStats');
+            if (house === 'vupi') {
+                vupiExtra.style.display = '';
+                document.getElementById('perfVupiVisitas').textContent = s.visitas || 0;
+                document.getElementById('perfVupiDeps').textContent = s.depositos || 0;
+                document.getElementById('perfVupiGgr').textContent = Format.currency(s.ggr || 0);
+                document.getElementById('perfVupiNgr').textContent = Format.currency(s.ngr || 0);
+            } else {
+                vupiExtra.style.display = 'none';
+            }
         }
 
         function initChart() {
