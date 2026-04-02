@@ -279,6 +279,22 @@
                 defaultCPA: 20,
                 maxCPA: 150,
                 color: '#E53935'
+            },
+            {
+                id: 'jonbet',
+                name: 'Jonbet',
+                subtitle: 'Jonbet Brasil',
+                logo: '../img/jonbet-logo.webp',
+                baseline: 'R$20',
+                bonus: 'R$150',
+                wager: '1x',
+                payment: 'Mensal - dia 15',
+                currency: 'BRL',
+                metaTypes: ['QFTD'],
+                models: [{ type: 'CPA', value: null }],
+                defaultCPA: 20,
+                maxCPA: 150,
+                color: '#1E90FF'
             }
         ];
 
@@ -326,7 +342,7 @@
             return Auth.currentUser || null;
         }
 
-        var HOUSE_ID_MAP = { 'superbet': '1', 'sportingbet': '2', 'estrelabet': '3', 'vupi': '4', 'blaze': '5' };
+        var HOUSE_ID_MAP = { 'superbet': '1', 'sportingbet': '2', 'estrelabet': '3', 'vupi': '4', 'blaze': '5', 'jonbet': '6' };
 
         function getOfferStatus(offerId) {
             const fullUser = getFullUserData();

@@ -20,7 +20,8 @@ const HOUSE_IDS = {
     'sportingbet': '2',
     'estrelabet': '3',
     'vupi': '4',
-    'blaze': '5'
+    'blaze': '5',
+    'jonbet': '6'
 };
 
 module.exports = async function handler(req, res) {

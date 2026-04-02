@@ -153,6 +153,22 @@ const BettingHouses = {
                 totalClicks: 0,
                 totalConversions: 0,
                 totalPaid: 0
+            },
+            {
+                id: 6,
+                name: 'Jonbet',
+                slug: 'jonbet',
+                logo: '🎯',
+                color: '#1E90FF',
+                baseUrl: 'https://jonbet.com',
+                cpa: 150.00,
+                revShare: 0,
+                minDeposit: 20.00,
+                status: 'active',
+                totalAffiliates: 0,
+                totalClicks: 0,
+                totalConversions: 0,
+                totalPaid: 0
             }
         ];
 

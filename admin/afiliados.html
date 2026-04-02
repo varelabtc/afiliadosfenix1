@@ -445,7 +445,7 @@
 
                 // Update each user row
                 users.forEach(function(user) {
-                    var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80, blaze: 150 };
+                    var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80, blaze: 150, jonbet: 150 };
                     var totalEarnings = 0;
                     var totalConv = 0;
 
@@ -500,7 +500,8 @@
             var estrelabet = parseFloat(document.getElementById('dealEstrelabet').value) || 110;
             var vupi = parseFloat(document.getElementById('dealVupi').value) || 80;
             var blaze = parseFloat(document.getElementById('dealBlaze').value) || 150;
-            var cpaDeals = { superbet: superbet, sportingbet: sportingbet, estrelabet: estrelabet, vupi: vupi, blaze: blaze };
+            var jonbet = parseFloat(document.getElementById('dealJonbet').value) || 150;
+            var cpaDeals = { superbet: superbet, sportingbet: sportingbet, estrelabet: estrelabet, vupi: vupi, blaze: blaze, jonbet: jonbet };
             try {
                 await SupabaseDB.updateUser(userId, { cpa_deals: cpaDeals });
                 await AffiliateManager.fetchAll();
@@ -725,7 +726,7 @@
                 <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
                     <h4 style="margin-bottom: 12px;">Acordos CPA</h4>
                     ${(function() {
-                        var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80, blaze: 150 };
+                        var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80, blaze: 150, jonbet: 150 };
                         return '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 10px;">' +
                             '<div>' +
                                 '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Superbet (R$)</label>' +
@@ -746,6 +747,10 @@
                             '<div>' +
                                 '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Blaze (R$)</label>' +
                                 '<input type="number" id="dealBlaze" value="' + (deals.blaze || 150) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
+                            '</div>' +
+                            '<div>' +
+                                '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Jonbet (R$)</label>' +
+                                '<input type="number" id="dealJonbet" value="' + (deals.jonbet || 150) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
                             '</div>' +
                         '</div>' +
                         '<button onclick="saveCpaDeals(' + user.id + ')" style="padding: 8px 20px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Salvar Acordos</button>';
@@ -871,7 +876,7 @@
             e.preventDefault();
             const userId = parseInt(document.getElementById('cpaUserId').value);
             const houses = BettingHouses.getAll();
-            var slugMap = { 1: 'superbet', 2: 'sportingbet', 3: 'estrelabet', 4: 'vupi', 5: 'blaze' };
+            var slugMap = { 1: 'superbet', 2: 'sportingbet', 3: 'estrelabet', 4: 'vupi', 5: 'blaze', 6: 'jonbet' };
             var cpaDeals = {};
 
             houses.forEach(function(house) {
@@ -1028,7 +1033,7 @@
             if (otgId) updateData.otg_affiliate_id = otgId;
 
             // Clear link_requests for houses that now have links
-            var slugMap = { 1: 'superbet', 2: 'sportingbet', 3: 'estrelabet', 4: 'vupi', 5: 'blaze' };
+            var slugMap = { 1: 'superbet', 2: 'sportingbet', 3: 'estrelabet', 4: 'vupi', 5: 'blaze', 6: 'jonbet' };
             var currentRequests = user.link_requests || [];
             if (currentRequests.length > 0) {
                 var remaining = currentRequests.filter(function(req) {
