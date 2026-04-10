@@ -464,21 +464,15 @@
                 var start = new Date();
                 start.setDate(end.getDate() - houseDays);
                 var fmt = function(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
-                var res = await fetch('/api/superbet?action=results&startDate=' + fmt(start) + '&endDate=' + fmt(end) + '&limit=1000');
-                if (res.ok) {
-                    var json = await res.json();
-                    var rows = (json.data && json.data.data) || json.data || [];
-                    if (Array.isArray(rows)) {
-                        rows.forEach(function(r) {
-                            sbStats.registrations += (r.registrations || 0);
-                            sbStats.first_deposits += (r.first_deposits || 0);
-                            sbStats.qualified_cpa += (r.qualified_cpa || 0);
-                            sbStats.cpa += (r.cpa || 0);
-                            sbStats.rvs += (r.rvs || 0);
-                            sbStats.lucro += (r.lucro_tipster || 0);
-                        });
-                    }
-                }
+                var rows = await fetchAllPages('/api/superbet?action=results&startDate=' + fmt(start) + '&endDate=' + fmt(end));
+                rows.forEach(function(r) {
+                    sbStats.registrations += (r.registrations || 0);
+                    sbStats.first_deposits += (r.first_deposits || 0);
+                    sbStats.qualified_cpa += (r.qualified_cpa || 0);
+                    sbStats.cpa += (r.cpa || 0);
+                    sbStats.rvs += (r.rvs || 0);
+                    sbStats.lucro += (r.lucro_tipster || 0);
+                });
             } catch (e) { console.error('Erro API casas:', e); }
 
             // R$200 per qualified CPA
@@ -635,6 +629,27 @@
             return { startDate: fmt(start), endDate: fmt(end) };
         }
 
+        // Fetch all pages from Superbet API (max 100 per page)
+        async function fetchAllPages(baseUrl) {
+            var allRows = [];
+            var page = 1;
+            while (true) {
+                var url = baseUrl + '&limit=100&page=' + page;
+                var res = await fetch(url);
+                if (!res.ok) {
+                    if (page === 1) throw new Error((await res.json().catch(function() { return {}; })).message || 'Erro ' + res.status);
+                    break;
+                }
+                var json = await res.json();
+                var rows = (json.data && json.data.data) || json.data || [];
+                if (!Array.isArray(rows) || rows.length === 0) break;
+                allRows = allRows.concat(rows);
+                if (rows.length < 100) break;
+                page++;
+            }
+            return allRows;
+        }
+
         async function loadSuperbetData() {
             var loading = document.getElementById('sbLoading');
             var error = document.getElementById('sbError');
@@ -650,28 +665,14 @@
             var range = getDateRange(days);
 
             try {
-                // Fetch totals (no groupBy), by affiliate, and by campaign in parallel
+                // Fetch totals (no groupBy), by affiliate, and by campaign in parallel (with pagination)
                 var base = '/api/superbet?action=results&startDate=' + range.startDate + '&endDate=' + range.endDate;
 
-                var [totalRes, affRes, campRes] = await Promise.all([
-                    fetch(base + '&limit=1000'),
-                    fetch(base + '&groupBy=affiliate&limit=1000'),
-                    fetch(base + '&groupBy=campaign&limit=1000')
+                var [totalData, affData, campData] = await Promise.all([
+                    fetchAllPages(base),
+                    fetchAllPages(base + '&groupBy=affiliate'),
+                    fetchAllPages(base + '&groupBy=campaign')
                 ]);
-
-                if (!totalRes.ok || !affRes.ok || !campRes.ok) {
-                    var errData = await totalRes.json().catch(function() { return {}; });
-                    throw new Error(errData.message || errData.error || 'Erro ' + totalRes.status);
-                }
-
-                var totalJson = await totalRes.json();
-                var affJson = await affRes.json();
-                var campJson = await campRes.json();
-
-                // API returns { data: { data: [...] } } — extract inner array
-                var totalData = (totalJson.data && totalJson.data.data) || totalJson.data || [];
-                var affData = (affJson.data && affJson.data.data) || affJson.data || [];
-                var campData = (campJson.data && campJson.data.data) || campJson.data || [];
 
                 // Calculate totals from granular data
                 var totals = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, lucro_tipster: 0 };
