@@ -455,14 +455,16 @@
         async function loadHousesPerformance() {
             var container = document.getElementById('housesGrid');
 
-            // Fetch real Superbet totals from API
+            // Fetch real Superbet totals from API (use selected period or default 90 days)
             var sbStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, lucro: 0 };
             try {
+                var periodSelect = document.getElementById('sbPeriod');
+                var houseDays = periodSelect ? (parseInt(periodSelect.value) || 90) : 90;
                 var end = new Date();
                 var start = new Date();
-                start.setDate(end.getDate() - 30);
-                var fmt = function(d) { return d.toISOString().split('T')[0]; };
-                var res = await fetch('/api/superbet?action=results&startDate=' + fmt(start) + '&endDate=' + fmt(end) + '&limit=100');
+                start.setDate(end.getDate() - houseDays);
+                var fmt = function(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+                var res = await fetch('/api/superbet?action=results&startDate=' + fmt(start) + '&endDate=' + fmt(end) + '&limit=1000');
                 if (res.ok) {
                     var json = await res.json();
                     var rows = (json.data && json.data.data) || json.data || [];
@@ -652,9 +654,9 @@
                 var base = '/api/superbet?action=results&startDate=' + range.startDate + '&endDate=' + range.endDate;
 
                 var [totalRes, affRes, campRes] = await Promise.all([
-                    fetch(base + '&limit=100'),
-                    fetch(base + '&groupBy=affiliate&limit=100'),
-                    fetch(base + '&groupBy=campaign&limit=100')
+                    fetch(base + '&limit=1000'),
+                    fetch(base + '&groupBy=affiliate&limit=1000'),
+                    fetch(base + '&groupBy=campaign&limit=1000')
                 ]);
 
                 if (!totalRes.ok || !affRes.ok || !campRes.ok) {
