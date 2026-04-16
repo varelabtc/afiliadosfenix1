@@ -393,6 +393,11 @@
 
                     var [sbRes, spRes] = await Promise.all([fetch(sbAggUrl), fetch(spAggUrl)]);
 
+                    // CPA deals from user config (affiliate values, not agency)
+                    var deals = user.cpa_deals || { superbet: 200, sportingbet: 180 };
+                    var cpaSb = deals.superbet || 200;
+                    var cpaSp = deals.sportingbet || 180;
+
                     // Superbet commissions
                     if (sbRes.ok) {
                         var sbJson = await sbRes.json();
@@ -400,13 +405,12 @@
                         if (Array.isArray(sbRows)) {
                             sbRows.forEach(function(r) {
                                 var qcpa = Math.round(r.qualified_cpa || 0);
-                                var commission = r.total_commission || 0;
-                                if (qcpa > 0 || commission > 0) {
+                                if (qcpa > 0) {
                                     allCommissions.push({
                                         type: 'cpa',
                                         platform: 'superbet',
                                         description: 'CPA Superbet - ' + qcpa + ' qualificado(s)',
-                                        amount: commission || (qcpa * 200),
+                                        amount: qcpa * cpaSb,
                                         date: startDate + ' a ' + endDate,
                                         status: 'paid'
                                     });
@@ -422,13 +426,12 @@
                         if (Array.isArray(spRows)) {
                             spRows.forEach(function(r) {
                                 var qcpa = Math.round(r.qualified_cpa || 0);
-                                var commission = r.total_commission || 0;
-                                if (qcpa > 0 || commission > 0) {
+                                if (qcpa > 0) {
                                     allCommissions.push({
                                         type: 'cpa',
                                         platform: 'sportingbet',
                                         description: 'CPA Sportingbet - ' + qcpa + ' qualificado(s)',
-                                        amount: commission || (qcpa * 180),
+                                        amount: qcpa * cpaSp,
                                         date: startDate + ' a ' + endDate,
                                         status: 'paid'
                                     });

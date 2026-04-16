@@ -496,8 +496,8 @@
             var cpaSportingbet = deals.sportingbet || 180;
             var cpaVupi = deals.vupi || 80;
 
-            var superbetEarnings = sbStats.total_commission || (Math.round(sbStats.qualified_cpa) * cpaSuperbet);
-            var sportingbetEarnings = spStats.total_commission || (Math.round(spStats.qualified_cpa) * cpaSportingbet);
+            var superbetEarnings = Math.round(sbStats.qualified_cpa) * cpaSuperbet;
+            var sportingbetEarnings = Math.round(spStats.qualified_cpa) * cpaSportingbet;
             var vupiEarnings = vupiStats.qftds * cpaVupi;
             var totalEarnings = superbetEarnings + sportingbetEarnings + vupiEarnings;
 
@@ -601,27 +601,25 @@
 
             var items = [];
 
-            // Superbet commissions - use total_commission from API when available
+            // Superbet commissions - use affiliate deal value (not agency value from API)
             if (dailyData && dailyData.length > 0) {
                 dailyData.filter(function(r) {
-                    return (r.qualified_cpa || 0) > 0 || (r.cpa || 0) > 0;
+                    return (r.qualified_cpa || 0) > 0;
                 }).forEach(function(r) {
                     var date = r.id || r.label || r.date || '-';
                     var qty = Math.round(r.qualified_cpa || 0);
-                    var amount = (r.cpa || 0) > 0 ? r.cpa : qty * (cpaSuperbet || 250);
-                    items.push({ date: date, house: 'Superbet', detail: qty + ' CPA qualificado', amount: amount });
+                    items.push({ date: date, house: 'Superbet', detail: qty + ' CPA qualificado', amount: qty * (cpaSuperbet || 200) });
                 });
             }
 
-            // Sportingbet commissions - use total_commission from API when available
+            // Sportingbet commissions - use affiliate deal value
             if (spDailyData && spDailyData.length > 0) {
                 spDailyData.filter(function(r) {
-                    return (r.qualified_cpa || 0) > 0 || (r.cpa || 0) > 0;
+                    return (r.qualified_cpa || 0) > 0;
                 }).forEach(function(r) {
                     var date = r.id || r.label || r.date || '-';
                     var qty = Math.round(r.qualified_cpa || 0);
-                    var amount = (r.cpa || 0) > 0 ? r.cpa : qty * (cpaSportingbet || 180);
-                    items.push({ date: date, house: 'Sportingbet', detail: qty + ' CPA qualificado', amount: amount });
+                    items.push({ date: date, house: 'Sportingbet', detail: qty + ' CPA qualificado', amount: qty * (cpaSportingbet || 180) });
                 });
             }
 
