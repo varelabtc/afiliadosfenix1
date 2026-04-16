@@ -1,12 +1,13 @@
-// Vercel Serverless Function - Superbet/OTG Partners API Proxy
-// Keeps API key secure on server side, never exposed to browser
+// Vercel Serverless Function - OTG Partners API V2 Proxy (Multi-Brand)
+// Supports Superbet + Sportingbet via brand field
 //
 // Usage:
 //   GET /api/superbet?action=affiliates
 //   GET /api/superbet?action=campaigns
-//   GET /api/superbet?action=results&startDate=2024-01-01&endDate=2024-01-31&groupBy=affiliate
+//   GET /api/superbet?action=results&startDate=2024-01-01&endDate=2024-12-31&groupBy=affiliate
+//   GET /api/superbet?action=results-aggregates&startDate=2024-01-01&endDate=2024-12-31&groupBy=affiliate
 
-const API_BASE = 'https://api-partners.grupootg.com/api/v1';
+const API_BASE = 'https://affiliate-api-prd.partnersotg.com/api/v2';
 
 module.exports = async function handler(req, res) {
     // CORS headers
@@ -27,7 +28,7 @@ module.exports = async function handler(req, res) {
         return res.status(500).json({ error: 'API key not configured' });
     }
 
-    const { action, startDate, endDate, groupBy, affiliateIds, campaignIds, page, limit } = req.query;
+    const { action, startDate, endDate, groupBy, affiliateIds, campaignIds, brandIds, page, limit } = req.query;
 
     let endpoint = '';
     let queryParams = '';
@@ -46,28 +47,43 @@ module.exports = async function handler(req, res) {
                 return res.status(400).json({ error: 'startDate and endDate are required' });
             }
             endpoint = '/external/results';
-            const params = new URLSearchParams();
-            params.set('startDate', startDate);
-            params.set('endDate', endDate);
-            if (groupBy) params.set('groupBy', groupBy);
-            if (page) params.set('page', page);
-            if (limit) params.set('limit', limit);
-            if (affiliateIds) {
-                const ids = Array.isArray(affiliateIds) ? affiliateIds : [affiliateIds];
-                ids.forEach(id => params.append('affiliateIds', id));
+            break;
+
+        case 'results-aggregates':
+            if (!startDate || !endDate) {
+                return res.status(400).json({ error: 'startDate and endDate are required' });
             }
-            if (campaignIds) {
-                const cids = Array.isArray(campaignIds) ? campaignIds : [campaignIds];
-                cids.forEach(id => params.append('campaignIds', id));
-            }
-            queryParams = '?' + params.toString();
+            endpoint = '/external/results-aggregates';
             break;
 
         default:
             return res.status(400).json({
                 error: 'Invalid action',
-                validActions: ['affiliates', 'campaigns', 'results']
+                validActions: ['affiliates', 'campaigns', 'results', 'results-aggregates']
             });
+    }
+
+    // Build query params for results endpoints
+    if (action === 'results' || action === 'results-aggregates') {
+        const params = new URLSearchParams();
+        params.set('startDate', startDate);
+        params.set('endDate', endDate);
+        if (groupBy) params.set('groupBy', groupBy);
+        if (page) params.set('page', page);
+        if (limit) params.set('limit', limit);
+        if (affiliateIds) {
+            const ids = Array.isArray(affiliateIds) ? affiliateIds : [affiliateIds];
+            ids.forEach(id => params.append('affiliateIds', id));
+        }
+        if (campaignIds) {
+            const cids = Array.isArray(campaignIds) ? campaignIds : [campaignIds];
+            cids.forEach(id => params.append('campaignIds', id));
+        }
+        if (brandIds) {
+            const bids = Array.isArray(brandIds) ? brandIds : [brandIds];
+            bids.forEach(id => params.append('brandIds', id));
+        }
+        queryParams = '?' + params.toString();
     }
 
     try {
@@ -76,7 +92,7 @@ module.exports = async function handler(req, res) {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'X-API-Key': apiKey,
+                'x-api-key': apiKey,
                 'Accept': 'application/json'
             }
         });
@@ -92,9 +108,9 @@ module.exports = async function handler(req, res) {
         return res.status(200).json(data);
 
     } catch (error) {
-        console.error('[SUPERBET_API_ERROR]', error.message);
+        console.error('[OTG_API_V2_ERROR]', error.message);
         return res.status(502).json({
-            error: 'Failed to fetch from OTG API',
+            error: 'Failed to fetch from OTG API v2',
             message: error.message
         });
     }
