@@ -310,12 +310,26 @@
 
         async function getAffiliateBrandIds(otgId) {
             if (affiliateBrandIds) return affiliateBrandIds;
+
+            var user = Auth.currentUser;
+            var userName = (user && user.name) ? user.name.replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() : '';
+
             try {
                 var res = await fetch('/api/superbet?action=affiliates');
                 if (res.ok) {
                     var json = await res.json();
                     var allAff = (json.data && json.data.data) || json.data || [];
+                    if (!Array.isArray(allAff)) allAff = [];
+
                     var match = allAff.find(function(a) { return a.id === otgId; });
+
+                    if (!match && userName) {
+                        match = allAff.find(function(a) {
+                            var apiName = (a.name || '').toLowerCase();
+                            return apiName === userName;
+                        });
+                    }
+
                     if (match) {
                         var name = match.name;
                         var sbId = null, spId = null;

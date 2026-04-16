@@ -320,18 +320,30 @@
         async function getAffiliateBrandIds(otgId) {
             if (affiliateBrandIds) return affiliateBrandIds;
 
-            // Fetch all affiliates from API to find both brand IDs
+            var user = Auth.currentUser;
+            // Normalize user name for matching: remove spaces, accents, uppercase
+            var userName = (user && user.name) ? user.name.replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() : '';
+
             try {
                 var res = await fetch('/api/superbet?action=affiliates');
                 if (res.ok) {
                     var json = await res.json();
                     var allAff = (json.data && json.data.data) || json.data || [];
+                    if (!Array.isArray(allAff)) allAff = [];
 
-                    // Find the affiliate name by otgId
+                    // Try to find by otgId first
                     var match = allAff.find(function(a) { return a.id === otgId; });
+
+                    // If not found by ID, try by name
+                    if (!match && userName) {
+                        match = allAff.find(function(a) {
+                            var apiName = (a.name || '').toLowerCase();
+                            return apiName === userName;
+                        });
+                    }
+
                     if (match) {
                         var name = match.name;
-                        // Find all IDs for this affiliate name
                         var sbId = null, spId = null;
                         allAff.forEach(function(a) {
                             if (a.name === name) {
@@ -339,7 +351,8 @@
                                 if (a.brand && a.brand.id === BRAND_SPORTINGBET) spId = a.id;
                             }
                         });
-                        affiliateBrandIds = { superbet: sbId, sportingbet: spId };
+                        affiliateBrandIds = { superbet: sbId, sportingbet: spId, name: name };
+                        console.log('Brand IDs encontrados:', affiliateBrandIds);
                         return affiliateBrandIds;
                     }
                 }
