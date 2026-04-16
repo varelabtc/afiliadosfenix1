@@ -308,28 +308,46 @@
         // Cache affiliate IDs per brand
         var affiliateBrandIds = null;
 
+        function normalizeName(name) {
+            return (name || '').replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        }
+
+        function findAffiliateMatch(allAff, otgId, userName) {
+            var match = allAff.find(function(a) { return a.id === otgId; });
+            if (match) return match;
+            if (!userName || userName.length < 4) return null;
+            match = allAff.find(function(a) { return normalizeName(a.name) === userName; });
+            if (match) return match;
+            var minLen = Math.min(userName.length, 8);
+            var candidates = allAff.filter(function(a) {
+                var apiName = normalizeName(a.name);
+                return apiName.indexOf(userName.substring(0, minLen)) === 0 || userName.indexOf(apiName.substring(0, minLen)) === 0;
+            });
+            if (candidates.length > 0) {
+                candidates.sort(function(a, b) {
+                    var nameA = normalizeName(a.name);
+                    var nameB = normalizeName(b.name);
+                    var commonA = 0, commonB = 0;
+                    for (var i = 0; i < Math.min(nameA.length, userName.length); i++) { if (nameA[i] === userName[i]) commonA++; else break; }
+                    for (var i = 0; i < Math.min(nameB.length, userName.length); i++) { if (nameB[i] === userName[i]) commonB++; else break; }
+                    return commonB - commonA;
+                });
+                return candidates[0];
+            }
+            return null;
+        }
+
         async function getAffiliateBrandIds(otgId) {
             if (affiliateBrandIds) return affiliateBrandIds;
-
             var user = Auth.currentUser;
-            var userName = (user && user.name) ? user.name.replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() : '';
-
+            var userName = (user && user.name) ? normalizeName(user.name) : '';
             try {
                 var res = await fetch('/api/superbet?action=affiliates');
                 if (res.ok) {
                     var json = await res.json();
                     var allAff = (json.data && json.data.data) || json.data || [];
                     if (!Array.isArray(allAff)) allAff = [];
-
-                    var match = allAff.find(function(a) { return a.id === otgId; });
-
-                    if (!match && userName) {
-                        match = allAff.find(function(a) {
-                            var apiName = (a.name || '').toLowerCase();
-                            return apiName === userName;
-                        });
-                    }
-
+                    var match = findAffiliateMatch(allAff, otgId, userName);
                     if (match) {
                         var name = match.name;
                         var sbId = null, spId = null;

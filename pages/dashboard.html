@@ -317,12 +317,49 @@
         // Cache affiliate IDs per brand (fetched once)
         var affiliateBrandIds = null;
 
+        function normalizeName(name) {
+            return (name || '').replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        }
+
+        function findAffiliateMatch(allAff, otgId, userName) {
+            // 1. Try exact ID match
+            var match = allAff.find(function(a) { return a.id === otgId; });
+            if (match) return match;
+
+            if (!userName || userName.length < 4) return null;
+
+            // 2. Try exact name match
+            match = allAff.find(function(a) { return normalizeName(a.name) === userName; });
+            if (match) return match;
+
+            // 3. Try partial match: API name starts with user name or vice versa (min 8 chars)
+            var minLen = Math.min(userName.length, 8);
+            var candidates = allAff.filter(function(a) {
+                var apiName = normalizeName(a.name);
+                return apiName.indexOf(userName.substring(0, minLen)) === 0 || userName.indexOf(apiName.substring(0, minLen)) === 0;
+            });
+
+            // Pick the best match (longest common prefix)
+            if (candidates.length > 0) {
+                candidates.sort(function(a, b) {
+                    var nameA = normalizeName(a.name);
+                    var nameB = normalizeName(b.name);
+                    var commonA = 0, commonB = 0;
+                    for (var i = 0; i < Math.min(nameA.length, userName.length); i++) { if (nameA[i] === userName[i]) commonA++; else break; }
+                    for (var i = 0; i < Math.min(nameB.length, userName.length); i++) { if (nameB[i] === userName[i]) commonB++; else break; }
+                    return commonB - commonA;
+                });
+                return candidates[0];
+            }
+
+            return null;
+        }
+
         async function getAffiliateBrandIds(otgId) {
             if (affiliateBrandIds) return affiliateBrandIds;
 
             var user = Auth.currentUser;
-            // Normalize user name for matching: remove spaces, accents, uppercase
-            var userName = (user && user.name) ? user.name.replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() : '';
+            var userName = (user && user.name) ? normalizeName(user.name) : '';
 
             try {
                 var res = await fetch('/api/superbet?action=affiliates');
@@ -331,16 +368,7 @@
                     var allAff = (json.data && json.data.data) || json.data || [];
                     if (!Array.isArray(allAff)) allAff = [];
 
-                    // Try to find by otgId first
-                    var match = allAff.find(function(a) { return a.id === otgId; });
-
-                    // If not found by ID, try by name
-                    if (!match && userName) {
-                        match = allAff.find(function(a) {
-                            var apiName = (a.name || '').toLowerCase();
-                            return apiName === userName;
-                        });
-                    }
+                    var match = findAffiliateMatch(allAff, otgId, userName);
 
                     if (match) {
                         var name = match.name;
@@ -354,11 +382,12 @@
                         affiliateBrandIds = { superbet: sbId, sportingbet: spId, name: name };
                         console.log('Brand IDs encontrados:', affiliateBrandIds);
                         return affiliateBrandIds;
+                    } else {
+                        console.warn('Afiliado não encontrado na API V2. Nome:', userName, 'ID:', otgId);
                     }
                 }
             } catch (e) { console.error('Erro ao buscar IDs de brand:', e); }
 
-            // Fallback: use the same ID for both
             affiliateBrandIds = { superbet: otgId, sportingbet: otgId };
             return affiliateBrandIds;
         }
