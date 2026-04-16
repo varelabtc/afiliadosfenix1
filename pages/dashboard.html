@@ -314,6 +314,42 @@
             return allRows;
         }
 
+        // Cache affiliate IDs per brand (fetched once)
+        var affiliateBrandIds = null;
+
+        async function getAffiliateBrandIds(otgId) {
+            if (affiliateBrandIds) return affiliateBrandIds;
+
+            // Fetch all affiliates from API to find both brand IDs
+            try {
+                var res = await fetch('/api/superbet?action=affiliates');
+                if (res.ok) {
+                    var json = await res.json();
+                    var allAff = (json.data && json.data.data) || json.data || [];
+
+                    // Find the affiliate name by otgId
+                    var match = allAff.find(function(a) { return a.id === otgId; });
+                    if (match) {
+                        var name = match.name;
+                        // Find all IDs for this affiliate name
+                        var sbId = null, spId = null;
+                        allAff.forEach(function(a) {
+                            if (a.name === name) {
+                                if (a.brand && a.brand.id === BRAND_SUPERBET) sbId = a.id;
+                                if (a.brand && a.brand.id === BRAND_SPORTINGBET) spId = a.id;
+                            }
+                        });
+                        affiliateBrandIds = { superbet: sbId, sportingbet: spId };
+                        return affiliateBrandIds;
+                    }
+                }
+            } catch (e) { console.error('Erro ao buscar IDs de brand:', e); }
+
+            // Fallback: use the same ID for both
+            affiliateBrandIds = { superbet: otgId, sportingbet: otgId };
+            return affiliateBrandIds;
+        }
+
         async function loadSuperbetStats(days) {
             const user = Auth.currentUser;
             if (!user) return;
@@ -332,16 +368,33 @@
 
             if (otgId) {
                 try {
-                    var baseUrl = '/api/superbet?action=results&startDate=' + fmt(start) + '&endDate=' + fmt(end) + '&affiliateIds=' + encodeURIComponent(otgId);
-                    var sbBase = baseUrl + '&brandIds=' + BRAND_SUPERBET;
-                    var spBase = baseUrl + '&brandIds=' + BRAND_SPORTINGBET;
+                    // Get both brand-specific IDs for this affiliate
+                    var brandIds = await getAffiliateBrandIds(otgId);
+                    var dateRange = '&startDate=' + fmt(start) + '&endDate=' + fmt(end);
 
-                    var [sbRows, sbDaily, spRows, spDaily] = await Promise.all([
-                        fetchAllPages(sbBase),
-                        fetchAllPages(sbBase + '&groupBy=date'),
-                        fetchAllPages(spBase),
-                        fetchAllPages(spBase + '&groupBy=date')
-                    ]);
+                    var fetches = [];
+
+                    // Superbet fetch
+                    if (brandIds.superbet) {
+                        var sbBase = '/api/superbet?action=results' + dateRange + '&affiliateIds=' + encodeURIComponent(brandIds.superbet) + '&brandIds=' + BRAND_SUPERBET;
+                        fetches.push(fetchAllPages(sbBase));
+                        fetches.push(fetchAllPages(sbBase + '&groupBy=date'));
+                    } else {
+                        fetches.push(Promise.resolve([]));
+                        fetches.push(Promise.resolve([]));
+                    }
+
+                    // Sportingbet fetch
+                    if (brandIds.sportingbet) {
+                        var spBase = '/api/superbet?action=results' + dateRange + '&affiliateIds=' + encodeURIComponent(brandIds.sportingbet) + '&brandIds=' + BRAND_SPORTINGBET;
+                        fetches.push(fetchAllPages(spBase));
+                        fetches.push(fetchAllPages(spBase + '&groupBy=date'));
+                    } else {
+                        fetches.push(Promise.resolve([]));
+                        fetches.push(Promise.resolve([]));
+                    }
+
+                    var [sbRows, sbDaily, spRows, spDaily] = await Promise.all(fetches);
 
                     sbRows.forEach(function(r) {
                         sbStats.registrations += (r.registrations || 0);

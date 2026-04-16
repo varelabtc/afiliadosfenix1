@@ -301,6 +301,39 @@
             document.getElementById('startDate').value = monthAgo.toISOString().split('T')[0];
         }
 
+        // Brand IDs
+        var BRAND_SUPERBET = 'clsuperbet000001';
+        var BRAND_SPORTINGBET = 'cmm5dhdqm000e19b58dqc549a';
+
+        // Cache affiliate IDs per brand
+        var affiliateBrandIds = null;
+
+        async function getAffiliateBrandIds(otgId) {
+            if (affiliateBrandIds) return affiliateBrandIds;
+            try {
+                var res = await fetch('/api/superbet?action=affiliates');
+                if (res.ok) {
+                    var json = await res.json();
+                    var allAff = (json.data && json.data.data) || json.data || [];
+                    var match = allAff.find(function(a) { return a.id === otgId; });
+                    if (match) {
+                        var name = match.name;
+                        var sbId = null, spId = null;
+                        allAff.forEach(function(a) {
+                            if (a.name === name) {
+                                if (a.brand && a.brand.id === BRAND_SUPERBET) sbId = a.id;
+                                if (a.brand && a.brand.id === BRAND_SPORTINGBET) spId = a.id;
+                            }
+                        });
+                        affiliateBrandIds = { superbet: sbId, sportingbet: spId };
+                        return affiliateBrandIds;
+                    }
+                }
+            } catch (e) {}
+            affiliateBrandIds = { superbet: otgId, sportingbet: otgId };
+            return affiliateBrandIds;
+        }
+
         async function loadCommissions() {
             const user = Auth.currentUser;
             if (!user) return;
@@ -319,9 +352,12 @@
                         startDate = monthAgo.toISOString().split('T')[0];
                     }
 
-                    // Fetch Superbet and Sportingbet data separately via brandIds
-                    var sbUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(otgId) + '&groupBy=date&limit=100&brandIds=clsuperbet000001';
-                    var spUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(otgId) + '&groupBy=date&limit=100&brandIds=cmm5dhdqm000e19b58dqc549a';
+                    // Get both brand-specific IDs for this affiliate
+                    var brandIds = await getAffiliateBrandIds(otgId);
+
+                    // Fetch Superbet and Sportingbet data separately via brandIds + correct affiliate ID
+                    var sbUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(brandIds.superbet || otgId) + '&groupBy=date&limit=100&brandIds=' + BRAND_SUPERBET;
+                    var spUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(brandIds.sportingbet || otgId) + '&groupBy=date&limit=100&brandIds=' + BRAND_SPORTINGBET;
 
                     var [sbRes, spRes] = await Promise.all([fetch(sbUrl), fetch(spUrl)]);
 
