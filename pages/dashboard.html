@@ -289,74 +289,84 @@
             }
         }
 
+        // Brand IDs for V2 API
+        var BRAND_SUPERBET = 'clsuperbet000001';
+        var BRAND_SPORTINGBET = 'cmm5dhdqm000e19b58dqc549a';
+
+        // Helper to fetch all pages (max 100 per page)
+        async function fetchAllPages(baseUrl) {
+            var allRows = [];
+            var page = 1;
+            var separator = baseUrl.indexOf('?') >= 0 ? '&' : '?';
+            while (true) {
+                var url = baseUrl + separator + 'limit=100&page=' + page;
+                var res = await fetch(url);
+                if (!res.ok) { if (page === 1) throw new Error('Erro ' + res.status); break; }
+                var json = await res.json();
+                var rows = (json.data && json.data.data) || json.data || [];
+                if (!Array.isArray(rows) || rows.length === 0) break;
+                allRows = allRows.concat(rows);
+                if (rows.length < 100) break;
+                page++;
+            }
+            return allRows;
+        }
+
         async function loadSuperbetStats(days) {
             const user = Auth.currentUser;
             if (!user) return;
 
             var otgId = user.otg_affiliate_id;
+            var end = new Date();
+            var start = new Date();
+            start.setDate(end.getDate() - days);
+            var fmt = function(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
 
             // Default zeros
-            var stats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, lucro_tipster: 0 };
+            var sbStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, total_commission: 0 };
+            var spStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, total_commission: 0 };
             var dailyData = [];
+            var spDailyData = [];
 
             if (otgId) {
                 try {
-                    var end = new Date();
-                    var start = new Date();
-                    start.setDate(end.getDate() - days);
-                    var fmt = function(d) { return d.toISOString().split('T')[0]; };
-
                     var baseUrl = '/api/superbet?action=results&startDate=' + fmt(start) + '&endDate=' + fmt(end) + '&affiliateIds=' + encodeURIComponent(otgId);
+                    var sbBase = baseUrl + '&brandIds=' + BRAND_SUPERBET;
+                    var spBase = baseUrl + '&brandIds=' + BRAND_SPORTINGBET;
 
-                    var [totalRes, dailyRes] = await Promise.all([
-                        fetch(baseUrl + '&limit=100'),
-                        fetch(baseUrl + '&groupBy=date&limit=100')
+                    var [sbRows, sbDaily, spRows, spDaily] = await Promise.all([
+                        fetchAllPages(sbBase),
+                        fetchAllPages(sbBase + '&groupBy=date'),
+                        fetchAllPages(spBase),
+                        fetchAllPages(spBase + '&groupBy=date')
                     ]);
 
-                    if (totalRes.ok) {
-                        var totalJson = await totalRes.json();
-                        var rows = (totalJson.data && totalJson.data.data) || totalJson.data || [];
-                        if (Array.isArray(rows)) {
-                            rows.forEach(function(r) {
-                                stats.registrations += (r.registrations || 0);
-                                stats.first_deposits += (r.first_deposits || 0);
-                                stats.qualified_cpa += (r.qualified_cpa || 0);
-                                stats.cpa += (r.cpa || 0);
-                                stats.rvs += (r.rvs || 0);
-                                stats.lucro_tipster += (r.lucro_tipster || 0);
-                            });
-                        }
-                    }
+                    sbRows.forEach(function(r) {
+                        sbStats.registrations += (r.registrations || 0);
+                        sbStats.first_deposits += (r.first_deposits || 0);
+                        sbStats.qualified_cpa += (r.qualified_cpa || 0);
+                        sbStats.cpa += (r.cpa || 0);
+                        sbStats.rvs += (r.rvs || 0);
+                        sbStats.total_commission += (r.total_commission || 0);
+                    });
 
-                    if (dailyRes.ok) {
-                        var dailyJson = await dailyRes.json();
-                        dailyData = (dailyJson.data && dailyJson.data.data) || dailyJson.data || [];
-                    }
+                    spRows.forEach(function(r) {
+                        spStats.registrations += (r.registrations || 0);
+                        spStats.first_deposits += (r.first_deposits || 0);
+                        spStats.qualified_cpa += (r.qualified_cpa || 0);
+                        spStats.cpa += (r.cpa || 0);
+                        spStats.rvs += (r.rvs || 0);
+                        spStats.total_commission += (r.total_commission || 0);
+                    });
+
+                    dailyData = sbDaily;
+                    spDailyData = spDaily;
                 } catch (err) {
-                    console.error('Erro ao buscar dados Superbet:', err);
+                    console.error('Erro ao buscar dados API V2:', err);
                 }
             }
 
-            superbetCache = { stats: stats, daily: dailyData };
-
-            // Fetch Sportingbet manual CPAs for this affiliate
-            var sbStats = { ftds: 0, amount: 0 };
-            try {
-                var end2 = new Date();
-                var start2 = new Date();
-                start2.setDate(end2.getDate() - days);
-                var fmt2 = function(d) { return d.toISOString().split('T')[0]; };
-                var sbRes = await fetch('/api/sportingbet-cpa?affiliate_id=' + user.id + '&startDate=' + fmt2(start2) + '&endDate=' + fmt2(end2));
-                if (sbRes.ok) {
-                    var sbData = await sbRes.json();
-                    if (Array.isArray(sbData)) {
-                        sbData.forEach(function(r) {
-                            sbStats.ftds += (r.ftds || 0);
-                            sbStats.amount += (r.amount || 0);
-                        });
-                    }
-                }
-            } catch (e) {}
+            superbetCache = { stats: sbStats, daily: dailyData };
 
             // Fetch VUPI data
             var vupiStats = { visitas: 0, registros: 0, ftds: 0, ftds_amount: 0, qftds: 0, depositos: 0, deposito_amount: 0, ggr: 0, ngr: 0, cpa: 0, revshare: 0 };
@@ -388,19 +398,19 @@
             var cpaSportingbet = deals.sportingbet || 180;
             var cpaVupi = deals.vupi || 80;
 
-            var superbetEarnings = Math.round(stats.qualified_cpa) * cpaSuperbet;
-            var sportingbetEarnings = sbStats.ftds * cpaSportingbet;
+            var superbetEarnings = Math.round(sbStats.qualified_cpa) * cpaSuperbet;
+            var sportingbetEarnings = Math.round(spStats.qualified_cpa) * cpaSportingbet;
             var vupiEarnings = vupiStats.qftds * cpaVupi;
             var totalEarnings = superbetEarnings + sportingbetEarnings + vupiEarnings;
 
             // Store per-house stats
-            allHouseStats.superbet = { regs: stats.registrations, ftds: stats.first_deposits, cpas: stats.qualified_cpa, lucro: superbetEarnings };
-            allHouseStats.sportingbet = { regs: 0, ftds: sbStats.ftds, cpas: sbStats.ftds, lucro: sportingbetEarnings };
+            allHouseStats.superbet = { regs: sbStats.registrations, ftds: sbStats.first_deposits, cpas: sbStats.qualified_cpa, lucro: superbetEarnings };
+            allHouseStats.sportingbet = { regs: spStats.registrations, ftds: spStats.first_deposits, cpas: spStats.qualified_cpa, lucro: sportingbetEarnings };
             allHouseStats.vupi = { regs: vupiStats.registros, ftds: vupiStats.ftds, cpas: vupiStats.qftds, lucro: vupiEarnings, visitas: vupiStats.visitas, depositos: vupiStats.depositos, ggr: vupiStats.ggr, ngr: vupiStats.ngr };
             allHouseStats.all = {
-                regs: stats.registrations + vupiStats.registros,
-                ftds: stats.first_deposits + sbStats.ftds + vupiStats.ftds,
-                cpas: stats.qualified_cpa + sbStats.ftds + vupiStats.qftds,
+                regs: sbStats.registrations + spStats.registrations + vupiStats.registros,
+                ftds: sbStats.first_deposits + spStats.first_deposits + vupiStats.ftds,
+                cpas: sbStats.qualified_cpa + spStats.qualified_cpa + vupiStats.qftds,
                 lucro: totalEarnings
             };
 
@@ -422,13 +432,8 @@
             // Show current house performance
             switchHouse(currentHouse);
 
-            // Recent commissions
-            var sbCpaList = [];
-            try {
-                var sbRes2 = await fetch('/api/sportingbet-cpa?affiliate_id=' + user.id + '&startDate=' + fmt(start) + '&endDate=' + fmt(end));
-                if (sbRes2.ok) sbCpaList = await sbRes2.json();
-            } catch(e) {}
-            loadRecentCommissions(dailyData, sbCpaList, cpaSuperbet, cpaSportingbet);
+            // Recent commissions from both brands
+            loadRecentCommissions(dailyData, spDailyData, cpaSuperbet, cpaSportingbet);
         }
 
         function switchHouse(house) {
@@ -492,7 +497,7 @@
             chartLabels.innerHTML = days.map(d => '<span>' + d + '</span>').join('');
         }
 
-        function loadRecentCommissions(dailyData, sbCpaList, cpaSuperbet, cpaSportingbet) {
+        function loadRecentCommissions(dailyData, spDailyData, cpaSuperbet, cpaSportingbet) {
             const container = document.getElementById('ultimasComissoes');
             if (!container) return;
 
@@ -509,11 +514,14 @@
                 });
             }
 
-            // Sportingbet commissions
-            if (Array.isArray(sbCpaList)) {
-                sbCpaList.forEach(function(r) {
-                    var qty = r.ftds || 1;
-                    items.push({ date: r.date || '-', house: 'Sportingbet', detail: qty + ' CPA qualificado', amount: qty * (cpaSportingbet || 180) });
+            // Sportingbet commissions (from API V2)
+            if (spDailyData && spDailyData.length > 0) {
+                spDailyData.filter(function(r) {
+                    return (r.qualified_cpa || 0) > 0;
+                }).forEach(function(r) {
+                    var date = r.id || r.label || r.date || '-';
+                    var qty = Math.round(r.qualified_cpa || 0);
+                    items.push({ date: date, house: 'Sportingbet', detail: qty + ' CPA qualificado', amount: qty * (cpaSportingbet || 180) });
                 });
             }
 

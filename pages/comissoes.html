@@ -319,17 +319,20 @@
                         startDate = monthAgo.toISOString().split('T')[0];
                     }
 
-                    var url = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(otgId) + '&groupBy=date&limit=100';
-                    var res = await fetch(url);
+                    // Fetch Superbet and Sportingbet data separately via brandIds
+                    var sbUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(otgId) + '&groupBy=date&limit=100&brandIds=clsuperbet000001';
+                    var spUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(otgId) + '&groupBy=date&limit=100&brandIds=cmm5dhdqm000e19b58dqc549a';
 
-                    if (res.ok) {
-                        var json = await res.json();
-                        var rows = (json.data && json.data.data) || json.data || [];
-                        if (Array.isArray(rows)) {
-                            rows.forEach(function(r) {
+                    var [sbRes, spRes] = await Promise.all([fetch(sbUrl), fetch(spUrl)]);
+
+                    // Superbet commissions
+                    if (sbRes.ok) {
+                        var sbJson = await sbRes.json();
+                        var sbRows = (sbJson.data && sbJson.data.data) || sbJson.data || [];
+                        if (Array.isArray(sbRows)) {
+                            sbRows.forEach(function(r) {
                                 var date = r.id || r.label || r.date || '';
                                 var qcpa = Math.round(r.qualified_cpa || 0);
-                                // CPA commission - R$200 per qualified CPA
                                 if (qcpa > 0) {
                                     allCommissions.push({
                                         type: 'cpa',
@@ -343,33 +346,32 @@
                             });
                         }
                     }
+
+                    // Sportingbet commissions (from API V2)
+                    if (spRes.ok) {
+                        var spJson = await spRes.json();
+                        var spRows = (spJson.data && spJson.data.data) || spJson.data || [];
+                        if (Array.isArray(spRows)) {
+                            spRows.forEach(function(r) {
+                                var date = r.id || r.label || r.date || '';
+                                var qcpa = Math.round(r.qualified_cpa || 0);
+                                if (qcpa > 0) {
+                                    allCommissions.push({
+                                        type: 'cpa',
+                                        platform: 'sportingbet',
+                                        description: 'CPA Sportingbet - ' + qcpa + ' qualificado(s)',
+                                        amount: qcpa * 180,
+                                        date: date,
+                                        status: 'paid'
+                                    });
+                                }
+                            });
+                        }
+                    }
                 } catch (err) {
                     console.error('Erro ao buscar comissões:', err);
                 }
             }
-
-            // Fetch Sportingbet manual CPAs
-            try {
-                var startDate2 = document.getElementById('startDate').value;
-                var endDate2 = document.getElementById('endDate').value;
-                var sbUrl = '/api/sportingbet-cpa?affiliate_id=' + user.id + '&startDate=' + startDate2 + '&endDate=' + endDate2;
-                var sbRes = await fetch(sbUrl);
-                if (sbRes.ok) {
-                    var sbData = await sbRes.json();
-                    if (Array.isArray(sbData)) {
-                        sbData.forEach(function(r) {
-                            allCommissions.push({
-                                type: 'cpa',
-                                platform: 'sportingbet',
-                                description: 'CPA Sportingbet - ' + (r.ftds || 1) + ' FTD(s)',
-                                amount: r.amount || 180,
-                                date: r.date || '',
-                                status: r.status || 'approved'
-                            });
-                        });
-                    }
-                }
-            } catch (e) {}
 
             // Calculate totals
             var totalCPA = allCommissions.filter(function(c) { return c.type === 'cpa'; }).reduce(function(sum, c) { return sum + c.amount; }, 0);
