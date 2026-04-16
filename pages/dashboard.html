@@ -374,10 +374,10 @@
 
                     var fetches = [];
 
-                    // Superbet fetch
+                    // Superbet fetch - use groupBy=affiliate for correct totals (qualified_cpa only in aggregated data)
                     if (brandIds.superbet) {
-                        var sbBase = '/api/superbet?action=results' + dateRange + '&affiliateIds=' + encodeURIComponent(brandIds.superbet) + '&brandIds=' + BRAND_SUPERBET;
-                        fetches.push(fetchAllPages(sbBase));
+                        var sbBase = '/api/superbet?action=results' + dateRange + '&affiliateIds=' + encodeURIComponent(brandIds.superbet);
+                        fetches.push(fetchAllPages(sbBase + '&groupBy=affiliate'));
                         fetches.push(fetchAllPages(sbBase + '&groupBy=date'));
                     } else {
                         fetches.push(Promise.resolve([]));
@@ -386,8 +386,8 @@
 
                     // Sportingbet fetch
                     if (brandIds.sportingbet) {
-                        var spBase = '/api/superbet?action=results' + dateRange + '&affiliateIds=' + encodeURIComponent(brandIds.sportingbet) + '&brandIds=' + BRAND_SPORTINGBET;
-                        fetches.push(fetchAllPages(spBase));
+                        var spBase = '/api/superbet?action=results' + dateRange + '&affiliateIds=' + encodeURIComponent(brandIds.sportingbet);
+                        fetches.push(fetchAllPages(spBase + '&groupBy=affiliate'));
                         fetches.push(fetchAllPages(spBase + '&groupBy=date'));
                     } else {
                         fetches.push(Promise.resolve([]));
@@ -396,6 +396,7 @@
 
                     var [sbRows, sbDaily, spRows, spDaily] = await Promise.all(fetches);
 
+                    // groupBy=affiliate returns aggregated totals (1 row per affiliate)
                     sbRows.forEach(function(r) {
                         sbStats.registrations += (r.registrations || 0);
                         sbStats.first_deposits += (r.first_deposits || 0);
@@ -453,8 +454,8 @@
             var cpaSportingbet = deals.sportingbet || 180;
             var cpaVupi = deals.vupi || 80;
 
-            var superbetEarnings = Math.round(sbStats.qualified_cpa) * cpaSuperbet;
-            var sportingbetEarnings = Math.round(spStats.qualified_cpa) * cpaSportingbet;
+            var superbetEarnings = sbStats.total_commission || (Math.round(sbStats.qualified_cpa) * cpaSuperbet);
+            var sportingbetEarnings = spStats.total_commission || (Math.round(spStats.qualified_cpa) * cpaSportingbet);
             var vupiEarnings = vupiStats.qftds * cpaVupi;
             var totalEarnings = superbetEarnings + sportingbetEarnings + vupiEarnings;
 

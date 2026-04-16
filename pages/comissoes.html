@@ -355,11 +355,11 @@
                     // Get both brand-specific IDs for this affiliate
                     var brandIds = await getAffiliateBrandIds(otgId);
 
-                    // Fetch Superbet and Sportingbet data separately via brandIds + correct affiliate ID
-                    var sbUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(brandIds.superbet || otgId) + '&groupBy=date&limit=100&brandIds=' + BRAND_SUPERBET;
-                    var spUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(brandIds.sportingbet || otgId) + '&groupBy=date&limit=100&brandIds=' + BRAND_SPORTINGBET;
+                    // Fetch aggregated totals per brand using groupBy=affiliate (qualified_cpa only in aggregated data)
+                    var sbAggUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(brandIds.superbet || otgId) + '&groupBy=affiliate&limit=100';
+                    var spAggUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(brandIds.sportingbet || otgId) + '&groupBy=affiliate&limit=100';
 
-                    var [sbRes, spRes] = await Promise.all([fetch(sbUrl), fetch(spUrl)]);
+                    var [sbRes, spRes] = await Promise.all([fetch(sbAggUrl), fetch(spAggUrl)]);
 
                     // Superbet commissions
                     if (sbRes.ok) {
@@ -367,15 +367,15 @@
                         var sbRows = (sbJson.data && sbJson.data.data) || sbJson.data || [];
                         if (Array.isArray(sbRows)) {
                             sbRows.forEach(function(r) {
-                                var date = r.id || r.label || r.date || '';
                                 var qcpa = Math.round(r.qualified_cpa || 0);
-                                if (qcpa > 0) {
+                                var commission = r.total_commission || 0;
+                                if (qcpa > 0 || commission > 0) {
                                     allCommissions.push({
                                         type: 'cpa',
                                         platform: 'superbet',
                                         description: 'CPA Superbet - ' + qcpa + ' qualificado(s)',
-                                        amount: qcpa * 200,
-                                        date: date,
+                                        amount: commission || (qcpa * 200),
+                                        date: startDate + ' a ' + endDate,
                                         status: 'paid'
                                     });
                                 }
@@ -383,21 +383,21 @@
                         }
                     }
 
-                    // Sportingbet commissions (from API V2)
+                    // Sportingbet commissions
                     if (spRes.ok) {
                         var spJson = await spRes.json();
                         var spRows = (spJson.data && spJson.data.data) || spJson.data || [];
                         if (Array.isArray(spRows)) {
                             spRows.forEach(function(r) {
-                                var date = r.id || r.label || r.date || '';
                                 var qcpa = Math.round(r.qualified_cpa || 0);
-                                if (qcpa > 0) {
+                                var commission = r.total_commission || 0;
+                                if (qcpa > 0 || commission > 0) {
                                     allCommissions.push({
                                         type: 'cpa',
                                         platform: 'sportingbet',
                                         description: 'CPA Sportingbet - ' + qcpa + ' qualificado(s)',
-                                        amount: qcpa * 180,
-                                        date: date,
+                                        amount: commission || (qcpa * 180),
+                                        date: startDate + ' a ' + endDate,
                                         status: 'paid'
                                     });
                                 }
