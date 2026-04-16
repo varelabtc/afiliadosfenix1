@@ -318,12 +318,17 @@
             if (!userName || userName.length < 4) return null;
             match = allAff.find(function(a) { return normalizeName(a.name) === userName; });
             if (match) return match;
-            var minLen = Math.min(userName.length, 8);
             var candidates = allAff.filter(function(a) {
                 var apiName = normalizeName(a.name);
-                return apiName.indexOf(userName.substring(0, minLen)) === 0 || userName.indexOf(apiName.substring(0, minLen)) === 0;
+                var commonLen = 0;
+                for (var i = 0; i < Math.min(apiName.length, userName.length); i++) {
+                    if (apiName[i] === userName[i]) commonLen++; else break;
+                }
+                var shorter = Math.min(apiName.length, userName.length);
+                return commonLen >= Math.max(shorter * 0.7, 8);
             });
-            if (candidates.length > 0) {
+            if (candidates.length === 1) return candidates[0];
+            if (candidates.length > 1) {
                 candidates.sort(function(a, b) {
                     var nameA = normalizeName(a.name);
                     var nameB = normalizeName(b.name);

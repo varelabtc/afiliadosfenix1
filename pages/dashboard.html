@@ -332,15 +332,21 @@
             match = allAff.find(function(a) { return normalizeName(a.name) === userName; });
             if (match) return match;
 
-            // 3. Try partial match: API name starts with user name or vice versa (min 8 chars)
-            var minLen = Math.min(userName.length, 8);
+            // 3. Try partial match: require at least 70% of shorter name matching from start
             var candidates = allAff.filter(function(a) {
                 var apiName = normalizeName(a.name);
-                return apiName.indexOf(userName.substring(0, minLen)) === 0 || userName.indexOf(apiName.substring(0, minLen)) === 0;
+                var commonLen = 0;
+                for (var i = 0; i < Math.min(apiName.length, userName.length); i++) {
+                    if (apiName[i] === userName[i]) commonLen++; else break;
+                }
+                var shorter = Math.min(apiName.length, userName.length);
+                return commonLen >= Math.max(shorter * 0.7, 8);
             });
 
-            // Pick the best match (longest common prefix)
-            if (candidates.length > 0) {
+            if (candidates.length === 1) {
+                return candidates[0];
+            } else if (candidates.length > 1) {
+                // Pick best match by longest common prefix
                 candidates.sort(function(a, b) {
                     var nameA = normalizeName(a.name);
                     var nameB = normalizeName(b.name);
@@ -408,7 +414,7 @@
             var dailyData = [];
             var spDailyData = [];
 
-            // Try to find affiliate even without otg_affiliate_id (match by name)
+                // Find affiliate brand IDs (by ID first, then by name)
             var brandIds = await getAffiliateBrandIds(otgId);
             if (brandIds.superbet || brandIds.sportingbet) {
                 try {
