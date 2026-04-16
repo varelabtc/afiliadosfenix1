@@ -601,25 +601,27 @@
 
             var items = [];
 
-            // Superbet commissions
+            // Superbet commissions - use total_commission from API when available
             if (dailyData && dailyData.length > 0) {
                 dailyData.filter(function(r) {
-                    return (r.qualified_cpa || 0) > 0;
+                    return (r.qualified_cpa || 0) > 0 || (r.cpa || 0) > 0;
                 }).forEach(function(r) {
                     var date = r.id || r.label || r.date || '-';
                     var qty = Math.round(r.qualified_cpa || 0);
-                    items.push({ date: date, house: 'Superbet', detail: qty + ' CPA qualificado', amount: qty * (cpaSuperbet || 200) });
+                    var amount = (r.cpa || 0) > 0 ? r.cpa : qty * (cpaSuperbet || 250);
+                    items.push({ date: date, house: 'Superbet', detail: qty + ' CPA qualificado', amount: amount });
                 });
             }
 
-            // Sportingbet commissions (from API V2)
+            // Sportingbet commissions - use total_commission from API when available
             if (spDailyData && spDailyData.length > 0) {
                 spDailyData.filter(function(r) {
-                    return (r.qualified_cpa || 0) > 0;
+                    return (r.qualified_cpa || 0) > 0 || (r.cpa || 0) > 0;
                 }).forEach(function(r) {
                     var date = r.id || r.label || r.date || '-';
                     var qty = Math.round(r.qualified_cpa || 0);
-                    items.push({ date: date, house: 'Sportingbet', detail: qty + ' CPA qualificado', amount: qty * (cpaSportingbet || 180) });
+                    var amount = (r.cpa || 0) > 0 ? r.cpa : qty * (cpaSportingbet || 180);
+                    items.push({ date: date, house: 'Sportingbet', detail: qty + ' CPA qualificado', amount: amount });
                 });
             }
 
