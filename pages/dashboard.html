@@ -408,10 +408,10 @@
             var dailyData = [];
             var spDailyData = [];
 
-            if (otgId) {
+            // Try to find affiliate even without otg_affiliate_id (match by name)
+            var brandIds = await getAffiliateBrandIds(otgId);
+            if (brandIds.superbet || brandIds.sportingbet) {
                 try {
-                    // Get both brand-specific IDs for this affiliate
-                    var brandIds = await getAffiliateBrandIds(otgId);
                     var dateRange = '&startDate=' + fmt(start) + '&endDate=' + fmt(end);
 
                     var fetches = [];

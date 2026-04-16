@@ -373,7 +373,8 @@
             var otgId = user.otg_affiliate_id;
             allCommissions = [];
 
-            if (otgId) {
+            var brandIds = await getAffiliateBrandIds(otgId);
+            if (brandIds.superbet || brandIds.sportingbet) {
                 try {
                     var startDate = document.getElementById('startDate').value;
                     var endDate = document.getElementById('endDate').value;
@@ -383,9 +384,6 @@
                         var monthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
                         startDate = monthAgo.toISOString().split('T')[0];
                     }
-
-                    // Get both brand-specific IDs for this affiliate
-                    var brandIds = await getAffiliateBrandIds(otgId);
 
                     // Fetch aggregated totals per brand using groupBy=affiliate (qualified_cpa only in aggregated data)
                     var sbAggUrl = '/api/superbet?action=results&startDate=' + startDate + '&endDate=' + endDate + '&affiliateIds=' + encodeURIComponent(brandIds.superbet || otgId) + '&groupBy=affiliate&limit=100';
