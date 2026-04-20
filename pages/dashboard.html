@@ -136,10 +136,14 @@
                             </div>
                             <div class="perf-item">
                                 <div class="perf-value" id="perfCPAs">0</div>
-                                <div class="perf-label">CPAs</div>
+                                <div class="perf-label">CPAs Qual.</div>
                             </div>
                             <div class="perf-item">
-                                <div class="perf-value" id="perfDepositos">R$ 0</div>
+                                <div class="perf-value" id="perfDeposit" style="color:#3B82F6;">R$ 0</div>
+                                <div class="perf-label">Depósitos</div>
+                            </div>
+                            <div class="perf-item">
+                                <div class="perf-value" id="perfLucro" style="color:var(--success);">R$ 0</div>
                                 <div class="perf-label">Lucro</div>
                             </div>
                         </div>
@@ -409,8 +413,8 @@
             var fmt = function(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
 
             // Default zeros
-            var sbStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, total_commission: 0 };
-            var spStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, total_commission: 0 };
+            var sbStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, total_commission: 0, deposit: 0 };
+            var spStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, total_commission: 0, deposit: 0 };
             var dailyData = [];
             var spDailyData = [];
 
@@ -452,6 +456,7 @@
                         sbStats.cpa += (r.cpa || 0);
                         sbStats.rvs += (r.rvs || 0);
                         sbStats.total_commission += (r.total_commission || 0);
+                        sbStats.deposit += (r.deposit || 0);
                     });
 
                     spRows.forEach(function(r) {
@@ -461,6 +466,7 @@
                         spStats.cpa += (r.cpa || 0);
                         spStats.rvs += (r.rvs || 0);
                         spStats.total_commission += (r.total_commission || 0);
+                        spStats.deposit += (r.deposit || 0);
                     });
 
                     dailyData = sbDaily;
@@ -507,14 +513,15 @@
             var vupiEarnings = vupiStats.qftds * cpaVupi;
             var totalEarnings = superbetEarnings + sportingbetEarnings + vupiEarnings;
 
-            // Store per-house stats
-            allHouseStats.superbet = { regs: sbStats.registrations, ftds: sbStats.first_deposits, cpas: sbStats.qualified_cpa, lucro: superbetEarnings };
-            allHouseStats.sportingbet = { regs: spStats.registrations, ftds: spStats.first_deposits, cpas: spStats.qualified_cpa, lucro: sportingbetEarnings };
-            allHouseStats.vupi = { regs: vupiStats.registros, ftds: vupiStats.ftds, cpas: vupiStats.qftds, lucro: vupiEarnings, visitas: vupiStats.visitas, depositos: vupiStats.depositos, ggr: vupiStats.ggr, ngr: vupiStats.ngr };
+            // Store per-house stats (includes deposit field from API)
+            allHouseStats.superbet = { regs: sbStats.registrations, ftds: sbStats.first_deposits, cpas: sbStats.qualified_cpa, deposit: sbStats.deposit, lucro: superbetEarnings };
+            allHouseStats.sportingbet = { regs: spStats.registrations, ftds: spStats.first_deposits, cpas: spStats.qualified_cpa, deposit: spStats.deposit, lucro: sportingbetEarnings };
+            allHouseStats.vupi = { regs: vupiStats.registros, ftds: vupiStats.ftds, cpas: vupiStats.qftds, deposit: vupiStats.deposito_amount, lucro: vupiEarnings, visitas: vupiStats.visitas, depositos: vupiStats.depositos, ggr: vupiStats.ggr, ngr: vupiStats.ngr };
             allHouseStats.all = {
                 regs: sbStats.registrations + spStats.registrations + vupiStats.registros,
                 ftds: sbStats.first_deposits + spStats.first_deposits + vupiStats.ftds,
                 cpas: sbStats.qualified_cpa + spStats.qualified_cpa + vupiStats.qftds,
+                deposit: sbStats.deposit + spStats.deposit + vupiStats.deposito_amount,
                 lucro: totalEarnings
             };
 
@@ -559,7 +566,8 @@
             document.getElementById('perfRegistros').textContent = Math.round(s.regs || 0);
             document.getElementById('perfFTDs').textContent = Math.round(s.ftds || 0);
             document.getElementById('perfCPAs').textContent = Math.round(s.cpas || 0);
-            document.getElementById('perfDepositos').textContent = Format.currency(s.lucro || 0);
+            document.getElementById('perfDeposit').textContent = Format.currency(s.deposit || 0);
+            document.getElementById('perfLucro').textContent = Format.currency(s.lucro || 0);
 
             // Show/hide VUPI extra stats
             var vupiExtra = document.getElementById('vupiExtraStats');
