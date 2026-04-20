@@ -384,6 +384,11 @@
             const fullUser = getFullUserData();
             const houseId = HOUSE_ID_MAP[offerId] || null;
 
+            // Priority 1: cpa_deals (admin-configured per affiliate)
+            if (fullUser?.cpa_deals && fullUser.cpa_deals[offerId] !== undefined) {
+                return fullUser.cpa_deals[offerId];
+            }
+            // Priority 2: legacy deals structure
             if (fullUser?.deals?.[houseId]) {
                 const deal = fullUser.deals[houseId];
                 if (deal.type === 'cpa') return deal.cpaValue || offer.defaultCPA;
@@ -452,7 +457,7 @@
                             '</div>' +
                             '<div class="oferta-meta-item">' +
                                 '<span class="oferta-meta-label">CPA</span>' +
-                                '<span class="oferta-meta-value">' + Format.currency(offer.defaultCPA) + ' - ' + Format.currency(offer.maxCPA) + '</span>' +
+                                '<span class="oferta-meta-value">' + Format.currency(cpa) + '</span>' +
                             '</div>' +
                         '</div>' +
                         actionBtn +
