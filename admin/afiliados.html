@@ -196,6 +196,7 @@
                             <option value="vupi">Falta VUPI</option>
                             <option value="blaze">Falta Blaze</option>
                             <option value="jonbet">Falta JonBet</option>
+                            <option value="lottubet">Falta Lottu.bet</option>
                         </select>
                     </div>
                 </div>
@@ -404,7 +405,7 @@
 
             // Apply missing house link filter
             if (currentHouseMissing !== 'all') {
-                var houseIdMap = { superbet: '1', sportingbet: '2', estrelabet: '3', vupi: '4', blaze: '5', jonbet: '6' };
+                var houseIdMap = { superbet: '1', sportingbet: '2', estrelabet: '3', vupi: '4', blaze: '5', jonbet: '6', lottubet: '7' };
                 var hid = houseIdMap[currentHouseMissing];
                 filteredUsers = filteredUsers.filter(function(u) {
                     var links = u.house_links || {};
@@ -447,11 +448,11 @@
 
                 // Links status
                 var links = user.house_links || {};
-                var houseNames = { '1': 'SB', '2': 'SP', '3': 'ES', '4': 'VP', '5': 'BL', '6': 'JB' };
-                var houseColors = { '1': '#E8590C', '2': '#22C55E', '3': '#1a2744', '4': '#7C3AED', '5': '#EF4444', '6': '#F59E0B' };
-                var houseFullNames = { '1': 'Superbet', '2': 'Sportingbet', '3': 'Estrelabet', '4': 'VUPI', '5': 'Blaze', '6': 'JonBet' };
+                var houseNames = { '1': 'SB', '2': 'SP', '3': 'ES', '4': 'VP', '5': 'BL', '6': 'JB', '7': 'LT' };
+                var houseColors = { '1': '#E8590C', '2': '#22C55E', '3': '#1a2744', '4': '#7C3AED', '5': '#EF4444', '6': '#1E90FF', '7': '#F59E0B' };
+                var houseFullNames = { '1': 'Superbet', '2': 'Sportingbet', '3': 'Estrelabet', '4': 'VUPI', '5': 'Blaze', '6': 'JonBet', '7': 'Lottu.bet' };
                 var linksHtml = '';
-                ['1','2','3','4','5','6'].forEach(function(hid) {
+                ['1','2','3','4','5','6','7'].forEach(function(hid) {
                     var has = links[hid] && links[hid].trim() !== '';
                     var color = has ? houseColors[hid] : '#374151';
                     var opacity = has ? '1' : '0.3';
@@ -674,7 +675,8 @@
             var vupi = parseFloat(document.getElementById('dealVupi').value) || 80;
             var blaze = parseFloat(document.getElementById('dealBlaze').value) || 150;
             var jonbet = parseFloat(document.getElementById('dealJonbet').value) || 150;
-            var cpaDeals = { superbet: superbet, sportingbet: sportingbet, estrelabet: estrelabet, vupi: vupi, blaze: blaze, jonbet: jonbet };
+            var lottubet = parseFloat(document.getElementById('dealLottubet').value) || 100;
+            var cpaDeals = { superbet: superbet, sportingbet: sportingbet, estrelabet: estrelabet, vupi: vupi, blaze: blaze, jonbet: jonbet, lottubet: lottubet };
             try {
                 await SupabaseDB.updateUser(userId, { cpa_deals: cpaDeals });
                 await AffiliateManager.fetchAll();
@@ -899,7 +901,7 @@
                 <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
                     <h4 style="margin-bottom: 12px;">Acordos CPA</h4>
                     ${(function() {
-                        var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80, blaze: 150, jonbet: 150 };
+                        var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80, blaze: 150, jonbet: 150, lottubet: 100 };
                         return '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 10px;">' +
                             '<div>' +
                                 '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Superbet (R$)</label>' +
@@ -924,6 +926,10 @@
                             '<div>' +
                                 '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Jonbet (R$)</label>' +
                                 '<input type="number" id="dealJonbet" value="' + (deals.jonbet || 150) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
+                            '</div>' +
+                            '<div>' +
+                                '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Lottu.bet (R$)</label>' +
+                                '<input type="number" id="dealLottubet" value="' + (deals.lottubet || 100) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
                             '</div>' +
                         '</div>' +
                         '<button onclick="saveCpaDeals(' + user.id + ')" style="padding: 8px 20px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Salvar Acordos</button>';

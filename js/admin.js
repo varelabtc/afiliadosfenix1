@@ -169,6 +169,22 @@ const BettingHouses = {
                 totalClicks: 0,
                 totalConversions: 0,
                 totalPaid: 0
+            },
+            {
+                id: 7,
+                name: 'Lottu.bet',
+                slug: 'lottubet',
+                logo: '🎲',
+                color: '#F59E0B',
+                baseUrl: 'https://lottu.bet',
+                cpa: 100.00,
+                revShare: 20,
+                minDeposit: 20.00,
+                status: 'active',
+                totalAffiliates: 0,
+                totalClicks: 0,
+                totalConversions: 0,
+                totalPaid: 0
             }
         ];
 

@@ -295,6 +295,22 @@
                 defaultCPA: 20,
                 maxCPA: 150,
                 color: '#1E90FF'
+            },
+            {
+                id: 'lottubet',
+                name: 'Lottu.bet',
+                subtitle: 'Lottu.bet Brasil',
+                logo: '../img/lottubet-logo.png',
+                baseline: 'R$20',
+                bonus: 'R$100',
+                wager: '1x',
+                payment: 'Mensal - dia 15',
+                currency: 'BRL',
+                metaTypes: ['CPA'],
+                models: [{ type: 'CPA', value: 100 }],
+                defaultCPA: 100,
+                maxCPA: 150,
+                color: '#F59E0B'
             }
         ];
 
@@ -342,7 +358,7 @@
             return Auth.currentUser || null;
         }
 
-        var HOUSE_ID_MAP = { 'superbet': '1', 'sportingbet': '2', 'estrelabet': '3', 'vupi': '4', 'blaze': '5', 'jonbet': '6' };
+        var HOUSE_ID_MAP = { 'superbet': '1', 'sportingbet': '2', 'estrelabet': '3', 'vupi': '4', 'blaze': '5', 'jonbet': '6', 'lottubet': '7' };
 
         function getOfferStatus(offerId) {
             const fullUser = getFullUserData();
