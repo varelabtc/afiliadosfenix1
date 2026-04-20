@@ -140,22 +140,13 @@
                     <h1>Gerenciar Afiliados</h1>
                     <p>Aprove, rejeite e gerencie todos os afiliados</p>
                 </div>
-                <div class="topbar-right">
-                    <select id="statusFilter" class="btn btn-secondary" style="padding: 12px 20px;">
-                        <option value="all">Todos</option>
-                        <option value="pending">Pendentes</option>
-                        <option value="approved">Aprovados</option>
-                        <option value="rejected">Rejeitados</option>
-                        <option value="blocked">Bloqueados</option>
-                    </select>
-                </div>
             </div>
 
             <!-- Stats -->
-            <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="stats-grid" style="grid-template-columns: repeat(5, 1fr);">
                 <div class="stat-card">
                     <div class="stat-value" id="totalCount">0</div>
-                    <div class="stat-label">Total de Afiliados</div>
+                    <div class="stat-label">Total</div>
                 </div>
                 <div class="stat-card" style="border-left: 3px solid var(--warning);">
                     <div class="stat-value" id="pendingCount" style="color: var(--warning);">0</div>
@@ -169,12 +160,49 @@
                     <div class="stat-value" id="blockedCount" style="color: var(--danger);">0</div>
                     <div class="stat-label">Bloqueados</div>
                 </div>
+                <div class="stat-card" style="border-left: 3px solid var(--accent);">
+                    <div class="stat-value" id="pedidosCount" style="color: var(--accent);">0</div>
+                    <div class="stat-label">Com Pedidos</div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="card" style="margin-bottom: 12px;">
+                <div class="card-body" style="padding: 14px 16px;">
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+                        <button class="tab-filter active" data-status="all">Todos</button>
+                        <button class="tab-filter" data-status="pending">Pendentes</button>
+                        <button class="tab-filter" data-status="approved">Aprovados</button>
+                        <button class="tab-filter" data-status="rejected">Rejeitados</button>
+                        <button class="tab-filter" data-status="blocked">Bloqueados</button>
+                        <button class="tab-filter" data-status="pedidos" style="background: rgba(232,89,12,0.15); color: var(--accent);">Com Pedidos de Link</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; align-items: center;">
+                        <div style="position: relative;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted);">
+                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <input type="text" id="searchInput" placeholder="Buscar por nome, email ou código..." style="width: 100%; padding: 10px 12px 10px 38px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 0.85rem;">
+                        </div>
+                        <select id="managerFilter" style="padding: 10px 12px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 0.85rem;">
+                            <option value="all">Todos os Gerentes</option>
+                            <option value="none">Sem Gerente</option>
+                        </select>
+                        <select id="houseMissingFilter" style="padding: 10px 12px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 0.85rem;">
+                            <option value="all">Todas as casas</option>
+                            <option value="superbet">Falta Superbet</option>
+                            <option value="sportingbet">Falta Sportingbet</option>
+                            <option value="estrelabet">Falta Estrelabet</option>
+                            <option value="vupi">Falta VUPI</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <!-- Affiliates Table -->
             <div class="card">
                 <div class="card-header">
-                    <h3>Lista de Afiliados</h3>
+                    <h3>Lista de Afiliados <span id="resultCount" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400; margin-left: 8px;"></span></h3>
                 </div>
                 <div class="card-body">
                     <div class="table-container">
@@ -182,8 +210,9 @@
                             <thead>
                                 <tr>
                                     <th>Afiliado</th>
+                                    <th>Gerente</th>
                                     <th>Código</th>
-                                    <th>Acordo</th>
+                                    <th>Links</th>
                                     <th>Conversões</th>
                                     <th>Ganhos</th>
                                     <th>Status</th>
@@ -281,6 +310,9 @@
     <script src="../js/admin.js?v=4"></script>
     <script>
         let currentFilter = 'all';
+        let currentSearch = '';
+        let currentManager = 'all';
+        let currentHouseMissing = 'all';
 
         document.addEventListener('DOMContentLoaded', async function() {
             if (!AdminAuth.requireAuth()) return;
@@ -289,10 +321,43 @@
                 document.getElementById('adminName').textContent = AdminAuth.currentAdmin.name;
             }
 
+            // Populate manager dropdown
+            var mgrSelect = document.getElementById('managerFilter');
+            var allMgrs = ManagerManager.getAll ? ManagerManager.getAll() : [];
+            allMgrs.forEach(function(m) {
+                var opt = document.createElement('option');
+                opt.value = m.id;
+                opt.textContent = m.name;
+                mgrSelect.appendChild(opt);
+            });
+
             loadAffiliates();
 
-            document.getElementById('statusFilter').addEventListener('change', function() {
-                currentFilter = this.value;
+            // Tab filters
+            document.querySelectorAll('.tab-filter').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-filter').forEach(function(b) { b.classList.remove('active'); });
+                    this.classList.add('active');
+                    currentFilter = this.dataset.status;
+                    loadAffiliates();
+                });
+            });
+
+            // Search
+            document.getElementById('searchInput').addEventListener('input', function() {
+                currentSearch = this.value.toLowerCase().trim();
+                loadAffiliates();
+            });
+
+            // Manager filter
+            document.getElementById('managerFilter').addEventListener('change', function() {
+                currentManager = this.value;
+                loadAffiliates();
+            });
+
+            // House missing filter
+            document.getElementById('houseMissingFilter').addEventListener('change', function() {
+                currentHouseMissing = this.value;
                 loadAffiliates();
             });
         });
@@ -305,10 +370,13 @@
             document.getElementById('pendingCount').textContent = allUsers.filter(u => u.status === 'pending').length;
             document.getElementById('approvedCount').textContent = allUsers.filter(u => u.status === 'approved' || !u.status).length;
             document.getElementById('blockedCount').textContent = allUsers.filter(u => u.status === 'blocked').length;
+            document.getElementById('pedidosCount').textContent = allUsers.filter(u => u.link_requests && u.link_requests.length > 0).length;
 
-            // Filter users
+            // Apply status filter
             let filteredUsers = allUsers;
-            if (currentFilter !== 'all') {
+            if (currentFilter === 'pedidos') {
+                filteredUsers = allUsers.filter(u => u.link_requests && u.link_requests.length > 0);
+            } else if (currentFilter !== 'all') {
                 if (currentFilter === 'approved') {
                     filteredUsers = allUsers.filter(u => u.status === 'approved' || !u.status);
                 } else {
@@ -316,12 +384,41 @@
                 }
             }
 
+            // Apply search
+            if (currentSearch) {
+                filteredUsers = filteredUsers.filter(function(u) {
+                    var hay = ((u.name || '') + ' ' + (u.email || '') + ' ' + (u.affiliate_code || '')).toLowerCase();
+                    return hay.indexOf(currentSearch) >= 0;
+                });
+            }
+
+            // Apply manager filter
+            if (currentManager === 'none') {
+                filteredUsers = filteredUsers.filter(function(u) { return !u.manager_id; });
+            } else if (currentManager !== 'all') {
+                var mgrId = parseInt(currentManager);
+                filteredUsers = filteredUsers.filter(function(u) { return u.manager_id === mgrId; });
+            }
+
+            // Apply missing house link filter
+            if (currentHouseMissing !== 'all') {
+                var houseIdMap = { superbet: '1', sportingbet: '2', estrelabet: '3', vupi: '4' };
+                var hid = houseIdMap[currentHouseMissing];
+                filteredUsers = filteredUsers.filter(function(u) {
+                    var links = u.house_links || {};
+                    return !links[hid] || links[hid].trim() === '';
+                });
+            }
+
+            // Update result count
+            document.getElementById('resultCount').textContent = '(' + filteredUsers.length + ' encontrados)';
+
             const tbody = document.getElementById('affiliatesTableBody');
 
             if (filteredUsers.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);">
                             Nenhum afiliado encontrado
                         </td>
                     </tr>
@@ -338,6 +435,29 @@
                                   user.status === 'rejected' ? 'Rejeitado' :
                                   user.status === 'blocked' ? 'Bloqueado' : 'Aprovado';
 
+                // Manager info
+                var mgrName = 'Sem gerente';
+                var mgrColor = 'var(--text-muted)';
+                if (user.manager_id) {
+                    var mgr = ManagerManager.getById(user.manager_id);
+                    if (mgr) { mgrName = mgr.name; mgrColor = 'var(--blue)'; }
+                }
+
+                // Links status
+                var links = user.house_links || {};
+                var houseNames = { '1': 'SB', '2': 'SP', '3': 'ES', '4': 'VP' };
+                var houseColors = { '1': '#E8590C', '2': '#22C55E', '3': '#1a2744', '4': '#7C3AED' };
+                var linksHtml = '';
+                ['1','2','3','4'].forEach(function(hid) {
+                    var has = links[hid] && links[hid].trim() !== '';
+                    var color = has ? houseColors[hid] : '#374151';
+                    var opacity = has ? '1' : '0.3';
+                    linksHtml += '<span title="' + (has ? 'Link configurado' : 'Link faltando') + '" style="display:inline-block;padding:2px 6px;margin-right:2px;border-radius:4px;font-size:0.65rem;font-weight:700;background:' + color + ';color:white;opacity:' + opacity + ';">' + houseNames[hid] + '</span>';
+                });
+                if (user.link_requests && user.link_requests.length > 0) {
+                    linksHtml += '<div style="margin-top:4px;"><span style="padding:2px 8px;background:#E8590C;color:white;border-radius:10px;font-size:0.65rem;font-weight:700;">PEDIDO: ' + user.link_requests.join(', ') + '</span></div>';
+                }
+
                 return `
                     <tr>
                         <td>
@@ -349,11 +469,11 @@
                                 </div>
                             </div>
                         </td>
+                        <td style="color: ${mgrColor}; font-size: 0.82rem; font-weight: 600;">${mgrName}</td>
                         <td>
                             <code style="background: var(--bg-input); padding: 4px 8px; border-radius: 4px;">${user.affiliate_code || 'N/A'}</code>
-                            ${(user.link_requests && user.link_requests.length > 0) ? '<span style="display:inline-block;margin-left:6px;padding:2px 8px;background:#E8590C;color:white;border-radius:10px;font-size:0.65rem;font-weight:700;">PEDIDO</span>' : ''}
                         </td>
-                        <td>${getDealBadge(user)}</td>
+                        <td>${linksHtml}</td>
                         <td id="conv_${user.id}">${Format.number(stats.totalConversions)}</td>
                         <td id="earn_${user.id}" style="color: var(--success); font-weight: 600;">${Format.currency(stats.totalEarnings)}</td>
                         <td><span class="status-badge ${statusClass}"><span class="status-dot"></span>${statusText}</span></td>
@@ -412,55 +532,104 @@
             loadRealEarnings(filteredUsers);
         }
 
+        async function fetchAllResults(url) {
+            var rows = [];
+            var page = 1;
+            var sep = url.indexOf('?') >= 0 ? '&' : '?';
+            while (true) {
+                var r = await fetch(url + sep + 'limit=100&page=' + page);
+                if (!r.ok) break;
+                var j = await r.json();
+                var data = (j.data && j.data.data) || [];
+                if (!Array.isArray(data) || data.length === 0) break;
+                rows = rows.concat(data);
+                if (data.length < 100) break;
+                page++;
+            }
+            return rows;
+        }
+
         async function loadRealEarnings(users) {
             try {
-                // Fetch all Superbet results
-                var sbRes = await fetch('/api/superbet?action=results&startDate=2025-01-01&endDate=2030-01-01&limit=100');
-                var sbData = {};
-                if (sbRes.ok) {
-                    var sbJson = await sbRes.json();
-                    var rows = (sbJson.data && sbJson.data.data) || [];
-                    rows.forEach(function(r) {
-                        var aid = r.affiliateId;
-                        if (!sbData[aid]) sbData[aid] = { qualified_cpa: 0, ftds: 0, regs: 0 };
-                        sbData[aid].qualified_cpa += (r.qualified_cpa || 0);
-                        sbData[aid].ftds += (r.first_deposits || 0);
-                        sbData[aid].regs += (r.registrations || 0);
-                    });
+                // Fetch Superbet (groupBy=affiliate) - qualified_cpa only in aggregated data
+                var sbRows = await fetchAllResults('/api/superbet?action=results&startDate=2025-01-01&endDate=2030-01-01&groupBy=affiliate&brandIds=clsuperbet000001');
+                var spRows = await fetchAllResults('/api/superbet?action=results&startDate=2025-01-01&endDate=2030-01-01&groupBy=affiliate&brandIds=cmm5dhdqm000e19b58dqc549a');
+
+                // Fetch affiliates to match names across brands
+                var affRes = await fetch('/api/superbet?action=affiliates');
+                var allAff = [];
+                if (affRes.ok) {
+                    var affJson = await affRes.json();
+                    allAff = (affJson.data && affJson.data.data) || [];
                 }
 
-                // Fetch all Sportingbet CPAs
-                var spRes = await fetch('/api/sportingbet-cpa?all=true');
-                var spData = {};
-                if (spRes.ok) {
-                    var spJson = await spRes.json();
-                    if (Array.isArray(spJson)) {
-                        spJson.forEach(function(r) {
-                            var aid = r.affiliate_id;
-                            if (!spData[aid]) spData[aid] = { ftds: 0 };
-                            spData[aid].ftds += (r.ftds || 0);
-                        });
-                    }
-                }
+                // Build lookup: affiliateId -> data
+                var sbMap = {};
+                sbRows.forEach(function(r) { sbMap[r.id] = r; });
+                var spMap = {};
+                spRows.forEach(function(r) { spMap[r.id] = r; });
 
-                // Update each user row
+                // For each user, find their Superbet and Sportingbet IDs by name
                 users.forEach(function(user) {
-                    var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80, blaze: 150, jonbet: 150 };
+                    var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80 };
                     var totalEarnings = 0;
                     var totalConv = 0;
 
+                    // Find matching affiliates by name (to get both brand IDs)
+                    var userName = (user.name || '').replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                    var sbId = null, spId = null;
+
+                    // Try by otg_affiliate_id first
+                    if (user.otg_affiliate_id) {
+                        var match = allAff.find(function(a) { return a.id === user.otg_affiliate_id; });
+                        if (match) {
+                            var matchName = match.name;
+                            allAff.forEach(function(a) {
+                                if (a.name === matchName) {
+                                    if (a.brand && a.brand.id === 'clsuperbet000001') sbId = a.id;
+                                    if (a.brand && a.brand.id === 'cmm5dhdqm000e19b58dqc549a') spId = a.id;
+                                }
+                            });
+                        }
+                    }
+
+                    // Fallback: match by name
+                    if (!sbId && !spId && userName.length >= 4) {
+                        var bestMatch = null;
+                        var bestScore = 0;
+                        allAff.forEach(function(a) {
+                            var an = (a.name || '').replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                            var common = 0;
+                            for (var i = 0; i < Math.min(an.length, userName.length); i++) {
+                                if (an[i] === userName[i]) common++; else break;
+                            }
+                            var shorter = Math.min(an.length, userName.length);
+                            if (common >= Math.max(shorter * 0.7, 8) && common > bestScore) {
+                                bestMatch = a.name; bestScore = common;
+                            }
+                        });
+                        if (bestMatch) {
+                            allAff.forEach(function(a) {
+                                if (a.name === bestMatch) {
+                                    if (a.brand && a.brand.id === 'clsuperbet000001') sbId = a.id;
+                                    if (a.brand && a.brand.id === 'cmm5dhdqm000e19b58dqc549a') spId = a.id;
+                                }
+                            });
+                        }
+                    }
+
                     // Superbet earnings
-                    if (user.otg_affiliate_id && sbData[user.otg_affiliate_id]) {
-                        var sb = sbData[user.otg_affiliate_id];
-                        totalEarnings += sb.qualified_cpa * (deals.superbet || 200);
-                        totalConv += sb.qualified_cpa;
+                    if (sbId && sbMap[sbId]) {
+                        var sb = sbMap[sbId];
+                        totalEarnings += (sb.qualified_cpa || 0) * (deals.superbet || 200);
+                        totalConv += (sb.qualified_cpa || 0);
                     }
 
                     // Sportingbet earnings
-                    if (spData[user.id]) {
-                        var sp = spData[user.id];
-                        totalEarnings += sp.ftds * (deals.sportingbet || 180);
-                        totalConv += sp.ftds;
+                    if (spId && spMap[spId]) {
+                        var sp = spMap[spId];
+                        totalEarnings += (sp.qualified_cpa || 0) * (deals.sportingbet || 180);
+                        totalConv += (sp.qualified_cpa || 0);
                     }
 
                     var convEl = document.getElementById('conv_' + user.id);
@@ -1064,6 +1233,28 @@
 
     <style>
         .admin-sidebar { border-right-color: var(--danger) !important; }
+        .tab-filter {
+            padding: 8px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-filter:hover {
+            background: var(--bg-elevated);
+        }
+        .tab-filter.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
     </style>
 
     <nav class="mobile-bottom-nav">

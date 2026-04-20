@@ -65,6 +65,18 @@
                     <p>Bem-vindo, <span id="welcomeName">Gerente</span></p>
                 </div>
 
+                <!-- Period Selector -->
+                <div class="card" style="margin-bottom: 12px;">
+                    <div class="card-body" style="padding: 14px 16px;">
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button class="period-tab" data-days="7">7 dias</button>
+                            <button class="period-tab active" data-days="30">30 dias</button>
+                            <button class="period-tab" data-days="90">90 dias</button>
+                            <button class="period-tab" data-days="365">Geral</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Stats -->
                 <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
                     <div class="stat-card">
@@ -76,12 +88,77 @@
                         <div class="stat-value" id="pendentes" style="color: var(--warning);">0</div>
                     </div>
                     <div class="stat-card" style="border-left: 3px solid var(--success);">
-                        <div class="stat-label">Conversões</div>
+                        <div class="stat-label">CPAs Qualificados</div>
                         <div class="stat-value" id="conversoes" style="color: var(--success);">0</div>
                     </div>
                     <div class="stat-card" style="border-left: 3px solid var(--blue);">
-                        <div class="stat-label">Meus Ganhos</div>
+                        <div class="stat-label">Meus Ganhos (40%)</div>
                         <div class="stat-value" id="meusGanhos" style="color: var(--blue);">R$ 0</div>
+                    </div>
+                </div>
+
+                <!-- Revenue Breakdown -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Faturamento da Operação</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Total que seus afiliados trazem para a agência</p>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                            <div style="background: rgba(232,89,12,0.08); border: 1px solid rgba(232,89,12,0.2); padding: 16px; border-radius: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                    <span style="font-size: 1.3rem;">🎰</span>
+                                    <h4 style="margin: 0; color: #E8590C;">Superbet</h4>
+                                </div>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                                    <div>
+                                        <div id="sbCpas" style="font-size: 1.2rem; font-weight: 700;">0</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-muted);">CPAs Qual.</div>
+                                    </div>
+                                    <div>
+                                        <div id="sbAgencyRevenue" style="font-size: 1.2rem; font-weight: 700; color: var(--success);">R$ 0</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-muted);">Agência recebe</div>
+                                    </div>
+                                    <div>
+                                        <div id="sbAgencyProfit" style="font-size: 1.2rem; font-weight: 700; color: #F59E0B;">R$ 0</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-muted);">Lucro Agência</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">Seus 40%:</span>
+                                    <span id="sbMgrEarnings" style="font-size: 1.1rem; font-weight: 700; color: var(--blue);">R$ 0</span>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); padding: 16px; border-radius: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                    <span style="font-size: 1.3rem;">⚽</span>
+                                    <h4 style="margin: 0; color: #22C55E;">Sportingbet</h4>
+                                </div>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                                    <div>
+                                        <div id="spCpas" style="font-size: 1.2rem; font-weight: 700;">0</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-muted);">CPAs Qual.</div>
+                                    </div>
+                                    <div>
+                                        <div id="spAgencyRevenue" style="font-size: 1.2rem; font-weight: 700; color: var(--success);">R$ 0</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-muted);">Agência recebe</div>
+                                    </div>
+                                    <div>
+                                        <div id="spAgencyProfit" style="font-size: 1.2rem; font-weight: 700; color: #F59E0B;">R$ 0</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-muted);">Lucro Agência</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">Seus 40%:</span>
+                                    <span id="spMgrEarnings" style="font-size: 1.1rem; font-weight: 700; color: var(--blue);">R$ 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 16px; padding: 14px 16px; background: rgba(59,130,246,0.08); border-radius: 10px; border: 1px solid rgba(59,130,246,0.2); font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                            <strong style="color: var(--blue);">Como funciona:</strong> Para cada CPA qualificado, a Superbet paga R$250 à agência (lucro R$50) e a Sportingbet paga R$250 (lucro R$70). Você recebe <strong>40% desse lucro</strong> + <strong>40% do RevShare</strong> que a agência ganha (50% do total).
+                        </div>
                     </div>
                 </div>
 
@@ -91,13 +168,10 @@
                         <h3>Meu Link de Indicação</h3>
                     </div>
                     <div class="card-body">
-                        <p style="color: var(--text-muted); margin-bottom: 12px;">Compartilhe este link para convidar novos afiliados. Todos que se cadastrarem por ele ficarão vinculados a você.</p>
+                        <p style="color: var(--text-muted); margin-bottom: 12px;">Compartilhe este link para convidar novos afiliados.</p>
                         <div style="display: flex; gap: 8px; align-items: center;">
                             <input type="text" id="referralLink" readonly style="flex: 1; padding: 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-1); font-size: 0.85rem;">
                             <button class="btn btn-primary" onclick="copyLink()" style="white-space: nowrap;">Copiar</button>
-                        </div>
-                        <div style="margin-top: 12px; padding: 12px; background: rgba(59,130,246,0.1); border-radius: 8px; border: 1px solid rgba(59,130,246,0.2);">
-                            <span style="font-size: 0.8rem; color: var(--blue);">Seu CPA por conversão de afiliado: <strong id="cpaInfo">R$ 0</strong></span>
                         </div>
                     </div>
                 </div>
@@ -105,7 +179,7 @@
                 <!-- Recent Affiliates -->
                 <div class="card">
                     <div class="card-header">
-                        <h3>Afiliados Recentes</h3>
+                        <h3>Meus Afiliados — Performance</h3>
                         <a href="afiliados.html" class="btn btn-secondary btn-sm">Ver todos</a>
                     </div>
                     <div class="card-body">
@@ -115,14 +189,15 @@
                                     <tr>
                                         <th>Afiliado</th>
                                         <th>Status</th>
-                                        <th>Conversões</th>
-                                        <th>Seus Ganhos</th>
+                                        <th>CPAs Superbet</th>
+                                        <th>CPAs Sportingbet</th>
+                                        <th>Sua Comissão</th>
                                     </tr>
                                 </thead>
                                 <tbody id="recentAffiliates">
                                     <tr>
-                                        <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-muted);">
-                                            Nenhum afiliado ainda. Compartilhe seu link!
+                                        <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                            Carregando afiliados...
                                         </td>
                                     </tr>
                                 </tbody>
@@ -138,54 +213,232 @@
     <script src="../js/main.js?v=4"></script>
     <script src="../js/admin.js?v=4"></script>
     <script>
+        var BRAND_SUPERBET = 'clsuperbet000001';
+        var BRAND_SPORTINGBET = 'cmm5dhdqm000e19b58dqc549a';
+        var currentDays = 30;
+        var allApiAff = [];
+
         document.addEventListener('DOMContentLoaded', async function() {
             if (!ManagerManager.requireAuth()) return;
             await AffiliateManager.fetchAll();
             await ManagerManager.fetchAll();
+
+            // Period tabs
+            document.querySelectorAll('.period-tab').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.period-tab').forEach(function(b) { b.classList.remove('active'); });
+                    this.classList.add('active');
+                    currentDays = parseInt(this.dataset.days) || 30;
+                    loadManagerDashboard();
+                });
+            });
+
             loadManagerDashboard();
         });
 
-        function loadManagerDashboard() {
+        function normalizeName(name) {
+            return (name || '').replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        }
+
+        function getAffBrandIds(user) {
+            if (!allApiAff || allApiAff.length === 0) return { sb: null, sp: null };
+            var userName = normalizeName(user.name);
+
+            // Try by otg_affiliate_id first
+            var match = user.otg_affiliate_id ? allApiAff.find(function(a) { return a.id === user.otg_affiliate_id; }) : null;
+
+            // Fallback: match by name
+            if (!match && userName.length >= 4) {
+                var bestScore = 0;
+                allApiAff.forEach(function(a) {
+                    var an = normalizeName(a.name);
+                    var common = 0;
+                    for (var i = 0; i < Math.min(an.length, userName.length); i++) {
+                        if (an[i] === userName[i]) common++; else break;
+                    }
+                    var shorter = Math.min(an.length, userName.length);
+                    if (common >= Math.max(shorter * 0.7, 8) && common > bestScore) {
+                        match = a; bestScore = common;
+                    }
+                });
+            }
+
+            if (!match) return { sb: null, sp: null };
+
+            var matchName = match.name;
+            var sbId = null, spId = null;
+            allApiAff.forEach(function(a) {
+                if (a.name === matchName) {
+                    if (a.brand && a.brand.id === BRAND_SUPERBET) sbId = a.id;
+                    if (a.brand && a.brand.id === BRAND_SPORTINGBET) spId = a.id;
+                }
+            });
+            return { sb: sbId, sp: spId };
+        }
+
+        async function fetchAllPages(baseUrl) {
+            var allRows = [];
+            var page = 1;
+            var sep = baseUrl.indexOf('?') >= 0 ? '&' : '?';
+            while (true) {
+                var r = await fetch(baseUrl + sep + 'limit=100&page=' + page);
+                if (!r.ok) break;
+                var j = await r.json();
+                var rows = (j.data && j.data.data) || [];
+                if (!Array.isArray(rows) || rows.length === 0) break;
+                allRows = allRows.concat(rows);
+                if (rows.length < 100) break;
+                page++;
+            }
+            return allRows;
+        }
+
+        async function loadManagerDashboard() {
             var mgr = ManagerManager.getCurrentManager();
             if (!mgr) return;
 
-            var fullMgr = ManagerManager.getById(mgr.id);
             document.getElementById('mgrName').textContent = mgr.name;
             document.getElementById('mgrAvatar').textContent = mgr.name.charAt(0);
             document.getElementById('welcomeName').textContent = mgr.name.split(' ')[0];
-
-            var stats = ManagerManager.getStats(mgr.id);
-            document.getElementById('totalAfiliados').textContent = stats.totalAffiliates;
-            document.getElementById('pendentes').textContent = stats.pendingAffiliates;
-            document.getElementById('pendingBadge').textContent = stats.pendingAffiliates;
-            document.getElementById('conversoes').textContent = stats.totalConversions;
-            document.getElementById('meusGanhos').textContent = Format.currency(stats.managerEarnings);
 
             // Referral link
             var baseUrl = window.location.origin;
             var refLink = baseUrl + '/pages/cadastro.html?ref=' + (mgr.referralCode || 'MGR');
             document.getElementById('referralLink').value = refLink;
-            document.getElementById('cpaInfo').textContent = Format.currency(stats.cpaCommission);
 
-            // Recent affiliates
+            // Get manager's affiliates
             var affiliates = ManagerManager.getAffiliates(mgr.id);
-            var tbody = document.getElementById('recentAffiliates');
+            document.getElementById('totalAfiliados').textContent = affiliates.length;
+            document.getElementById('pendentes').textContent = affiliates.filter(function(a) { return a.status === 'pending'; }).length;
+            document.getElementById('pendingBadge').textContent = affiliates.filter(function(a) { return a.status === 'pending'; }).length;
 
-            if (affiliates.length > 0) {
-                tbody.innerHTML = affiliates.slice(0, 5).map(function(aff) {
-                    var conversions = aff.total_conversions || 0;
-                    var mgrEarning = conversions * stats.cpaCommission;
-                    var statusClass = aff.status === 'pending' ? 'pending' : aff.status === 'rejected' ? 'inactive' : 'active';
-                    var statusText = aff.status === 'pending' ? 'Pendente' : aff.status === 'rejected' ? 'Rejeitado' : 'Aprovado';
+            // Fetch API affiliates list
+            try {
+                var affRes = await fetch('/api/superbet?action=affiliates');
+                if (affRes.ok) {
+                    var affJson = await affRes.json();
+                    allApiAff = (affJson.data && affJson.data.data) || [];
+                }
+            } catch (e) { console.error(e); }
 
-                    return '<tr>' +
-                        '<td><div style="display:flex;align-items:center;gap:10px;"><div class="user-avatar">' + aff.name.charAt(0) + '</div><div><div style="font-weight:600;">' + aff.name + '</div><div style="font-size:0.75rem;color:var(--text-muted);">' + aff.email + '</div></div></div></td>' +
-                        '<td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + statusText + '</span></td>' +
-                        '<td>' + conversions + '</td>' +
-                        '<td style="color:var(--blue);font-weight:600;">' + Format.currency(mgrEarning) + '</td>' +
-                    '</tr>';
-                }).join('');
+            // Period
+            var end = new Date();
+            var start = new Date();
+            start.setDate(end.getDate() - currentDays);
+            var fmt = function(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+            var dateRange = '&startDate=' + fmt(start) + '&endDate=' + fmt(end);
+
+            // Aggregate totals
+            var totals = {
+                sbCpas: 0, sbRvs: 0, sbCommission: 0,
+                spCpas: 0, spRvs: 0, spCommission: 0
+            };
+
+            // Per-affiliate details for table
+            var affDetails = [];
+
+            for (var i = 0; i < affiliates.length; i++) {
+                var aff = affiliates[i];
+                var ids = getAffBrandIds(aff);
+
+                var sbCpa = 0, sbRvs = 0, sbCom = 0;
+                var spCpa = 0, spRvs = 0, spCom = 0;
+
+                if (ids.sb) {
+                    try {
+                        var sbRows = await fetchAllPages('/api/superbet?action=results' + dateRange + '&groupBy=affiliate&affiliateIds=' + encodeURIComponent(ids.sb));
+                        sbRows.forEach(function(r) {
+                            sbCpa += (r.qualified_cpa || 0);
+                            sbRvs += (r.rvs || 0);
+                            sbCom += (r.total_commission || 0);
+                        });
+                    } catch (e) {}
+                }
+
+                if (ids.sp) {
+                    try {
+                        var spRows = await fetchAllPages('/api/superbet?action=results' + dateRange + '&groupBy=affiliate&affiliateIds=' + encodeURIComponent(ids.sp));
+                        spRows.forEach(function(r) {
+                            spCpa += (r.qualified_cpa || 0);
+                            spRvs += (r.rvs || 0);
+                            spCom += (r.total_commission || 0);
+                        });
+                    } catch (e) {}
+                }
+
+                totals.sbCpas += sbCpa;
+                totals.sbRvs += sbRvs;
+                totals.sbCommission += sbCom;
+                totals.spCpas += spCpa;
+                totals.spRvs += spRvs;
+                totals.spCommission += spCom;
+
+                // Manager commission for this affiliate
+                // Superbet: agency profit = R$50 per CPA + 50% of RVS
+                //   (agency receives R$250/CPA but pays R$200 to affiliate; RVS split 50/50)
+                var sbAgencyProfit = (sbCpa * 50) + (sbRvs * 0.5);
+                var sbMgrComm = sbAgencyProfit * 0.4;
+
+                // Sportingbet: agency profit = R$70 per CPA + 50% of RVS
+                var spAgencyProfit = (spCpa * 70) + (spRvs * 0.5);
+                var spMgrComm = spAgencyProfit * 0.4;
+
+                affDetails.push({
+                    aff: aff,
+                    sbCpa: sbCpa, spCpa: spCpa,
+                    mgrEarnings: sbMgrComm + spMgrComm
+                });
             }
+
+            // Compute totals
+            var sbAgencyRevenue = (totals.sbCpas * 250) + (totals.sbRvs * 0.5);
+            var sbAgencyProfit = (totals.sbCpas * 50) + (totals.sbRvs * 0.5);
+            var sbMgrEarnings = sbAgencyProfit * 0.4;
+
+            var spAgencyRevenue = (totals.spCpas * 250) + (totals.spRvs * 0.5);
+            var spAgencyProfit = (totals.spCpas * 70) + (totals.spRvs * 0.5);
+            var spMgrEarnings = spAgencyProfit * 0.4;
+
+            var totalCpas = totals.sbCpas + totals.spCpas;
+            var totalMgrEarnings = sbMgrEarnings + spMgrEarnings;
+
+            // Update UI
+            document.getElementById('conversoes').textContent = Math.round(totalCpas);
+            document.getElementById('meusGanhos').textContent = Format.currency(totalMgrEarnings);
+
+            document.getElementById('sbCpas').textContent = Math.round(totals.sbCpas);
+            document.getElementById('sbAgencyRevenue').textContent = Format.currency(sbAgencyRevenue);
+            document.getElementById('sbAgencyProfit').textContent = Format.currency(sbAgencyProfit);
+            document.getElementById('sbMgrEarnings').textContent = Format.currency(sbMgrEarnings);
+
+            document.getElementById('spCpas').textContent = Math.round(totals.spCpas);
+            document.getElementById('spAgencyRevenue').textContent = Format.currency(spAgencyRevenue);
+            document.getElementById('spAgencyProfit').textContent = Format.currency(spAgencyProfit);
+            document.getElementById('spMgrEarnings').textContent = Format.currency(spMgrEarnings);
+
+            // Recent affiliates table
+            var tbody = document.getElementById('recentAffiliates');
+            if (affDetails.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum afiliado ainda. Compartilhe seu link!</td></tr>';
+                return;
+            }
+
+            // Sort by earnings desc
+            affDetails.sort(function(a, b) { return b.mgrEarnings - a.mgrEarnings; });
+
+            tbody.innerHTML = affDetails.map(function(d) {
+                var aff = d.aff;
+                var statusClass = aff.status === 'pending' ? 'pending' : aff.status === 'rejected' ? 'inactive' : 'active';
+                var statusText = aff.status === 'pending' ? 'Pendente' : aff.status === 'rejected' ? 'Rejeitado' : 'Aprovado';
+
+                return '<tr>' +
+                    '<td><div style="display:flex;align-items:center;gap:10px;"><div class="user-avatar">' + aff.name.charAt(0) + '</div><div><div style="font-weight:600;">' + aff.name + '</div><div style="font-size:0.75rem;color:var(--text-muted);">' + aff.email + '</div></div></div></td>' +
+                    '<td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + statusText + '</span></td>' +
+                    '<td style="color:#E8590C;font-weight:700;">' + Math.round(d.sbCpa) + '</td>' +
+                    '<td style="color:#22C55E;font-weight:700;">' + Math.round(d.spCpa) + '</td>' +
+                    '<td style="color:var(--blue);font-weight:700;">' + Format.currency(d.mgrEarnings) + '</td>' +
+                '</tr>';
+            }).join('');
         }
 
         function copyLink() {
@@ -197,6 +450,23 @@
     </script>
 
     <style>
+        .period-tab {
+            padding: 8px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .period-tab:hover { background: var(--bg-elevated); }
+        .period-tab.active {
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+        }
         @media (max-width: 768px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }

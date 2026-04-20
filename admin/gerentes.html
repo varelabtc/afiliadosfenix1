@@ -131,10 +131,35 @@
                     <button class="btn btn-primary" onclick="openAddModal()">+ Novo Gerente</button>
                 </div>
 
+                <!-- Summary -->
+                <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+                    <div class="stat-card">
+                        <div class="stat-label">Total de Gerentes</div>
+                        <div class="stat-value" id="statTotalMgrs">0</div>
+                    </div>
+                    <div class="stat-card" style="border-left: 3px solid var(--success);">
+                        <div class="stat-label">Faturamento Total (30d)</div>
+                        <div class="stat-value" id="statTotalRev" style="color: var(--success);">R$ 0</div>
+                    </div>
+                    <div class="stat-card" style="border-left: 3px solid #F59E0B;">
+                        <div class="stat-label">Lucro Agência (30d)</div>
+                        <div class="stat-value" id="statTotalProfit" style="color: #F59E0B;">R$ 0</div>
+                    </div>
+                    <div class="stat-card" style="border-left: 3px solid var(--blue);">
+                        <div class="stat-label">Total Pago a Gerentes (30d)</div>
+                        <div class="stat-value" id="statTotalMgrComm" style="color: var(--blue);">R$ 0</div>
+                    </div>
+                </div>
+
                 <!-- Managers Table -->
                 <div class="card">
                     <div class="card-header">
                         <h3>Lista de Gerentes</h3>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="period-tab-mgr active" data-days="30">30 dias</button>
+                            <button class="period-tab-mgr" data-days="90">90 dias</button>
+                            <button class="period-tab-mgr" data-days="365">Geral</button>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-container">
@@ -143,17 +168,19 @@
                                     <tr>
                                         <th>Gerente</th>
                                         <th>Código</th>
-                                        <th>CPA/Conv.</th>
                                         <th>Afiliados</th>
-                                        <th>Conversões</th>
+                                        <th>CPAs Qual.</th>
+                                        <th>Faturamento</th>
+                                        <th>Lucro Agência</th>
+                                        <th>Comissão (40%)</th>
                                         <th>Status</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody id="managersBody">
                                     <tr>
-                                        <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
-                                            Nenhum gerente cadastrado
+                                        <td colspan="9" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                            Carregando gerentes...
                                         </td>
                                     </tr>
                                 </tbody>
@@ -200,11 +227,10 @@
                         <input type="text" name="phone" placeholder="(00) 00000-0000">
                     </div>
 
-                    <div class="form-group">
-                        <label>CPA por Conversão de Afiliado (R$)</label>
-                        <input type="number" step="0.01" min="0" name="cpaCommission" value="30" required>
-                        <small style="color: var(--text-muted); font-size: 0.75rem;">Quanto o gerente ganha por cada conversão dos afiliados dele</small>
+                    <div style="padding: 12px; background: rgba(59,130,246,0.08); border-radius: 8px; border: 1px solid rgba(59,130,246,0.2); font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                        <strong style="color: var(--blue);">Comissão automática:</strong> Gerente recebe <strong>40% do lucro da agência</strong> gerado pelos afiliados dele (R$50 por CPA Superbet + R$70 por CPA Sportingbet + 50% do RevShare da agência).
                     </div>
+                    <input type="hidden" name="cpaCommission" value="30">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-modal-close>Cancelar</button>
@@ -218,35 +244,178 @@
     <script src="../js/main.js?v=4"></script>
     <script src="../js/admin.js?v=4"></script>
     <script>
+        var BRAND_SUPERBET = 'clsuperbet000001';
+        var BRAND_SPORTINGBET = 'cmm5dhdqm000e19b58dqc549a';
+        var currentDays = 30;
+        var allApiAff = [];
+
         document.addEventListener('DOMContentLoaded', async function() {
             if (!AdminAuth.requireAuth()) return;
-            await ManagerManager.fetchAll();
+            await Promise.all([ManagerManager.fetchAll(), AffiliateManager.fetchAll()]);
             if (AdminAuth.currentAdmin) {
                 document.getElementById('adminName').textContent = AdminAuth.currentAdmin.name;
             }
+
+            // Fetch API affiliates
+            try {
+                var affRes = await fetch('/api/superbet?action=affiliates');
+                if (affRes.ok) {
+                    var affJson = await affRes.json();
+                    allApiAff = (affJson.data && affJson.data.data) || [];
+                }
+            } catch (e) { console.error(e); }
+
+            document.querySelectorAll('.period-tab-mgr').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.period-tab-mgr').forEach(function(b) { b.classList.remove('active'); });
+                    this.classList.add('active');
+                    currentDays = parseInt(this.dataset.days) || 30;
+                    loadManagers();
+                });
+            });
+
             loadManagers();
         });
 
-        function loadManagers() {
+        function normalizeName(name) {
+            return (name || '').replace(/\s+/g, '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        }
+
+        function getAffBrandIds(user) {
+            if (!allApiAff || allApiAff.length === 0) return { sb: null, sp: null };
+            var userName = normalizeName(user.name);
+            var match = user.otg_affiliate_id ? allApiAff.find(function(a) { return a.id === user.otg_affiliate_id; }) : null;
+            if (!match && userName.length >= 4) {
+                var bestScore = 0;
+                allApiAff.forEach(function(a) {
+                    var an = normalizeName(a.name);
+                    var common = 0;
+                    for (var i = 0; i < Math.min(an.length, userName.length); i++) {
+                        if (an[i] === userName[i]) common++; else break;
+                    }
+                    var shorter = Math.min(an.length, userName.length);
+                    if (common >= Math.max(shorter * 0.7, 8) && common > bestScore) {
+                        match = a; bestScore = common;
+                    }
+                });
+            }
+            if (!match) return { sb: null, sp: null };
+            var matchName = match.name;
+            var sbId = null, spId = null;
+            allApiAff.forEach(function(a) {
+                if (a.name === matchName) {
+                    if (a.brand && a.brand.id === BRAND_SUPERBET) sbId = a.id;
+                    if (a.brand && a.brand.id === BRAND_SPORTINGBET) spId = a.id;
+                }
+            });
+            return { sb: sbId, sp: spId };
+        }
+
+        async function fetchAllPages(baseUrl) {
+            var allRows = [];
+            var page = 1;
+            var sep = baseUrl.indexOf('?') >= 0 ? '&' : '?';
+            while (true) {
+                var r = await fetch(baseUrl + sep + 'limit=100&page=' + page);
+                if (!r.ok) break;
+                var j = await r.json();
+                var rows = (j.data && j.data.data) || [];
+                if (!Array.isArray(rows) || rows.length === 0) break;
+                allRows = allRows.concat(rows);
+                if (rows.length < 100) break;
+                page++;
+            }
+            return allRows;
+        }
+
+        async function loadManagers() {
             var managers = ManagerManager.getAll();
             var tbody = document.getElementById('managersBody');
 
+            document.getElementById('statTotalMgrs').textContent = managers.length;
+
             if (managers.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum gerente cadastrado</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum gerente cadastrado</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = managers.map(function(mgr) {
-                var stats = ManagerManager.getStats(mgr.id);
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted);">Calculando faturamento...</td></tr>';
+
+            // Period
+            var end = new Date();
+            var start = new Date();
+            start.setDate(end.getDate() - currentDays);
+            var fmt = function(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+            var dateRange = '&startDate=' + fmt(start) + '&endDate=' + fmt(end);
+
+            // Prefetch all Superbet/Sportingbet data once
+            var sbRows = await fetchAllPages('/api/superbet?action=results' + dateRange + '&groupBy=affiliate&brandIds=' + BRAND_SUPERBET);
+            var spRows = await fetchAllPages('/api/superbet?action=results' + dateRange + '&groupBy=affiliate&brandIds=' + BRAND_SPORTINGBET);
+            var sbMap = {};
+            sbRows.forEach(function(r) { sbMap[r.id] = r; });
+            var spMap = {};
+            spRows.forEach(function(r) { spMap[r.id] = r; });
+
+            var totalRev = 0, totalProfit = 0, totalMgrComm = 0;
+
+            var managerData = managers.map(function(mgr) {
+                var affs = ManagerManager.getAffiliates(mgr.id);
+                var sbCpas = 0, spCpas = 0, sbRvs = 0, spRvs = 0;
+
+                affs.forEach(function(aff) {
+                    var ids = getAffBrandIds(aff);
+                    if (ids.sb && sbMap[ids.sb]) {
+                        sbCpas += (sbMap[ids.sb].qualified_cpa || 0);
+                        sbRvs += (sbMap[ids.sb].rvs || 0);
+                    }
+                    if (ids.sp && spMap[ids.sp]) {
+                        spCpas += (spMap[ids.sp].qualified_cpa || 0);
+                        spRvs += (spMap[ids.sp].rvs || 0);
+                    }
+                });
+
+                // Agency receives R$250/CPA + 50% of RVS (from both brands)
+                var agencyRevenue = (sbCpas * 250) + (sbRvs * 0.5) + (spCpas * 250) + (spRvs * 0.5);
+                // Agency profit: Superbet = R$50/CPA + 50% RVS, Sportingbet = R$70/CPA + 50% RVS
+                var agencyProfit = (sbCpas * 50) + (sbRvs * 0.5) + (spCpas * 70) + (spRvs * 0.5);
+                // Manager gets 40% of agency profit
+                var mgrComm = agencyProfit * 0.4;
+
+                totalRev += agencyRevenue;
+                totalProfit += agencyProfit;
+                totalMgrComm += mgrComm;
+
+                return {
+                    mgr: mgr,
+                    totalAffiliates: affs.length,
+                    cpas: sbCpas + spCpas,
+                    agencyRevenue: agencyRevenue,
+                    agencyProfit: agencyProfit,
+                    mgrComm: mgrComm
+                };
+            });
+
+            // Update summary cards
+            document.getElementById('statTotalRev').textContent = Format.currency(totalRev);
+            document.getElementById('statTotalProfit').textContent = Format.currency(totalProfit);
+            document.getElementById('statTotalMgrComm').textContent = Format.currency(totalMgrComm);
+
+            // Sort by mgrComm desc
+            managerData.sort(function(a, b) { return b.mgrComm - a.mgrComm; });
+
+            tbody.innerHTML = managerData.map(function(d) {
+                var mgr = d.mgr;
                 var statusClass = mgr.status === 'active' ? 'active' : 'inactive';
                 var statusText = mgr.status === 'active' ? 'Ativo' : 'Inativo';
 
                 return '<tr>' +
                     '<td><div style="display:flex;align-items:center;gap:10px;"><div class="user-avatar" style="background:var(--blue);">' + mgr.name.charAt(0) + '</div><div><div style="font-weight:600;">' + mgr.name + '</div><div style="font-size:0.75rem;color:var(--text-muted);">' + mgr.email + '</div></div></div></td>' +
                     '<td><code style="background:var(--bg-2);padding:4px 8px;border-radius:4px;">' + (mgr.referral_code || '-') + '</code></td>' +
-                    '<td style="color:var(--blue);font-weight:600;">R$ ' + (mgr.cpa_commission || 30).toFixed(2) + '</td>' +
-                    '<td>' + stats.totalAffiliates + '</td>' +
-                    '<td>' + stats.totalConversions + '</td>' +
+                    '<td>' + d.totalAffiliates + '</td>' +
+                    '<td style="color:var(--accent);font-weight:700;">' + Math.round(d.cpas) + '</td>' +
+                    '<td style="color:var(--success);font-weight:600;">' + Format.currency(d.agencyRevenue) + '</td>' +
+                    '<td style="color:#F59E0B;font-weight:600;">' + Format.currency(d.agencyProfit) + '</td>' +
+                    '<td style="color:var(--blue);font-weight:700;">' + Format.currency(d.mgrComm) + '</td>' +
                     '<td><span class="status-badge ' + statusClass + '"><span class="status-dot"></span>' + statusText + '</span></td>' +
                     '<td><div style="display:flex;gap:8px;">' +
                         '<button class="btn-icon" onclick="editManager(' + mgr.id + ')" title="Editar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>' +
@@ -319,6 +488,21 @@
     </script>
 
     <style>
+        .period-tab-mgr {
+            padding: 6px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .period-tab-mgr.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
         .admin-sidebar { border-right-color: var(--fire-red, #EF4444) !important; }
         .admin-sidebar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--fire-red, #EF4444); }
         .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 16px; border-bottom: 1px solid var(--border); }
