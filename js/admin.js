@@ -178,7 +178,7 @@ const BettingHouses = {
                 color: '#F59E0B',
                 baseUrl: 'https://lottu.bet',
                 cpa: 100.00,
-                revShare: 20,
+                revShare: 0,
                 minDeposit: 20.00,
                 status: 'active',
                 totalAffiliates: 0,
