@@ -518,6 +518,7 @@
             allHouseStats.superbet = { regs: sbStats.registrations, ftds: sbStats.first_deposits, cpas: sbStats.qualified_cpa, deposit: sbStats.deposit, lucro: superbetEarnings };
             allHouseStats.sportingbet = { regs: spStats.registrations, ftds: spStats.first_deposits, cpas: spStats.qualified_cpa, deposit: spStats.deposit, lucro: sportingbetEarnings };
             allHouseStats.vupi = { regs: vupiStats.registros, ftds: vupiStats.ftds, cpas: vupiStats.qftds, deposit: vupiStats.deposito_amount, lucro: vupiEarnings, visitas: vupiStats.visitas, depositos: vupiStats.depositos, ggr: vupiStats.ggr, ngr: vupiStats.ngr };
+            allHouseStats.lottubet = { regs: 0, ftds: 0, cpas: 0, deposit: 0, lucro: 0 };
             allHouseStats.all = {
                 regs: sbStats.registrations + spStats.registrations + vupiStats.registros,
                 ftds: sbStats.first_deposits + spStats.first_deposits + vupiStats.ftds,
@@ -550,7 +551,11 @@
 
         function switchHouse(house) {
             currentHouse = house;
-            var s = allHouseStats[house] || allHouseStats.all;
+            // Use zero-stats for houses without data (instead of falling back to 'all')
+            var s = allHouseStats[house];
+            if (!s) {
+                s = (house === 'all' && allHouseStats.all) ? allHouseStats.all : { regs: 0, ftds: 0, cpas: 0, deposit: 0, lucro: 0 };
+            }
 
             // Update tabs style
             document.querySelectorAll('.house-tab').forEach(function(btn) {
