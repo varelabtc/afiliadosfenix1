@@ -194,6 +194,8 @@
                             <option value="sportingbet">Falta Sportingbet</option>
                             <option value="estrelabet">Falta Estrelabet</option>
                             <option value="vupi">Falta VUPI</option>
+                            <option value="blaze">Falta Blaze</option>
+                            <option value="jonbet">Falta JonBet</option>
                         </select>
                     </div>
                 </div>
@@ -402,7 +404,7 @@
 
             // Apply missing house link filter
             if (currentHouseMissing !== 'all') {
-                var houseIdMap = { superbet: '1', sportingbet: '2', estrelabet: '3', vupi: '4' };
+                var houseIdMap = { superbet: '1', sportingbet: '2', estrelabet: '3', vupi: '4', blaze: '5', jonbet: '6' };
                 var hid = houseIdMap[currentHouseMissing];
                 filteredUsers = filteredUsers.filter(function(u) {
                     var links = u.house_links || {};
@@ -445,14 +447,16 @@
 
                 // Links status
                 var links = user.house_links || {};
-                var houseNames = { '1': 'SB', '2': 'SP', '3': 'ES', '4': 'VP' };
-                var houseColors = { '1': '#E8590C', '2': '#22C55E', '3': '#1a2744', '4': '#7C3AED' };
+                var houseNames = { '1': 'SB', '2': 'SP', '3': 'ES', '4': 'VP', '5': 'BL', '6': 'JB' };
+                var houseColors = { '1': '#E8590C', '2': '#22C55E', '3': '#1a2744', '4': '#7C3AED', '5': '#EF4444', '6': '#F59E0B' };
+                var houseFullNames = { '1': 'Superbet', '2': 'Sportingbet', '3': 'Estrelabet', '4': 'VUPI', '5': 'Blaze', '6': 'JonBet' };
                 var linksHtml = '';
-                ['1','2','3','4'].forEach(function(hid) {
+                ['1','2','3','4','5','6'].forEach(function(hid) {
                     var has = links[hid] && links[hid].trim() !== '';
                     var color = has ? houseColors[hid] : '#374151';
                     var opacity = has ? '1' : '0.3';
-                    linksHtml += '<span title="' + (has ? 'Link configurado' : 'Link faltando') + '" style="display:inline-block;padding:2px 6px;margin-right:2px;border-radius:4px;font-size:0.65rem;font-weight:700;background:' + color + ';color:white;opacity:' + opacity + ';">' + houseNames[hid] + '</span>';
+                    var titleText = houseFullNames[hid] + (has ? ' — Link configurado' : ' — Link faltando');
+                    linksHtml += '<span title="' + titleText + '" style="display:inline-block;padding:2px 6px;margin-right:2px;border-radius:4px;font-size:0.65rem;font-weight:700;background:' + color + ';color:white;opacity:' + opacity + ';">' + houseNames[hid] + '</span>';
                 });
                 if (user.link_requests && user.link_requests.length > 0) {
                     linksHtml += '<div style="margin-top:4px;"><span style="padding:2px 8px;background:#E8590C;color:white;border-radius:10px;font-size:0.65rem;font-weight:700;">PEDIDO: ' + user.link_requests.join(', ') + '</span></div>';
