@@ -157,32 +157,55 @@
                     <!-- Link padrao -->
                     <div class="od-card">
                         <h4 class="od-card-title">Link padrao de afiliado</h4>
-                        <p style="font-size: 0.8rem; color: var(--text-3); margin-bottom: 12px;">Para compartilhar bilhetes/apostas, use o <strong>Gerador de Link</strong> abaixo.</p>
+                        <p style="font-size: 0.8rem; color: var(--text-3); margin-bottom: 12px;">Você tem 2 links disponíveis: o <strong style="color: var(--accent);">Link Fenix</strong> (com rastreamento da sua conta) e o <strong style="color: #3B82F6;">Link Direto</strong> (cadastro na casa sem intermediário).</p>
 
                         <div class="od-field-block">
-                            <label class="od-label" style="color: var(--accent);">LINK FENIX (COM RASTREAMENTO)</label>
+                            <label class="od-label" style="color: var(--accent);">🔥 LINK FENIX (COM RASTREAMENTO)</label>
                             <div class="od-link-row">
                                 <input type="text" id="trackingLink" readonly class="od-link-input">
                                 <button class="od-btn-icon" onclick="copyTrackingLink()" title="Copiar">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                                 </button>
                             </div>
-                        </div>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px;">
-                            <button class="share-btn-od whatsapp" onclick="shareOd('whatsapp')">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                                WhatsApp
-                            </button>
-                            <button class="share-btn-od telegram" onclick="shareOd('telegram')">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-                                Telegram
-                            </button>
-                            <button class="share-btn-od copy" onclick="copyTrackingLink()">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-                                Copiar Link
-                            </button>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+                                <button class="share-btn-od whatsapp" onclick="shareOd('whatsapp')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                    WhatsApp
+                                </button>
+                                <button class="share-btn-od telegram" onclick="shareOd('telegram')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                                    Telegram
+                                </button>
+                                <button class="share-btn-od copy" onclick="copyTrackingLink()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                    Copiar
+                                </button>
+                            </div>
                         </div>
 
+                        <div class="od-field-block" style="margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border);">
+                            <label class="od-label" style="color: #3B82F6;">🔗 LINK DIRETO DA CASA (CADASTRO NORMAL)</label>
+                            <div class="od-link-row">
+                                <input type="text" id="directLink" readonly class="od-link-input">
+                                <button class="od-btn-icon" onclick="copyDirectLink()" title="Copiar">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                </button>
+                            </div>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+                                <button class="share-btn-od whatsapp" onclick="shareDirect('whatsapp')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                                    WhatsApp
+                                </button>
+                                <button class="share-btn-od telegram" onclick="shareDirect('telegram')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0h-.056z"/></svg>
+                                    Telegram
+                                </button>
+                                <button class="share-btn-od copy" onclick="copyDirectLink()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                    Copiar
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Gerador de link - SUPERBET -->
@@ -549,6 +572,67 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Gerador de link - LOTTU.BET -->
+                    <div class="od-card" id="generatorCard_lottubet" style="margin-top: 16px; display: none;">
+                        <h4 class="od-card-title" style="color: #F59E0B;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" style="margin-right: 6px; vertical-align: -3px;"><path d="M12 5v14M5 12h14"/></svg>
+                            Gerador de Link — Lottu.bet
+                        </h4>
+                        <p class="od-help" style="margin-bottom: 16px;">Cole links de bilhetes prontos, promocoes ou ofertas da <strong>Lottu.bet</strong>.</p>
+
+                        <div class="od-field-block">
+                            <label class="od-label">NOME DO LINK</label>
+                            <input type="text" id="customLinkName_lottubet" class="od-input" placeholder="Ex: Bonus Lottu.bet" style="font-size: 0.85rem; margin-bottom: 12px;">
+                        </div>
+                        <div class="od-field-block">
+                            <label class="od-label">COLE O LINK DA LOTTU.BET</label>
+                            <div class="od-link-row">
+                                <input type="text" id="customUrlInput_lottubet" class="od-input" placeholder="https://lottu.bet/promo/oferta" style="flex:1; font-size: 0.85rem;">
+                                <button class="od-btn-generate" onclick="generateCustomLink('lottubet')" style="background: #F59E0B;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                                    Gerar Link
+                                </button>
+                            </div>
+                        </div>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px; cursor: pointer; font-size: 0.8rem; color: var(--text-3);">
+                            <input type="checkbox" id="shortenToggle_lottubet" style="accent-color: #F59E0B; width: 16px; height: 16px; cursor: pointer;">
+                            Encurtar link
+                        </label>
+
+                        <div id="customResult_lottubet" style="display: none;">
+                            <div class="od-field-block">
+                                <label class="od-label" style="color: var(--accent);">LINK FENIX (COM RASTREAMENTO)</label>
+                                <div class="od-link-row">
+                                    <input type="text" id="customGeneratedLink_lottubet" readonly class="od-link-input od-link-generated">
+                                    <button class="od-btn-icon" onclick="copyCustomLink('lottubet')" title="Copiar">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button class="share-btn-od whatsapp" onclick="shareCustom('whatsapp','lottubet')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075z"/></svg>
+                                    WhatsApp
+                                </button>
+                                <button class="share-btn-od telegram" onclick="shareCustom('telegram','lottubet')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0h-.056z"/></svg>
+                                    Telegram
+                                </button>
+                                <button class="share-btn-od copy" onclick="copyCustomLink('lottubet')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                                    Copiar Link
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="savedLinksSection_lottubet" style="margin-top: 20px; display: none;">
+                            <div style="border-top: 1px solid var(--border); padding-top: 16px;">
+                                <h5 class="od-section-title">Links gerados — Lottu.bet</h5>
+                                <div id="savedLinksList_lottubet"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tab: Banners -->
@@ -646,6 +730,17 @@
                 defaultCPA: 150,
                 color: '#1E90FF',
                 descricao: 'Jonbet e uma plataforma de apostas esportivas e cassino. Deposite R$20 e ganhe R$150. Rollover 1x. Pagamento mensal no dia 15.'
+            },
+            lottubet: {
+                name: 'Lottu.bet',
+                subtitle: 'Lottu.bet Brasil',
+                slug: 'lottubet',
+                houseId: '7',
+                logo: '../img/lottubet-logo.png',
+                maxCPA: 100,
+                defaultCPA: 100,
+                color: '#F59E0B',
+                descricao: 'Lottu.bet e uma plataforma de apostas online. Deposite R$20 e ganhe R$100. Pagamento mensal no dia 15. Aceita diversos tipos de trafego.'
             }
         };
 
@@ -697,10 +792,12 @@
             document.getElementById('odName').textContent = offer.name;
             document.getElementById('odDescricao').textContent = offer.descricao;
 
-            // CPA value
+            // CPA value (priority: cpa_deals → deals → customCPA → default)
             var cpa = offer.defaultCPA;
             var houseId = offer.houseId;
-            if (fullUser && fullUser.deals && fullUser.deals[houseId]) {
+            if (fullUser && fullUser.cpa_deals && fullUser.cpa_deals[offer.slug] !== undefined) {
+                cpa = fullUser.cpa_deals[offer.slug];
+            } else if (fullUser && fullUser.deals && fullUser.deals[houseId]) {
                 var deal = fullUser.deals[houseId];
                 if (deal.type === 'cpa') cpa = deal.cpaValue || cpa;
                 else if (deal.type === 'hybrid') cpa = deal.hybridCPA || cpa;
@@ -714,10 +811,10 @@
 
             document.getElementById('odPagamento').textContent = Format.currency(cpa);
 
-            // Raw link
+            // Raw link (try both string and number keys)
             var rawLink = '';
-            if (fullUser && fullUser.house_links && fullUser.house_links[houseId]) {
-                rawLink = fullUser.house_links[houseId];
+            if (fullUser && fullUser.house_links) {
+                rawLink = fullUser.house_links[houseId] || fullUser.house_links[String(houseId)] || fullUser.house_links[Number(houseId)] || '';
             }
 
             if (!rawLink) {
