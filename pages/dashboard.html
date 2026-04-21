@@ -170,8 +170,12 @@
                                 <div class="perf-label">Depósitos</div>
                             </div>
                             <div class="perf-item">
+                                <div class="perf-value" id="perfRvs" style="color:#8B5CF6;">R$ 0</div>
+                                <div class="perf-label">RVS (50%)</div>
+                            </div>
+                            <div class="perf-item">
                                 <div class="perf-value" id="perfLucro" style="color:var(--success);">R$ 0</div>
-                                <div class="perf-label">Lucro</div>
+                                <div class="perf-label">Total</div>
                             </div>
                         </div>
 
@@ -554,21 +558,28 @@
             var cpaSportingbet = deals.sportingbet || 180;
             var cpaVupi = deals.vupi || 80;
 
-            var superbetEarnings = Math.round(sbStats.qualified_cpa) * cpaSuperbet;
-            var sportingbetEarnings = Math.round(spStats.qualified_cpa) * cpaSportingbet;
-            var vupiEarnings = vupiStats.qftds * cpaVupi;
+            // RVS 50% for affiliate (from API revenue share)
+            var sbAffRvs = (sbStats.rvs || 0) * 0.5;
+            var spAffRvs = (spStats.rvs || 0) * 0.5;
+            var vupiAffRvs = (vupiStats.revshare || 0) * 0.5;
+
+            // Total earnings = CPA × qty + 50% RVS
+            var superbetEarnings = (Math.round(sbStats.qualified_cpa) * cpaSuperbet) + sbAffRvs;
+            var sportingbetEarnings = (Math.round(spStats.qualified_cpa) * cpaSportingbet) + spAffRvs;
+            var vupiEarnings = (vupiStats.qftds * cpaVupi) + vupiAffRvs;
             var totalEarnings = superbetEarnings + sportingbetEarnings + vupiEarnings;
 
-            // Store per-house stats (includes deposit field from API)
-            allHouseStats.superbet = { regs: sbStats.registrations, ftds: sbStats.first_deposits, cpas: sbStats.qualified_cpa, deposit: sbStats.deposit, lucro: superbetEarnings };
-            allHouseStats.sportingbet = { regs: spStats.registrations, ftds: spStats.first_deposits, cpas: spStats.qualified_cpa, deposit: spStats.deposit, lucro: sportingbetEarnings };
-            allHouseStats.vupi = { regs: vupiStats.registros, ftds: vupiStats.ftds, cpas: vupiStats.qftds, deposit: vupiStats.deposito_amount, lucro: vupiEarnings, visitas: vupiStats.visitas, depositos: vupiStats.depositos, ggr: vupiStats.ggr, ngr: vupiStats.ngr };
-            allHouseStats.lottubet = { regs: 0, ftds: 0, cpas: 0, deposit: 0, lucro: 0 };
+            // Store per-house stats (includes deposit and rvs fields from API)
+            allHouseStats.superbet = { regs: sbStats.registrations, ftds: sbStats.first_deposits, cpas: sbStats.qualified_cpa, deposit: sbStats.deposit, rvs: sbAffRvs, lucro: superbetEarnings };
+            allHouseStats.sportingbet = { regs: spStats.registrations, ftds: spStats.first_deposits, cpas: spStats.qualified_cpa, deposit: spStats.deposit, rvs: spAffRvs, lucro: sportingbetEarnings };
+            allHouseStats.vupi = { regs: vupiStats.registros, ftds: vupiStats.ftds, cpas: vupiStats.qftds, deposit: vupiStats.deposito_amount, rvs: vupiAffRvs, lucro: vupiEarnings, visitas: vupiStats.visitas, depositos: vupiStats.depositos, ggr: vupiStats.ggr, ngr: vupiStats.ngr };
+            allHouseStats.lottubet = { regs: 0, ftds: 0, cpas: 0, deposit: 0, rvs: 0, lucro: 0 };
             allHouseStats.all = {
                 regs: sbStats.registrations + spStats.registrations + vupiStats.registros,
                 ftds: sbStats.first_deposits + spStats.first_deposits + vupiStats.ftds,
                 cpas: sbStats.qualified_cpa + spStats.qualified_cpa + vupiStats.qftds,
                 deposit: sbStats.deposit + spStats.deposit + vupiStats.deposito_amount,
+                rvs: sbAffRvs + spAffRvs + vupiAffRvs,
                 lucro: totalEarnings
             };
 
@@ -618,6 +629,7 @@
             document.getElementById('perfFTDs').textContent = Math.round(s.ftds || 0);
             document.getElementById('perfCPAs').textContent = Math.round(s.cpas || 0);
             document.getElementById('perfDeposit').textContent = Format.currency(s.deposit || 0);
+            document.getElementById('perfRvs').textContent = Format.currency(s.rvs || 0);
             document.getElementById('perfLucro').textContent = Format.currency(s.lucro || 0);
 
             // Show/hide VUPI extra stats
@@ -811,8 +823,8 @@
 
         .perf-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
             margin-bottom: 24px;
         }
 

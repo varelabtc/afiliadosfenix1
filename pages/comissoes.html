@@ -401,13 +401,14 @@
                     var cpaSb = deals.superbet || 200;
                     var cpaSp = deals.sportingbet || 180;
 
-                    // Superbet commissions
+                    // Superbet commissions (CPA + 50% RVS)
                     if (sbRes.ok) {
                         var sbJson = await sbRes.json();
                         var sbRows = (sbJson.data && sbJson.data.data) || sbJson.data || [];
                         if (Array.isArray(sbRows)) {
                             sbRows.forEach(function(r) {
                                 var qcpa = Math.round(r.qualified_cpa || 0);
+                                var rvs50 = (r.rvs || 0) * 0.5;
                                 if (qcpa > 0) {
                                     allCommissions.push({
                                         type: 'cpa',
@@ -418,23 +419,44 @@
                                         status: 'paid'
                                     });
                                 }
+                                if (rvs50 > 0) {
+                                    allCommissions.push({
+                                        type: 'revshare',
+                                        platform: 'superbet',
+                                        description: 'RevShare Superbet (50%) - ' + Format.currency(r.rvs || 0) + ' total',
+                                        amount: rvs50,
+                                        date: startDate + ' a ' + endDate,
+                                        status: 'paid'
+                                    });
+                                }
                             });
                         }
                     }
 
-                    // Sportingbet commissions
+                    // Sportingbet commissions (CPA + 50% RVS)
                     if (spRes.ok) {
                         var spJson = await spRes.json();
                         var spRows = (spJson.data && spJson.data.data) || spJson.data || [];
                         if (Array.isArray(spRows)) {
                             spRows.forEach(function(r) {
                                 var qcpa = Math.round(r.qualified_cpa || 0);
+                                var rvs50 = (r.rvs || 0) * 0.5;
                                 if (qcpa > 0) {
                                     allCommissions.push({
                                         type: 'cpa',
                                         platform: 'sportingbet',
                                         description: 'CPA Sportingbet - ' + qcpa + ' qualificado(s)',
                                         amount: qcpa * cpaSp,
+                                        date: startDate + ' a ' + endDate,
+                                        status: 'paid'
+                                    });
+                                }
+                                if (rvs50 > 0) {
+                                    allCommissions.push({
+                                        type: 'revshare',
+                                        platform: 'sportingbet',
+                                        description: 'RevShare Sportingbet (50%) - ' + Format.currency(r.rvs || 0) + ' total',
+                                        amount: rvs50,
                                         date: startDate + ' a ' + endDate,
                                         status: 'paid'
                                     });

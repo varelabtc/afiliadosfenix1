@@ -623,17 +623,19 @@
                         }
                     }
 
-                    // Superbet earnings
+                    // Superbet earnings (CPA + 50% RVS for affiliate)
                     if (sbId && sbMap[sbId]) {
                         var sb = sbMap[sbId];
                         totalEarnings += (sb.qualified_cpa || 0) * (deals.superbet || 200);
+                        totalEarnings += (sb.rvs || 0) * 0.5;
                         totalConv += (sb.qualified_cpa || 0);
                     }
 
-                    // Sportingbet earnings
+                    // Sportingbet earnings (CPA + 50% RVS for affiliate)
                     if (spId && spMap[spId]) {
                         var sp = spMap[spId];
                         totalEarnings += (sp.qualified_cpa || 0) * (deals.sportingbet || 180);
+                        totalEarnings += (sp.rvs || 0) * 0.5;
                         totalConv += (sp.qualified_cpa || 0);
                     }
 
