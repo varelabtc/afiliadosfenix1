@@ -163,7 +163,69 @@
             <div id="linksByHouse">
                 <!-- Links will be loaded here -->
             </div>
+
+            <!-- Promotional Links Section -->
+            <div class="card" style="margin-top: 32px; border-left: 4px solid var(--accent);">
+                <div class="card-header">
+                    <div>
+                        <h3>🎁 Links Promocionais por Casa</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Links promocionais que aparecerão para os afiliados dentro de cada oferta (bilhetes, bonus especiais, etc.)</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="Modal.open('addPromoLinkModal')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                        Adicionar Link Promocional
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="promoLinksContainer">
+                        <p style="text-align:center;color:var(--text-muted);padding:20px;">Carregando...</p>
+                    </div>
+                </div>
+            </div>
         </main>
+    </div>
+
+    <!-- Add Promo Link Modal -->
+    <div class="modal-overlay" id="addPromoLinkModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>Adicionar Link Promocional</h3>
+                <button class="modal-close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <form id="promoLinkForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Casa de Apostas</label>
+                        <select name="house_slug" id="promoHouseSelect" required>
+                            <option value="">Selecione...</option>
+                            <option value="superbet">🎰 Superbet</option>
+                            <option value="sportingbet">⚽ Sportingbet</option>
+                            <option value="estrelabet">⭐ Estrelabet</option>
+                            <option value="vupi">🟣 VUPI</option>
+                            <option value="blaze">🔥 Blaze</option>
+                            <option value="jonbet">🎯 Jonbet</option>
+                            <option value="lottubet">🎲 Lottu.bet</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nome / Descrição</label>
+                        <input type="text" name="name" placeholder="Ex: Bônus 100%, Bilhete Fla x Pal" required>
+                        <small style="color: var(--text-muted); font-size: 0.75rem;">Nome que o afiliado verá</small>
+                    </div>
+                    <div class="form-group">
+                        <label>URL</label>
+                        <input type="url" name="url" placeholder="https://superbet.com/promo/bonus" required>
+                        <small style="color: var(--text-muted); font-size: 0.75rem;">URL da promoção (o afiliado recebe o link rastreado com código dele)</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal-close>Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Adicionar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Add Link Modal -->
@@ -318,6 +380,95 @@
                 loadLinks();
             }
         }
+
+        // ── Promotional Links (Bilhetes/Promos admin-managed) ──
+        var HOUSE_LOGOS = { superbet: '🎰', sportingbet: '⚽', estrelabet: '⭐', vupi: '🟣', blaze: '🔥', jonbet: '🎯', lottubet: '🎲' };
+        var HOUSE_NAMES = { superbet: 'Superbet', sportingbet: 'Sportingbet', estrelabet: 'Estrelabet', vupi: 'VUPI', blaze: 'Blaze', jonbet: 'Jonbet', lottubet: 'Lottu.bet' };
+        var HOUSE_COLORS = { superbet: '#E8590C', sportingbet: '#22C55E', estrelabet: '#1a2744', vupi: '#7C3AED', blaze: '#EF4444', jonbet: '#1E90FF', lottubet: '#F59E0B' };
+
+        async function loadPromoLinks() {
+            var container = document.getElementById('promoLinksContainer');
+            try {
+                var res = await fetch('/api/promo-links');
+                if (!res.ok) throw new Error('API error');
+                var links = await res.json();
+
+                var byHouse = {};
+                Object.keys(HOUSE_NAMES).forEach(function(slug) { byHouse[slug] = []; });
+                links.forEach(function(l) { if (byHouse[l.house_slug]) byHouse[l.house_slug].push(l); });
+
+                var html = '';
+                Object.keys(HOUSE_NAMES).forEach(function(slug) {
+                    var list = byHouse[slug];
+                    html += '<div style="margin-bottom:18px;padding:14px 16px;background:var(--bg-input);border-left:3px solid ' + HOUSE_COLORS[slug] + ';border-radius:10px;">' +
+                        '<h4 style="margin:0 0 10px;font-size:0.95rem;color:' + HOUSE_COLORS[slug] + ';">' + HOUSE_LOGOS[slug] + ' ' + HOUSE_NAMES[slug] + ' <span style="color:var(--text-muted);font-weight:400;font-size:0.75rem;">(' + list.length + ' link(s))</span></h4>';
+
+                    if (list.length === 0) {
+                        html += '<p style="color:var(--text-muted);font-size:0.8rem;margin:0;">Nenhum link promocional ainda</p>';
+                    } else {
+                        list.forEach(function(link) {
+                            html += '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;background:var(--bg-elevated);border-radius:8px;margin-bottom:6px;">' +
+                                '<div style="flex:1;min-width:0;">' +
+                                    '<div style="font-weight:600;font-size:0.85rem;margin-bottom:2px;">' + link.name + '</div>' +
+                                    '<div style="font-size:0.75rem;color:var(--text-muted);word-break:break-all;">' + link.url + '</div>' +
+                                '</div>' +
+                                '<button class="btn-icon" style="color:var(--danger);" onclick="deletePromoLink(' + link.id + ')" title="Excluir">' +
+                                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg>' +
+                                '</button>' +
+                            '</div>';
+                        });
+                    }
+                    html += '</div>';
+                });
+
+                container.innerHTML = html;
+            } catch (e) {
+                container.innerHTML = '<p style="text-align:center;color:var(--danger);padding:20px;">Erro ao carregar. Certifique-se que a tabela promo_links existe no Supabase.</p>';
+            }
+        }
+
+        document.getElementById('promoLinkForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var data = {
+                house: formData.get('house_slug'),
+                name: formData.get('name'),
+                url: formData.get('url')
+            };
+
+            try {
+                var res = await fetch('/api/promo-links', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (res.ok) {
+                    Toast.success('Link promocional adicionado!');
+                    Modal.close('addPromoLinkModal');
+                    this.reset();
+                    loadPromoLinks();
+                } else {
+                    var err = await res.json().catch(function() { return {}; });
+                    Toast.error('Erro: ' + (err.error || 'desconhecido'));
+                }
+            } catch (err) {
+                Toast.error('Erro de conexão');
+            }
+        });
+
+        async function deletePromoLink(id) {
+            if (!confirm('Excluir este link promocional?')) return;
+            try {
+                var res = await fetch('/api/promo-links?id=' + id, { method: 'DELETE' });
+                if (res.ok) {
+                    Toast.success('Link excluído');
+                    loadPromoLinks();
+                }
+            } catch (e) { Toast.error('Erro ao excluir'); }
+        }
+
+        // Load on page load
+        setTimeout(loadPromoLinks, 300);
     </script>
 
     <style>

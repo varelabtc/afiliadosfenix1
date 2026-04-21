@@ -147,6 +147,7 @@
                 <!-- Tabs -->
                 <div class="od-tabs">
                     <button class="od-tab active" data-tab="links">Links de rastreamento</button>
+                    <button class="od-tab" data-tab="promos">🎁 Promoções</button>
                     <button class="od-tab" data-tab="banners">Banners</button>
                     <button class="od-tab" data-tab="descricao">Descricao</button>
                     <button class="od-tab" data-tab="limites">Limites</button>
@@ -635,6 +636,17 @@
                     </div>
                 </div>
 
+                <!-- Tab: Promoções -->
+                <div class="od-tab-content" id="tab-promos">
+                    <div class="od-card">
+                        <h4 class="od-card-title">🎁 Links Promocionais</h4>
+                        <p style="color: var(--text-3); font-size: 0.85rem; margin-bottom: 16px;">Links promocionais oficiais da casa. Clique em <strong>Gerar meu link</strong> para criar o link rastreado pela sua conta.</p>
+                        <div id="promoLinksList">
+                            <p style="text-align:center;color:var(--text-muted);padding:20px;">Carregando promoções...</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Tab: Banners -->
                 <div class="od-tab-content" id="tab-banners">
                     <div class="od-card">
@@ -831,6 +843,82 @@
             baseTrackingLink = window.location.origin + '/api/go?a=' + user.id + '&h=' + offer.slug + '&url=' + encodeURIComponent(encoded);
             baseDirectLink = rawLink;
             updateTrackingLink();
+
+            // Load promo links for this house
+            loadPromoLinks(offer.slug);
+        }
+
+        async function loadPromoLinks(houseSlug) {
+            var user = Auth.currentUser;
+            var container = document.getElementById('promoLinksList');
+            if (!container) return;
+
+            try {
+                var res = await fetch('/api/promo-links?house=' + encodeURIComponent(houseSlug));
+                if (!res.ok) throw new Error('API error');
+                var links = await res.json();
+
+                if (!links || links.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:30px;">Nenhuma promoção disponível no momento. O administrador irá adicionar em breve.</p>';
+                    return;
+                }
+
+                var html = '';
+                links.forEach(function(link) {
+                    var encoded = btoa(link.url);
+                    var fenixLink = window.location.origin + '/api/go?a=' + user.id + '&h=' + houseSlug + '&url=' + encodeURIComponent(encoded);
+                    var safeId = 'promo-' + link.id;
+                    html += '<div style="background:var(--bg-2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;">' +
+                        '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;">' +
+                            '<h5 style="margin:0;font-size:0.95rem;font-weight:600;">' + link.name + '</h5>' +
+                            '<span style="font-size:0.7rem;color:var(--text-muted);">' + new Date(link.created_at).toLocaleDateString('pt-BR') + '</span>' +
+                        '</div>' +
+                        '<div class="od-link-row" style="margin-bottom:8px;">' +
+                            '<input type="text" id="' + safeId + '" readonly value="' + fenixLink + '" class="od-link-input">' +
+                            '<button class="od-btn-icon" onclick="copyPromoLink(\'' + safeId + '\')" title="Copiar">' +
+                                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>' +
+                            '</button>' +
+                        '</div>' +
+                        '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+                            '<button class="share-btn-od whatsapp" onclick="sharePromoLink(\'whatsapp\',\'' + safeId + '\')">' +
+                                '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164z"/></svg>' +
+                                'WhatsApp' +
+                            '</button>' +
+                            '<button class="share-btn-od telegram" onclick="sharePromoLink(\'telegram\',\'' + safeId + '\')">' +
+                                '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0h-.056z"/></svg>' +
+                                'Telegram' +
+                            '</button>' +
+                            '<button class="share-btn-od copy" onclick="copyPromoLink(\'' + safeId + '\')">' +
+                                '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/></svg>' +
+                                'Copiar' +
+                            '</button>' +
+                        '</div>' +
+                    '</div>';
+                });
+                container.innerHTML = html;
+            } catch (err) {
+                container.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:30px;">Nenhuma promoção disponível ainda.</p>';
+            }
+        }
+
+        function copyPromoLink(id) {
+            var input = document.getElementById(id);
+            if (!input) return;
+            navigator.clipboard.writeText(input.value).then(function() {
+                Toast.success('Link copiado!');
+            });
+        }
+
+        function sharePromoLink(platform, id) {
+            var input = document.getElementById(id);
+            if (!input) return;
+            var link = input.value;
+            var text = 'Confira essa promoção! ' + link;
+            if (platform === 'whatsapp') {
+                window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+            } else if (platform === 'telegram') {
+                window.open('https://t.me/share/url?url=' + encodeURIComponent(link), '_blank');
+            }
         }
 
         function updateTrackingLink() {
