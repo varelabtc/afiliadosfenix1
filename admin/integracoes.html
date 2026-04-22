@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenix Admin — Integrações</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../img/fenix-logo.png">
+    <style>
+        .integration-card {
+            background: var(--bg-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .integration-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .integration-identity {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .integration-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .integration-icon.utmify {
+            background: rgba(143, 37, 12, 0.15);
+            border: 1px solid rgba(143, 37, 12, 0.3);
+            color: var(--accent);
+        }
+
+        .integration-icon.webhook {
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            color: var(--blue);
+        }
+
+        .integration-title { font-size: 1rem; font-weight: 600; color: var(--text-1); }
+        .integration-desc { font-size: 0.8125rem; color: var(--text-3); margin-top: 2px; }
+
+        .integration-body { padding: 20px; }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-pill.connected { background: rgba(34, 197, 94, 0.1); color: var(--green); }
+        .status-pill.disconnected { background: rgba(239, 68, 68, 0.1); color: var(--red); }
+        .status-pill.pending { background: rgba(234, 179, 8, 0.1); color: var(--yellow); }
+
+        .status-pill::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .field-with-action {
+            display: flex;
+            gap: 8px;
+        }
+
+        .field-with-action input { flex: 1; }
+
+        .sync-log {
+            background: var(--bg-0);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            max-height: 280px;
+            overflow-y: auto;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 0.75rem;
+        }
+
+        .log-entry {
+            padding: 8px 14px;
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .log-entry:last-child { border-bottom: none; }
+
+        .log-time { color: var(--text-3); white-space: nowrap; }
+        .log-id { color: var(--text-2); }
+        .log-status.ok { color: var(--green); }
+        .log-status.erro { color: var(--red); }
+        .log-status.teste { color: var(--yellow); }
+        .log-value { color: var(--text-1); text-align: right; }
+
+        .section-label {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-3);
+            margin-bottom: 12px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: var(--text-2);
+        }
+
+        .toggle-switch input { display: none; }
+
+        .toggle-track {
+            width: 40px;
+            height: 22px;
+            background: var(--bg-3);
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            position: relative;
+            transition: var(--ease);
+        }
+
+        .toggle-track::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: var(--text-3);
+            border-radius: 50%;
+            transition: var(--ease);
+        }
+
+        .toggle-switch input:checked + .toggle-track {
+            background: rgba(143, 37, 12, 0.3);
+            border-color: var(--accent);
+        }
+
+        .toggle-switch input:checked + .toggle-track::after {
+            transform: translateX(18px);
+            background: var(--accent);
+        }
+
+        .event-map-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .event-map-row:last-child { border-bottom: none; }
+
+        .event-info { flex: 1; }
+        .event-name { font-size: 0.875rem; color: var(--text-1); font-weight: 500; }
+        .event-detail { font-size: 0.75rem; color: var(--text-3); margin-top: 2px; }
+
+        .test-payload-area {
+            background: var(--bg-0);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 0.75rem;
+            color: var(--text-2);
+            resize: vertical;
+            min-height: 200px;
+            width: 100%;
+        }
+
+        .result-box {
+            display: none;
+            background: var(--bg-0);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px;
+            margin-top: 12px;
+            font-size: 0.8125rem;
+        }
+
+        .result-box.show { display: block; }
+        .result-box.success { border-color: var(--green); }
+        .result-box.error { border-color: var(--red); }
+
+        .copy-btn {
+            padding: 6px 10px;
+            background: var(--bg-3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-2);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--ease);
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover { color: var(--text-1); border-color: var(--border-hover); }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <input type="checkbox" id="menu-toggle" class="menu-toggle-check">
+    <div class="mobile-header">
+        <label for="menu-toggle" class="mobile-menu-label">
+            <span></span><span></span><span></span>
+        </label>
+        <span class="mobile-logo"><img src="../img/fenix-logo.png" alt="Fenix"> Fenix <span style="color: var(--red); font-size: 0.6rem;">ADMIN</span></span>
+        <div style="width: 44px;"></div>
+    </div>
+    <label for="menu-toggle" class="sidebar-overlay-label"></label>
+
+    <aside class="sidebar admin-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-mark">
+                    <img src="../img/fenix-logo.png" alt="Fenix">
+                </div>
+                <h2>FENIX</h2>
+            </div>
+            <span class="admin-tag">ADMIN</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                Dashboard
+            </a>
+            <a href="afiliados.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                </svg>
+                Afiliados
+            </a>
+            <a href="gerentes.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>
+                </svg>
+                Gerentes
+            </a>
+            <a href="casas.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <path d="M3 9h18M9 21V9"/>
+                </svg>
+                Casas
+            </a>
+            <a href="cpa.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+                </svg>
+                CPA
+            </a>
+            <a href="links.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                </svg>
+                Links
+            </a>
+            <a href="saques.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                    <line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
+                Saques
+            </a>
+            <a href="relatorios.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 20V10M12 20V4M6 20v-6"/>
+                </svg>
+                Relatórios
+            </a>
+            <a href="integracoes.html" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2"/>
+                    <rect x="8" y="2" width="14" height="14" rx="2"/>
+                    <path d="M12 18v-6M9 15l3 3 3-3"/>
+                </svg>
+                Integrações
+            </a>
+            <a href="configuracoes.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+                Configurações
+            </a>
+
+            <div class="nav-divider"></div>
+
+            <a href="../index.html" class="nav-item" onclick="AdminAuth.logout()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Sair
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-card admin-user">
+                <div class="user-avatar">A</div>
+                <div class="user-info">
+                    <div class="user-name" id="adminName">Admin</div>
+                    <div class="user-role">Super Admin</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+        <div class="page-content">
+            <div class="page-header">
+                <h1>Integrações</h1>
+                <p>Conecte o painel com plataformas externas de rastreamento e analytics</p>
+            </div>
+
+            <!-- UTMify -->
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-identity">
+                        <div class="integration-icon utmify">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="integration-title">UTMify</div>
+                            <div class="integration-desc">Rastreamento de vendas e atribuição de UTMs</div>
+                        </div>
+                    </div>
+                    <span class="status-pill disconnected" id="utmifyStatus">Desconectado</span>
+                </div>
+
+                <div class="integration-body">
+                    <!-- Token -->
+                    <div class="section-label">Credencial de API</div>
+                    <div class="form-group">
+                        <label>Token da API UTMify</label>
+                        <div class="field-with-action">
+                            <input type="password" id="utmifyToken" placeholder="Cole aqui sua credencial da UTMify" autocomplete="off">
+                            <button class="btn btn-secondary btn-sm" onclick="toggleTokenVisibility()">Mostrar</button>
+                            <button class="btn btn-primary btn-sm" onclick="saveAndTestToken()">Testar Conexão</button>
+                        </div>
+                        <p style="margin-top: 6px; font-size: 0.75rem; color: var(--text-3);">
+                            Obtenha em: UTMify → Integrações → Webhooks → Credenciais de API
+                        </p>
+                    </div>
+
+                    <!-- Envio automático de vendas -->
+                    <div class="nav-divider" style="margin: 20px 0;"></div>
+
+                    <div class="section-label">Eventos para sincronizar</div>
+                    <div>
+                        <div class="event-map-row">
+                            <div class="event-info">
+                                <div class="event-name">Registro (FTD)</div>
+                                <div class="event-detail">Enviar quando um afiliado registrar uma conversão de FTD</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="syncFtd" checked>
+                                <span class="toggle-track"></span>
+                            </label>
+                        </div>
+                        <div class="event-map-row">
+                            <div class="event-info">
+                                <div class="event-name">CPA Aprovado</div>
+                                <div class="event-detail">Enviar quando um CPA for aprovado manualmente</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="syncCpa" checked>
+                                <span class="toggle-track"></span>
+                            </label>
+                        </div>
+                        <div class="event-map-row">
+                            <div class="event-info">
+                                <div class="event-name">Postback Recebido</div>
+                                <div class="event-detail">Repassar automaticamente postbacks das casas para o UTMify</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="syncPostback">
+                                <span class="toggle-track"></span>
+                            </label>
+                        </div>
+                        <div class="event-map-row">
+                            <div class="event-info">
+                                <div class="event-name">Modo de Teste</div>
+                                <div class="event-detail">Envios marcados como isTest — dados não são salvos na UTMify</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="utmifyTestMode">
+                                <span class="toggle-track"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Teste manual -->
+                    <div class="nav-divider" style="margin: 20px 0;"></div>
+
+                    <div class="section-label">Teste Manual de Envio</div>
+                    <p style="margin-bottom: 12px; font-size: 0.8125rem; color: var(--text-3);">
+                        Envie um pedido de teste para validar a integração sem salvar dados reais.
+                    </p>
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-sm" onclick="loadTestPayload('pix_waiting')">Pix Gerado</button>
+                        <button class="btn btn-secondary btn-sm" onclick="loadTestPayload('pix_paid')">Pix Pago</button>
+                        <button class="btn btn-secondary btn-sm" onclick="loadTestPayload('card_paid')">Cartão Pago</button>
+                        <button class="btn btn-secondary btn-sm" onclick="loadTestPayload('refunded')">Reembolso</button>
+                    </div>
+                    <textarea id="testPayload" class="test-payload-area" spellcheck="false"></textarea>
+                    <div style="display: flex; gap: 8px; margin-top: 10px; justify-content: flex-end;">
+                        <button class="btn btn-secondary btn-sm" onclick="copyPayload()">Copiar JSON</button>
+                        <button class="btn btn-primary btn-sm" onclick="sendTestPayload()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                            Enviar Teste
+                        </button>
+                    </div>
+                    <div class="result-box" id="testResult"></div>
+                </div>
+            </div>
+
+            <!-- Webhook Externo (Postback) -->
+            <div class="integration-card">
+                <div class="integration-header">
+                    <div class="integration-identity">
+                        <div class="integration-icon webhook">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/>
+                                <line x1="6" y1="1" x2="6" y2="4"/>
+                                <line x1="10" y1="1" x2="10" y2="4"/>
+                                <line x1="14" y1="1" x2="14" y2="4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="integration-title">Postback das Casas</div>
+                            <div class="integration-desc">URL de webhook para receber conversões das casas de apostas</div>
+                        </div>
+                    </div>
+                    <span class="status-pill connected">Ativo</span>
+                </div>
+                <div class="integration-body">
+                    <div class="section-label">URL do Postback</div>
+                    <div class="form-group">
+                        <label>Endpoint para configurar nas casas</label>
+                        <div class="field-with-action">
+                            <input type="text" id="postbackUrl" readonly value="" style="font-family: monospace; font-size: 0.8125rem; color: var(--accent);">
+                            <button class="copy-btn" onclick="copyPostbackUrl()">Copiar</button>
+                        </div>
+                    </div>
+                    <div class="section-label" style="margin-top: 16px;">Parâmetros suportados</div>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Parâmetro</th>
+                                    <th>Alias</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="font-mono">affiliate_id</td><td class="font-mono text-muted">aff_id, uid</td><td>ID do afiliado no painel</td></tr>
+                                <tr><td class="font-mono">house</td><td class="font-mono text-muted">brand, operator</td><td>Slug da casa (superbet, sportingbet...)</td></tr>
+                                <tr><td class="font-mono">event</td><td class="font-mono text-muted">type, action</td><td>Tipo de evento (ftd, registration...)</td></tr>
+                                <tr><td class="font-mono">subid</td><td class="font-mono text-muted">sub_id, clickid</td><td>Sub ID para rastreamento</td></tr>
+                                <tr><td class="font-mono">payout</td><td class="font-mono text-muted">amount, commission</td><td>Valor do CPA em reais</td></tr>
+                                <tr><td class="font-mono">player_id</td><td class="font-mono text-muted">playerid</td><td>ID do jogador na casa</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Histórico de Sincronizações -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Histórico de Envios — UTMify</h3>
+                    <button class="btn btn-secondary btn-sm" onclick="loadSyncLog()">Atualizar</button>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <div class="sync-log" id="syncLog">
+                        <div class="log-entry">
+                            <span class="log-time">—</span>
+                            <span class="log-id" style="color: var(--text-3);">Nenhum envio registrado ainda</span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="../js/supabase-db.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+const STORAGE_KEY = 'fenix_utmify_config';
+
+function loadConfig() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+}
+
+function saveConfig(data) {
+    const current = loadConfig();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...current, ...data }));
+}
+
+function showToast(msg, type = 'success') {
+    const c = document.getElementById('toastContainer');
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.textContent = msg;
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+}
+
+function toggleTokenVisibility() {
+    const inp = document.getElementById('utmifyToken');
+    const btn = inp.nextElementSibling;
+    if (inp.type === 'password') { inp.type = 'text'; btn.textContent = 'Ocultar'; }
+    else { inp.type = 'password'; btn.textContent = 'Mostrar'; }
+}
+
+async function saveAndTestToken() {
+    const token = document.getElementById('utmifyToken').value.trim();
+    if (!token) { showToast('Cole o token antes de testar', 'error'); return; }
+
+    const statusEl = document.getElementById('utmifyStatus');
+    statusEl.textContent = 'Verificando...';
+    statusEl.className = 'status-pill pending';
+
+    try {
+        const res = await fetch('/api/utmify?action=test');
+        const data = await res.json();
+
+        if (data.connected) {
+            statusEl.textContent = 'Conectado';
+            statusEl.className = 'status-pill connected';
+            saveConfig({ token });
+            showToast('Token salvo e conexão verificada!', 'success');
+        } else {
+            statusEl.textContent = 'Desconectado';
+            statusEl.className = 'status-pill disconnected';
+            showToast('Token não configurado no servidor. Configure UTMIFY_API_TOKEN no Vercel.', 'error');
+        }
+    } catch (e) {
+        statusEl.textContent = 'Erro';
+        statusEl.className = 'status-pill disconnected';
+        showToast('Erro ao verificar conexão: ' + e.message, 'error');
+    }
+}
+
+const TEST_PAYLOADS = {
+    pix_waiting: {
+        orderId: 'FNX-' + Date.now(),
+        platform: 'FenixAfiliados',
+        paymentMethod: 'pix',
+        status: 'waiting_payment',
+        createdAt: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        approvedDate: null,
+        refundedAt: null,
+        customer: { name: 'João Silva', email: 'joao@email.com', phone: '11999990000', document: '12345678900', country: 'BR', ip: '192.168.0.1' },
+        products: [{ id: 'SUPERBET-FTD', name: 'CPA Superbet FTD', planId: null, planName: null, quantity: 1, priceInCents: 15000 }],
+        trackingParameters: { src: null, sck: null, utm_source: 'fenix', utm_campaign: null, utm_medium: null, utm_content: null, utm_term: null },
+        commission: { totalPriceInCents: 15000, gatewayFeeInCents: 0, userCommissionInCents: 15000 },
+        isTest: true
+    },
+    pix_paid: null,
+    card_paid: null,
+    refunded: null
+};
+
+// Build derived payloads from base
+TEST_PAYLOADS.pix_paid = { ...TEST_PAYLOADS.pix_waiting, status: 'paid', approvedDate: new Date().toISOString().replace('T', ' ').slice(0, 19) };
+TEST_PAYLOADS.card_paid = { ...TEST_PAYLOADS.pix_waiting, paymentMethod: 'credit_card', status: 'paid', approvedDate: new Date().toISOString().replace('T', ' ').slice(0, 19) };
+TEST_PAYLOADS.refunded = { ...TEST_PAYLOADS.card_paid, status: 'refunded', refundedAt: new Date().toISOString().replace('T', ' ').slice(0, 19) };
+
+function loadTestPayload(type) {
+    const payload = TEST_PAYLOADS[type];
+    if (!payload) return;
+    document.getElementById('testPayload').value = JSON.stringify(payload, null, 2);
+    document.getElementById('testResult').className = 'result-box';
+}
+
+function copyPayload() {
+    const text = document.getElementById('testPayload').value;
+    navigator.clipboard.writeText(text).then(() => showToast('JSON copiado!'));
+}
+
+async function sendTestPayload() {
+    const raw = document.getElementById('testPayload').value.trim();
+    const resultEl = document.getElementById('testResult');
+
+    if (!raw) { showToast('Selecione um payload de teste', 'error'); return; }
+
+    let payload;
+    try { payload = JSON.parse(raw); }
+    catch { showToast('JSON inválido', 'error'); return; }
+
+    payload.isTest = true;
+
+    resultEl.className = 'result-box';
+    resultEl.textContent = 'Enviando...';
+    resultEl.classList.add('show');
+
+    try {
+        const res = await fetch('/api/utmify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        resultEl.textContent = JSON.stringify(data, null, 2);
+        if (res.ok) {
+            resultEl.classList.add('success');
+            showToast('Teste enviado com sucesso!', 'success');
+            addLogEntry(payload.orderId, 'teste', payload.commission?.totalPriceInCents || 0);
+        } else {
+            resultEl.classList.add('error');
+            showToast('Erro: ' + (data.error || 'Falha no envio'), 'error');
+        }
+    } catch (e) {
+        resultEl.textContent = 'Erro: ' + e.message;
+        resultEl.classList.add('error');
+        showToast('Erro na requisição', 'error');
+    }
+}
+
+function addLogEntry(orderId, status, valueInCents) {
+    const log = document.getElementById('syncLog');
+    const empty = log.querySelector('.log-entry span.log-id[style*="text-3"]');
+    if (empty) log.innerHTML = '';
+
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    entry.innerHTML = `
+        <span class="log-time">${new Date().toLocaleTimeString('pt-BR')}</span>
+        <span class="log-id">${orderId}</span>
+        <span class="log-status ${status}">${status.toUpperCase()}</span>
+        <span class="log-value">R$ ${(valueInCents / 100).toFixed(2)}</span>
+    `;
+    log.insertBefore(entry, log.firstChild);
+}
+
+function loadSyncLog() {
+    showToast('Log atualizado', 'success');
+}
+
+function copyPostbackUrl() {
+    const url = document.getElementById('postbackUrl').value;
+    navigator.clipboard.writeText(url).then(() => showToast('URL copiada!'));
+}
+
+// Init
+(function init() {
+    const origin = window.location.origin;
+    document.getElementById('postbackUrl').value = origin + '/api/postback?affiliate_id={ID}&house={CASA}&event={EVENTO}&payout={VALOR}';
+    loadTestPayload('pix_paid');
+
+    // Check connection status
+    fetch('/api/utmify?action=test')
+        .then(r => r.json())
+        .then(data => {
+            const el = document.getElementById('utmifyStatus');
+            if (data.connected) {
+                el.textContent = 'Conectado';
+                el.className = 'status-pill connected';
+            }
+        })
+        .catch(() => {});
+})();
+</script>
+</body>
+</html>

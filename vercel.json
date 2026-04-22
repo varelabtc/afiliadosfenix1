@@ -1,3 +1,21 @@
 {
-  "version": 2
+  "version": 2,
+  "env": {
+    "OTG_API_KEY": "@otg-api-key",
+    "UTMIFY_API_TOKEN": "@utmify-api-token",
+    "ADMIN_API_TOKEN": "@admin-api-token",
+    "ALLOWED_ORIGIN": "@allowed-origin",
+    "SUPABASE_URL": "@supabase-url",
+    "SUPABASE_KEY": "@supabase-key"
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
 }

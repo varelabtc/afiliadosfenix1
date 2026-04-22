@@ -4,26 +4,26 @@
    ============================================ */
 
 :root {
-    /* Core Colors */
-    --accent: #E8590C;
-    --accent-hover: #D14D0A;
-    --accent-subtle: rgba(232, 89, 12, 0.08);
+    /* Brand Colors — Fenix Palette */
+    --accent: #8F250C;
+    --accent-hover: #7A1F0A;
+    --accent-subtle: rgba(143, 37, 12, 0.1);
 
-    /* Neutrals */
-    --bg-0: #09090B;
-    --bg-1: #0F0F12;
-    --bg-2: #18181B;
-    --bg-3: #27272A;
-    --bg-hover: #2E2E32;
+    /* Backgrounds */
+    --bg-0: #0D0B1A;   /* RED GRADIENT — main background */
+    --bg-1: #0F0F0F;   /* ONYX — sidebar & card surface */
+    --bg-2: #1A1625;   /* elevated surfaces */
+    --bg-3: #251D35;   /* hover/active states */
+    --bg-hover: #2D2440;
 
     /* Text */
-    --text-1: #FAFAFA;
-    --text-2: #A1A1AA;
-    --text-3: #71717A;
+    --text-1: #FFE2C0;   /* SOFT APRICOT — primary text */
+    --text-2: #C4A882;   /* secondary text */
+    --text-3: #8A7A66;   /* muted text */
 
     /* Borders */
-    --border: #27272A;
-    --border-hover: #3F3F46;
+    --border: #2A1F38;
+    --border-hover: #3D2F54;
 
     /* Semantic */
     --green: #22C55E;
@@ -40,25 +40,25 @@
     --ease: 0.2s ease;
 
     /* Compatibility Variables */
-    --accent-primary: #E8590C;
+    --accent-primary: #8F250C;
     --accent-secondary: #EF4444;
-    --fire-orange: #E8590C;
+    --fire-orange: #8F250C;
     --fire-red: #EF4444;
-    --fire-gold: #EAB308;
-    --bg-primary: #09090B;
-    --bg-secondary: #0F0F12;
-    --bg-card: #0F0F12;
-    --bg-elevated: #18181B;
-    --bg-tertiary: #18181B;
-    --bg-glass: #0F0F12;
-    --bg-input: #18181B;
-    --text-primary: #FAFAFA;
-    --text-secondary: #A1A1AA;
-    --text-muted: #71717A;
-    --border-subtle: #27272A;
-    --border-light: #3F3F46;
-    --border-color: #27272A;
-    --border-glass: #27272A;
+    --fire-gold: #FFE2C0;
+    --bg-primary: #0D0B1A;
+    --bg-secondary: #0F0F0F;
+    --bg-card: #0F0F0F;
+    --bg-elevated: #1A1625;
+    --bg-tertiary: #1A1625;
+    --bg-glass: #0F0F0F;
+    --bg-input: #1A1625;
+    --text-primary: #FFE2C0;
+    --text-secondary: #C4A882;
+    --text-muted: #8A7A66;
+    --border-subtle: #2A1F38;
+    --border-light: #3D2F54;
+    --border-color: #2A1F38;
+    --border-glass: #2A1F38;
     --success: #22C55E;
     --warning: #EAB308;
     --danger: #EF4444;
@@ -69,9 +69,9 @@
     --radius-full: 999px;
     --transition-fast: 0.2s ease;
     --transition-base: 0.2s ease;
-    --gradient-fire: linear-gradient(135deg, #E8590C 0%, #EF4444 100%);
-    --gradient-ember: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-    --gradient-subtle: rgba(232, 89, 12, 0.08);
+    --gradient-fire: linear-gradient(135deg, #8F250C 0%, #C23515 100%);
+    --gradient-ember: linear-gradient(135deg, #C23515 0%, #8F250C 100%);
+    --gradient-subtle: rgba(143, 37, 12, 0.1);
     --blur-glass: none;
 }
 
@@ -173,7 +173,7 @@ a { color: inherit; text-decoration: none; }
     font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.02em;
-    background: linear-gradient(135deg, #E8590C, #EAB308);
+    background: linear-gradient(135deg, #8F250C, #FFE2C0);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -733,7 +733,7 @@ tbody tr:hover { background: var(--bg-2); }
     border: 1px solid var(--border);
     border-radius: 8px;
     cursor: pointer;
-    -webkit-tap-highlight-color: rgba(232, 89, 12, 0.3);
+    -webkit-tap-highlight-color: rgba(143, 37, 12, 0.3);
     position: relative;
     z-index: 201;
 }
@@ -781,7 +781,7 @@ tbody tr:hover { background: var(--bg-2); }
 .mobile-logo {
     font-size: 1rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #E8590C, #EAB308);
+    background: linear-gradient(135deg, #8F250C, #FFE2C0);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -851,7 +851,7 @@ tbody tr:hover { background: var(--bg-2); }
     font-size: 0.625rem;
     font-weight: 500;
     min-width: 56px;
-    -webkit-tap-highlight-color: rgba(232, 89, 12, 0.2);
+    -webkit-tap-highlight-color: rgba(143, 37, 12, 0.2);
 }
 
 .bottom-nav-item:active {
@@ -897,7 +897,7 @@ tbody tr:hover { background: var(--bg-2); }
     color: var(--text-1);
     text-decoration: none;
     font-size: 0.875rem;
-    -webkit-tap-highlight-color: rgba(232, 89, 12, 0.2);
+    -webkit-tap-highlight-color: rgba(143, 37, 12, 0.2);
 }
 
 .more-menu a:active {
@@ -963,7 +963,7 @@ body {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 2px;
-    background: linear-gradient(135deg, #E8590C, #EAB308);
+    background: linear-gradient(135deg, #8F250C, #FFE2C0);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1032,7 +1032,7 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
 
 /* Selection */
-::selection { background: rgba(232, 89, 12, 0.2); }
+::selection { background: rgba(143, 37, 12, 0.2); }
 
 /* Utils */
 .text-green { color: var(--green); }
