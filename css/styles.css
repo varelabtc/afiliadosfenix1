@@ -29,7 +29,7 @@
     --green: #4ADE80;
     --yellow: #FCD34D;
     --red: #F87171;
-    --blue: #60A5FA;
+    --blue: #8F250C;
 
     /* Layout */
     --sidebar-w: 240px;
@@ -60,7 +60,7 @@
     --success: #4ADE80;
     --warning: #FCD34D;
     --danger: #F87171;
-    --info: #60A5FA;
+    --info: #8F250C;
     --radius-sm: 6px;
     --radius-md: 8px;
     --radius-xl: 16px;

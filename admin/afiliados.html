@@ -301,7 +301,7 @@
                     <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Cole o link de afiliado de cada casa de apostas. O afiliado verá esses links no painel dele.</p>
                     <div id="linksFields"></div>
 
-                    <div style="margin-top: 20px; padding: 16px; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); border-radius: 10px;">
+                    <div style="margin-top: 20px; padding: 16px; background: rgba(143,37,12,0.08); border: 1px solid rgba(143,37,12,0.2); border-radius: 10px;">
                         <h4 style="font-size: 0.85rem; color: var(--blue); margin-bottom: 8px;">URL de Postback (para receber eventos)</h4>
                         <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">Configure esta URL como postback/webhook nas plataformas das casas para rastrear conversões automaticamente:</p>
                         <div style="background: var(--bg-0); padding: 10px 14px; border-radius: 8px; font-family: monospace; font-size: 0.75rem; color: var(--accent); word-break: break-all;" id="postbackUrl"></div>
@@ -663,7 +663,7 @@
                 if (type === 'cpa') {
                     return '<span style="background: rgba(34,197,94,0.15); color: var(--success); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">CPA R$' + (deal.cpaValue || house.cpa).toFixed(0) + '</span>';
                 } else if (type === 'revshare') {
-                    return '<span style="background: rgba(59,130,246,0.15); color: var(--info); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">Rev ' + (deal.revShare || house.revShare) + '%</span>';
+                    return '<span style="background: rgba(143,37,12,0.15); color: var(--info); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">Rev ' + (deal.revShare || house.revShare) + '%</span>';
                 } else {
                     return '<span style="background: rgba(234,179,8,0.15); color: var(--warning); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;">Híb</span>';
                 }
@@ -826,7 +826,7 @@
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
                         <div><div id="modalSbCpaApi" style="font-size: 1.2rem; font-weight: 700; color: #22C55E;">${Format.currency(realStats.cpa_api)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">CPA (API)</div></div>
-                        <div><div id="modalSbRvs" style="font-size: 1.2rem; font-weight: 700; color: #3B82F6;">${Format.currency(realStats.rvs)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">RevShare</div></div>
+                        <div><div id="modalSbRvs" style="font-size: 1.2rem; font-weight: 700; color: #8F250C;">${Format.currency(realStats.rvs)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">RevShare</div></div>
                         <div><div id="modalSbCommission" style="font-size: 1.2rem; font-weight: 700; color: #F59E0B;">${Format.currency(realStats.total_commission)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Comissao API</div></div>
                         <div><div id="modalSuperbetVal" style="font-size: 1.2rem; font-weight: 700; color: var(--accent-primary);">${Format.currency(realStats.superbetEarnings)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Ganho Fenix</div></div>
                     </div>
@@ -862,7 +862,7 @@
                         <div><div id="modalVupiGgr" style="font-size: 1.2rem; font-weight: 700; color: #F59E0B;">${Format.currency(realStats.vupiGgr)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">GGR</div></div>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-                        <div><div id="modalVupiNgr" style="font-size: 1.2rem; font-weight: 700; color: #3B82F6;">${Format.currency(realStats.vupiNgr)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">NGR</div></div>
+                        <div><div id="modalVupiNgr" style="font-size: 1.2rem; font-weight: 700; color: #8F250C;">${Format.currency(realStats.vupiNgr)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">NGR</div></div>
                         <div><div id="modalVupiCpa" style="font-size: 1.2rem; font-weight: 700; color: #22C55E;">${Format.currency(realStats.vupiCpa)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">CPA</div></div>
                         <div><div id="modalVupiRevshare" style="font-size: 1.2rem; font-weight: 700; color: #8B5CF6;">${Format.currency(realStats.vupiRevshare)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">RevShare</div></div>
                         <div><div id="modalVupiEarnings" style="font-size: 1.2rem; font-weight: 700; color: #7C3AED;">${Format.currency(realStats.vupiEarnings)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Ganho Fenix</div></div>
