@@ -552,8 +552,25 @@
                 }
             } catch(e) {}
 
+            // Fetch Lottu.bet manual CPAs (filtered by date range)
+            var ltStats = { ftds: 0, registrations: 0, amount: 0 };
+            try {
+                var ltUrl = '/api/lottubet-cpa?affiliate_id=' + user.id + '&startDate=' + fmt(start) + '&endDate=' + fmt(end);
+                var ltRes = await fetch(ltUrl);
+                if (ltRes.ok) {
+                    var ltData = await ltRes.json();
+                    if (Array.isArray(ltData)) {
+                        ltData.forEach(function(r) {
+                            ltStats.ftds += (r.ftds || 0);
+                            ltStats.registrations += (r.registrations || 0);
+                            ltStats.amount += (r.amount || 0);
+                        });
+                    }
+                }
+            } catch(e) {}
+
             // CPA deals
-            var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, vupi: 80 };
+            var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, vupi: 80, lottubet: 100 };
             var cpaSuperbet = deals.superbet || 200;
             var cpaSportingbet = deals.sportingbet || 180;
             var cpaVupi = deals.vupi || 80;
@@ -567,17 +584,18 @@
             var superbetEarnings = (Math.round(sbStats.qualified_cpa) * cpaSuperbet) + sbAffRvs;
             var sportingbetEarnings = (Math.round(spStats.qualified_cpa) * cpaSportingbet) + spAffRvs;
             var vupiEarnings = (vupiStats.qftds * cpaVupi) + vupiAffRvs;
-            var totalEarnings = superbetEarnings + sportingbetEarnings + vupiEarnings;
+            var lottubetEarnings = ltStats.amount; // amount is already the affiliate's earnings
+            var totalEarnings = superbetEarnings + sportingbetEarnings + vupiEarnings + lottubetEarnings;
 
             // Store per-house stats (includes deposit and rvs fields from API)
             allHouseStats.superbet = { regs: sbStats.registrations, ftds: sbStats.first_deposits, cpas: sbStats.qualified_cpa, deposit: sbStats.deposit, rvs: sbAffRvs, lucro: superbetEarnings };
             allHouseStats.sportingbet = { regs: spStats.registrations, ftds: spStats.first_deposits, cpas: spStats.qualified_cpa, deposit: spStats.deposit, rvs: spAffRvs, lucro: sportingbetEarnings };
             allHouseStats.vupi = { regs: vupiStats.registros, ftds: vupiStats.ftds, cpas: vupiStats.qftds, deposit: vupiStats.deposito_amount, rvs: vupiAffRvs, lucro: vupiEarnings, visitas: vupiStats.visitas, depositos: vupiStats.depositos, ggr: vupiStats.ggr, ngr: vupiStats.ngr };
-            allHouseStats.lottubet = { regs: 0, ftds: 0, cpas: 0, deposit: 0, rvs: 0, lucro: 0 };
+            allHouseStats.lottubet = { regs: ltStats.registrations, ftds: ltStats.ftds, cpas: ltStats.ftds, deposit: 0, rvs: 0, lucro: lottubetEarnings };
             allHouseStats.all = {
-                regs: sbStats.registrations + spStats.registrations + vupiStats.registros,
-                ftds: sbStats.first_deposits + spStats.first_deposits + vupiStats.ftds,
-                cpas: sbStats.qualified_cpa + spStats.qualified_cpa + vupiStats.qftds,
+                regs: sbStats.registrations + spStats.registrations + vupiStats.registros + ltStats.registrations,
+                ftds: sbStats.first_deposits + spStats.first_deposits + vupiStats.ftds + ltStats.ftds,
+                cpas: sbStats.qualified_cpa + spStats.qualified_cpa + vupiStats.qftds + ltStats.ftds,
                 deposit: sbStats.deposit + spStats.deposit + vupiStats.deposito_amount,
                 rvs: sbAffRvs + spAffRvs + vupiAffRvs,
                 lucro: totalEarnings
