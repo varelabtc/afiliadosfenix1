@@ -381,6 +381,39 @@
                     </div>
                 </div>
 
+                <!-- Lottu.bet PowerBI Report -->
+                <div class="card" id="lottubetCard">
+                    <div class="card-header">
+                        <h3>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" style="vertical-align: -3px; margin-right: 6px;"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01M8 8h.01M12 8h.01M16 8h.01"/></svg>
+                            Lottu.bet — Relatório PowerBI
+                        </h3>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button class="btn btn-secondary btn-sm" onclick="toggleLottubet()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                <span id="lottubetToggleText">Expandir</span>
+                            </button>
+                            <a href="https://app.powerbi.com/reportEmbed?reportId=720f4a9e-3732-4a8d-992c-f0891e927417&autoAuth=true&ctid=9bfaab99-1140-4254-825c-7b2a5d5f022c" target="_blank" class="btn btn-secondary btn-sm" style="text-decoration:none;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                Abrir em nova aba
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body" id="lottubetBody" style="display: none;">
+                        <div style="position: relative; width: 100%; padding-top: 56.25%; border-radius: 8px; overflow: hidden; background: var(--bg-input);">
+                            <iframe
+                                id="lottubetIframe"
+                                title="Lottu Experts"
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                                allowfullscreen="true">
+                            </iframe>
+                        </div>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; text-align: center;">
+                            Relatório Power BI da Lottu.bet. Você precisa estar logado na conta OTG/Lottu para visualizar os dados. Os nomes dos afiliados no relatório já correspondem aos cadastrados na plataforma.
+                        </p>
+                    </div>
+                </div>
+
                 <!-- Recent Activity -->
                 <div class="card">
                     <div class="card-header">
@@ -769,6 +802,24 @@
 
         // Auto-load data on page load
         setTimeout(loadSuperbetData, 500);
+
+        // Lottu.bet PowerBI toggle
+        var lottubetLoaded = false;
+        function toggleLottubet() {
+            var body = document.getElementById('lottubetBody');
+            var text = document.getElementById('lottubetToggleText');
+            if (body.style.display === 'none' || !body.style.display) {
+                body.style.display = 'block';
+                text.textContent = 'Recolher';
+                if (!lottubetLoaded) {
+                    document.getElementById('lottubetIframe').src = 'https://app.powerbi.com/reportEmbed?reportId=720f4a9e-3732-4a8d-992c-f0891e927417&autoAuth=true&ctid=9bfaab99-1140-4254-825c-7b2a5d5f022c';
+                    lottubetLoaded = true;
+                }
+            } else {
+                body.style.display = 'none';
+                text.textContent = 'Expandir';
+            }
+        }
 
     </script>
 
