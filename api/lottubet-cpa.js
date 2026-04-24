@@ -1,5 +1,6 @@
 // Vercel Serverless Function - Manual Lottu.bet CPA Management
 // Since Lottu.bet has no API, admin manually registers CPAs per affiliate
+// v2
 //
 // GET  /api/lottubet-cpa?affiliate_id=5                 → Get CPAs for one affiliate
 // GET  /api/lottubet-cpa?all=true                       → Get all CPAs (admin)
