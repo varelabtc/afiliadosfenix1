@@ -555,8 +555,8 @@
             // Fetch Lottu.bet manual CPAs (filtered by date range)
             var ltStats = { ftds: 0, registrations: 0, amount: 0 };
             try {
-                var ltUrl = '/api/lottubet-cpa?affiliate_id=' + user.id + '&startDate=' + fmt(start) + '&endDate=' + fmt(end);
-                var ltRes = await fetch(ltUrl);
+                var ltUrl = 'https://zaopgwnrzadisqtxrlst.supabase.co/rest/v1/lottubet_cpas?select=*&affiliate_id=eq.' + user.id + '&date=gte.' + fmt(start) + '&date=lte.' + fmt(end);
+                var ltRes = await fetch(ltUrl, { headers: { 'apikey': 'sb_publishable_5IHTgZdNubSyGzyuKWPPUg_cxXH_KCH' } });
                 if (ltRes.ok) {
                     var ltData = await ltRes.json();
                     if (Array.isArray(ltData)) {

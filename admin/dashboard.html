@@ -570,7 +570,7 @@
                 var [sbRows, spRows, ltData] = await Promise.all([
                     fetchAllPages(baseUrl + '&brandIds=' + BRAND_SUPERBET),
                     fetchAllPages(baseUrl + '&brandIds=' + BRAND_SPORTINGBET),
-                    fetch('/api/lottubet-cpa?all=true&startDate=' + range.startDate + '&endDate=' + range.endDate).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; })
+                    fetch('https://zaopgwnrzadisqtxrlst.supabase.co/rest/v1/lottubet_cpas?select=*&date=gte.' + range.startDate + '&date=lte.' + range.endDate, { headers: { 'apikey': 'sb_publishable_5IHTgZdNubSyGzyuKWPPUg_cxXH_KCH' } }).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; })
                 ]);
 
                 sbRows.forEach(function(r) {
@@ -892,7 +892,11 @@
         // Auto-load data on page load
         setTimeout(loadSuperbetData, 500);
 
-        // ── Lottu.bet CPA Manual ──
+        // ── Lottu.bet CPA Manual (direct Supabase calls — bypass serverless) ──
+        var SB_URL = 'https://zaopgwnrzadisqtxrlst.supabase.co';
+        var SB_KEY = 'sb_publishable_5IHTgZdNubSyGzyuKWPPUg_cxXH_KCH';
+        var SB_HEADERS = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY };
+
         async function loadLtCpaAffiliates() {
             try {
                 var res = await fetch('https://zaopgwnrzadisqtxrlst.supabase.co/rest/v1/users?select=id,name&order=name.asc', {
@@ -920,7 +924,7 @@
 
         async function loadLtCpaTable() {
             try {
-                var res = await fetch('/api/lottubet-cpa?all=true');
+                var res = await fetch(SB_URL + '/rest/v1/lottubet_cpas?select=*&order=date.desc', { headers: SB_HEADERS });
                 if (!res.ok) throw new Error('API error');
                 var data = await res.json();
                 var tbody = document.getElementById('ltCpaTableBody');
@@ -988,15 +992,18 @@
             if (!date) { Toast.error('Informe a data'); return; }
 
             try {
-                var res = await fetch('/api/lottubet-cpa', {
+                var res = await fetch(SB_URL + '/rest/v1/lottubet_cpas', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: Object.assign({}, SB_HEADERS, { 'Content-Type': 'application/json', 'Prefer': 'return=representation' }),
                     body: JSON.stringify({
-                        affiliate_id: affiliateId,
+                        affiliate_id: parseInt(affiliateId),
                         affiliate_name: affiliateName,
                         date: date,
                         ftds: ftds,
-                        amount: amount
+                        registrations: 0,
+                        amount: amount,
+                        description: 'CPA Lottu.bet',
+                        status: 'approved'
                     })
                 });
 
@@ -1004,18 +1011,18 @@
                     Toast.success('CPA Lottu.bet lançado para ' + affiliateName);
                     loadLtCpaTable();
                 } else {
-                    var err = await res.json().catch(function() { return {}; });
-                    Toast.error('Erro: ' + (err.error || 'desconhecido'));
+                    var errText = await res.text().catch(function() { return ''; });
+                    Toast.error('Erro: ' + (errText.substring(0, 80) || 'desconhecido'));
                 }
             } catch (e) {
-                Toast.error('Erro de conexão');
+                Toast.error('Erro de conexão: ' + e.message);
             }
         }
 
         async function deleteLtCpa(id) {
             if (!confirm('Excluir este lançamento?')) return;
             try {
-                var res = await fetch('/api/lottubet-cpa?id=' + id, { method: 'DELETE' });
+                var res = await fetch(SB_URL + '/rest/v1/lottubet_cpas?id=eq.' + id, { method: 'DELETE', headers: SB_HEADERS });
                 if (res.ok) {
                     Toast.success('Lançamento excluído');
                     loadLtCpaTable();
@@ -1114,15 +1121,18 @@
                 }
 
                 try {
-                    var postRes = await fetch('/api/lottubet-cpa', {
+                    var postRes = await fetch(SB_URL + '/rest/v1/lottubet_cpas', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: Object.assign({}, SB_HEADERS, { 'Content-Type': 'application/json' }),
                         body: JSON.stringify({
                             affiliate_id: match.id,
                             affiliate_name: match.name,
                             date: date,
                             ftds: ftds,
-                            amount: amount
+                            registrations: 0,
+                            amount: amount,
+                            description: 'CPA Lottu.bet (CSV Import)',
+                            status: 'approved'
                         })
                     });
                     if (postRes.ok) imported++;
