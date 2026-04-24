@@ -1,5 +1,13 @@
 {
   "version": 2,
+  "env": {
+    "OTG_API_KEY": "@otg-api-key",
+    "UTMIFY_API_TOKEN": "@utmify-api-token",
+    "ADMIN_API_TOKEN": "@admin-api-token",
+    "ALLOWED_ORIGIN": "@allowed-origin",
+    "SUPABASE_URL": "@supabase-url",
+    "SUPABASE_KEY": "@supabase-key"
+  },
   "headers": [
     {
       "source": "/api/(.*)",
