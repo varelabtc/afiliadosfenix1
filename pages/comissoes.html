@@ -464,6 +464,32 @@
                             });
                         }
                     }
+
+                    // Lottu.bet commissions (from direct Supabase - affiliate receives R$100 per FTD)
+                    var cpaLottu = (user.cpa_deals && user.cpa_deals.lottubet) || 100;
+                    try {
+                        var ltRes = await fetch('https://zaopgwnrzadisqtxrlst.supabase.co/rest/v1/lottubet_cpas?select=*&affiliate_id=eq.' + user.id + '&date=gte.' + startDate + '&date=lte.' + endDate, {
+                            headers: { 'apikey': 'sb_publishable_5IHTgZdNubSyGzyuKWPPUg_cxXH_KCH' }
+                        });
+                        if (ltRes.ok) {
+                            var ltRows = await ltRes.json();
+                            if (Array.isArray(ltRows)) {
+                                ltRows.forEach(function(r) {
+                                    var ftds = r.ftds || 0;
+                                    if (ftds > 0) {
+                                        allCommissions.push({
+                                            type: 'cpa',
+                                            platform: 'lottubet',
+                                            description: 'CPA Lottu.bet - ' + ftds + ' FTD(s)',
+                                            amount: ftds * cpaLottu,
+                                            date: r.date || (startDate + ' a ' + endDate),
+                                            status: r.status || 'approved'
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    } catch (e) {}
                 } catch (err) {
                     console.error('Erro ao buscar comissões:', err);
                 }

@@ -574,6 +574,7 @@
             var cpaSuperbet = deals.superbet || 200;
             var cpaSportingbet = deals.sportingbet || 180;
             var cpaVupi = deals.vupi || 80;
+            var cpaLottu = deals.lottubet || 100;
 
             // RVS 50% for affiliate (from API revenue share)
             var sbAffRvs = (sbStats.rvs || 0) * 0.5;
@@ -584,7 +585,8 @@
             var superbetEarnings = (Math.round(sbStats.qualified_cpa) * cpaSuperbet) + sbAffRvs;
             var sportingbetEarnings = (Math.round(spStats.qualified_cpa) * cpaSportingbet) + spAffRvs;
             var vupiEarnings = (vupiStats.qftds * cpaVupi) + vupiAffRvs;
-            var lottubetEarnings = ltStats.amount; // amount is already the affiliate's earnings
+            // Lottu.bet: affiliate receives R$100 per FTD (agency gets R$150; stored amount is agency total)
+            var lottubetEarnings = ltStats.ftds * cpaLottu;
             var totalEarnings = superbetEarnings + sportingbetEarnings + vupiEarnings + lottubetEarnings;
 
             // Store per-house stats (includes deposit and rvs fields from API)
