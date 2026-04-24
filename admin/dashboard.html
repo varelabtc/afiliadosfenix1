@@ -564,11 +564,13 @@
             // Fetch each brand separately
             var sbStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, total_commission: 0 };
             var spStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, total_commission: 0 };
+            var ltStats = { registrations: 0, first_deposits: 0, qualified_cpa: 0, cpa: 0, rvs: 0, total_commission: 0 };
 
             try {
-                var [sbRows, spRows] = await Promise.all([
+                var [sbRows, spRows, ltData] = await Promise.all([
                     fetchAllPages(baseUrl + '&brandIds=' + BRAND_SUPERBET),
-                    fetchAllPages(baseUrl + '&brandIds=' + BRAND_SPORTINGBET)
+                    fetchAllPages(baseUrl + '&brandIds=' + BRAND_SPORTINGBET),
+                    fetch('/api/lottubet-cpa?all=true&startDate=' + range.startDate + '&endDate=' + range.endDate).then(function(r) { return r.ok ? r.json() : []; }).catch(function() { return []; })
                 ]);
 
                 sbRows.forEach(function(r) {
@@ -588,11 +590,24 @@
                     spStats.rvs += (r.rvs || 0);
                     spStats.total_commission += (r.total_commission || 0);
                 });
+
+                // Lottu.bet: manual CPAs (agency receives R$150 per CPA, commission is what affiliate earned)
+                if (Array.isArray(ltData)) {
+                    ltData.forEach(function(r) {
+                        ltStats.registrations += (r.registrations || 0);
+                        ltStats.first_deposits += (r.ftds || 0);
+                        ltStats.qualified_cpa += (r.ftds || 0);
+                        // Agency total receivable: R$150 per CPA
+                        ltStats.cpa += (r.ftds || 0) * 150;
+                        ltStats.total_commission += (r.ftds || 0) * 150;
+                    });
+                }
             } catch (e) { console.error('Erro API V2 houses:', e); }
 
             var housesData = [
                 { name: 'Superbet', logo: '🎰', stats: sbStats },
-                { name: 'Sportingbet', logo: '⚽', stats: spStats }
+                { name: 'Sportingbet', logo: '⚽', stats: spStats },
+                { name: 'Lottu.bet', logo: '🎲', stats: ltStats }
             ];
 
             container.innerHTML = housesData.map(function(house) {
