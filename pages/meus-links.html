@@ -405,9 +405,14 @@
 
             let html = '';
 
+            const overrides = (Auth.currentUser && Auth.currentUser.cpa_overrides) || {};
+
             offersConfig.forEach(function(offer) {
                 const offerStatus = getOfferStatus(offer.id);
                 const cpa = getCPAValue(offer.id, offer);
+                const ovr = overrides[offer.id] || {};
+                const baseline = ovr.baseline || offer.baseline;
+                const bonus = ovr.bonus || offer.bonus;
 
                 if (offerStatus.status === 'active') activeCount++;
                 if (offerStatus.status === 'pending') pendingCount++;
@@ -435,7 +440,7 @@
                             '<div class="oferta-name">' + offer.name + '</div>' +
                             '<div class="oferta-subtitle">' + offer.subtitle + '</div>' +
                             '<div class="oferta-details">' +
-                                '<span>Deposite ' + offer.baseline + ' ganhe ' + offer.bonus + '</span>' +
+                                '<span>Deposite ' + baseline + ' ganhe ' + bonus + '</span>' +
                                 '<span>Wager: ' + offer.wager + '</span>' +
                                 '<span>Pagamento: ' + offer.payment + '</span>' +
                             '</div>' +
@@ -449,11 +454,11 @@
                         '<div class="oferta-meta-grid">' +
                             '<div class="oferta-meta-item">' +
                                 '<span class="oferta-meta-label">Depósito mín.</span>' +
-                                '<span class="oferta-meta-value">' + offer.baseline + '</span>' +
+                                '<span class="oferta-meta-value">' + baseline + '</span>' +
                             '</div>' +
                             '<div class="oferta-meta-item">' +
                                 '<span class="oferta-meta-label">Bônus</span>' +
-                                '<span class="oferta-meta-value" style="color: var(--green);">' + offer.bonus + '</span>' +
+                                '<span class="oferta-meta-value" style="color: var(--green);">' + bonus + '</span>' +
                             '</div>' +
                             '<div class="oferta-meta-item">' +
                                 '<span class="oferta-meta-label">CPA</span>' +
