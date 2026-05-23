@@ -68,12 +68,19 @@
                 <!-- Period Selector -->
                 <div class="card" style="margin-bottom: 12px;">
                     <div class="card-body" style="padding: 14px 16px;">
-                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <button class="period-tab" data-days="7">7 dias</button>
-                            <button class="period-tab active" data-days="30">30 dias</button>
-                            <button class="period-tab" data-days="90">90 dias</button>
-                            <button class="period-tab" data-days="365">Geral</button>
+                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                            <button type="button" class="period-tab" data-days="7">7 dias</button>
+                            <button type="button" class="period-tab active" data-days="30">30 dias</button>
+                            <button type="button" class="period-tab" data-days="90">90 dias</button>
+                            <button type="button" class="period-tab" data-days="365">Geral</button>
+                            <span class="period-divider"></span>
+                            <input type="date" id="mgrDateStart" class="period-date-input" title="Data inicial">
+                            <span style="color: var(--text-muted); font-size: 0.85rem;">até</span>
+                            <input type="date" id="mgrDateEnd" class="period-date-input" title="Data final">
+                            <button type="button" id="mgrDateApply" class="period-date-apply">Aplicar</button>
+                            <button type="button" id="mgrDateClear" class="period-date-clear" title="Limpar filtro de data" style="display:none;">×</button>
                         </div>
+                        <div id="mgrActivePeriod" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;"></div>
                     </div>
                 </div>
 
@@ -279,6 +286,8 @@
         var BRAND_SUPERBET = 'clsuperbet000001';
         var BRAND_SPORTINGBET = 'cmm5dhdqm000e19b58dqc549a';
         var currentDays = 30;
+        var customStart = null;
+        var customEnd = null;
         var allApiAff = [];
 
         document.addEventListener('DOMContentLoaded', async function() {
@@ -292,9 +301,39 @@
                     document.querySelectorAll('.period-tab').forEach(function(b) { b.classList.remove('active'); });
                     this.classList.add('active');
                     currentDays = parseInt(this.dataset.days) || 30;
+                    customStart = null; customEnd = null;
+                    var di = document.getElementById('mgrDateStart'); if (di) di.value = '';
+                    var df = document.getElementById('mgrDateEnd'); if (df) df.value = '';
+                    var clr = document.getElementById('mgrDateClear'); if (clr) clr.style.display = 'none';
                     loadManagerDashboard();
                 });
             });
+
+            var applyBtn = document.getElementById('mgrDateApply');
+            if (applyBtn) {
+                applyBtn.addEventListener('click', function() {
+                    var s = document.getElementById('mgrDateStart').value;
+                    var e = document.getElementById('mgrDateEnd').value;
+                    if (!s || !e) { Toast.error('Selecione data inicial e final'); return; }
+                    if (s > e) { Toast.error('Data inicial não pode ser maior que a final'); return; }
+                    customStart = s; customEnd = e;
+                    document.querySelectorAll('.period-tab').forEach(function(b) { b.classList.remove('active'); });
+                    document.getElementById('mgrDateClear').style.display = '';
+                    loadManagerDashboard();
+                });
+            }
+            var clearBtn = document.getElementById('mgrDateClear');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function() {
+                    customStart = null; customEnd = null;
+                    document.getElementById('mgrDateStart').value = '';
+                    document.getElementById('mgrDateEnd').value = '';
+                    this.style.display = 'none';
+                    var def = document.querySelector('.period-tab[data-days="30"]');
+                    if (def) { def.classList.add('active'); currentDays = 30; }
+                    loadManagerDashboard();
+                });
+            }
 
             loadManagerDashboard();
         });
@@ -384,12 +423,24 @@
                 }
             } catch (e) { console.error(e); }
 
-            // Period
-            var end = new Date();
-            var start = new Date();
-            start.setDate(end.getDate() - currentDays);
-            var fmt = function(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
-            var dateRange = '&startDate=' + fmt(start) + '&endDate=' + fmt(end);
+            // Period — custom range overrides currentDays preset
+            var startStr, endStr;
+            if (customStart && customEnd) {
+                startStr = customStart;
+                endStr = customEnd;
+            } else {
+                var end = new Date();
+                var start = new Date();
+                start.setDate(end.getDate() - currentDays);
+                var fmt = function(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+                startStr = fmt(start);
+                endStr = fmt(end);
+            }
+            var dateRange = '&startDate=' + startStr + '&endDate=' + endStr;
+
+            var fmtBR = function(s) { var p = s.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; };
+            var periodEl = document.getElementById('mgrActivePeriod');
+            if (periodEl) periodEl.textContent = 'Período ativo: ' + fmtBR(startStr) + ' até ' + fmtBR(endStr);
 
             // Aggregate totals with all fields
             var totals = {
@@ -565,6 +616,45 @@
             color: white;
             border-color: var(--blue);
         }
+        .period-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            margin: 0 4px;
+        }
+        .period-date-input {
+            padding: 6px 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            color-scheme: dark;
+        }
+        .period-date-apply {
+            padding: 8px 16px;
+            background: var(--blue);
+            border: 1px solid var(--blue);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .period-date-apply:hover { filter: brightness(1.1); }
+        .period-date-clear {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .period-date-clear:hover { color: #ef4444; border-color: #ef4444; }
         @media (max-width: 768px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
