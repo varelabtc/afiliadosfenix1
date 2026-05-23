@@ -161,19 +161,22 @@
 
                 <!-- Managers Table -->
                 <div class="card">
-                    <div class="card-header">
-                        <h3>Lista de Gerentes</h3>
-                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                            <button class="period-tab-mgr active" data-days="30">30 dias</button>
-                            <button class="period-tab-mgr" data-days="90">90 dias</button>
-                            <button class="period-tab-mgr" data-days="365">Geral</button>
-                            <span class="period-divider"></span>
-                            <input type="date" id="mgrDateStart" class="period-date-input" title="Data inicial">
-                            <span style="color: var(--text-muted); font-size: 0.85rem;">até</span>
-                            <input type="date" id="mgrDateEnd" class="period-date-input" title="Data final">
-                            <button id="mgrDateApply" class="period-date-apply">Aplicar</button>
-                            <button id="mgrDateClear" class="period-date-clear" title="Limpar filtro de data" style="display:none;">×</button>
+                    <div class="card-header" style="flex-direction: column; align-items: stretch; gap: 12px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <h3 style="margin: 0;">Lista de Gerentes</h3>
+                            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                <button type="button" class="period-tab-mgr active" data-days="30">30 dias</button>
+                                <button type="button" class="period-tab-mgr" data-days="90">90 dias</button>
+                                <button type="button" class="period-tab-mgr" data-days="365">Geral</button>
+                                <span class="period-divider"></span>
+                                <input type="date" id="mgrDateStart" class="period-date-input" title="Data inicial">
+                                <span style="color: var(--text-muted); font-size: 0.85rem;">até</span>
+                                <input type="date" id="mgrDateEnd" class="period-date-input" title="Data final">
+                                <button type="button" id="mgrDateApply" class="period-date-apply">Aplicar</button>
+                                <button type="button" id="mgrDateClear" class="period-date-clear" title="Limpar filtro de data" style="display:none;">×</button>
+                            </div>
                         </div>
+                        <div id="mgrActivePeriod" style="font-size: 0.8rem; color: var(--text-muted);"></div>
                     </div>
                     <div class="card-body">
                         <div class="table-container">
@@ -397,9 +400,21 @@
             }
             var dateRange = '&startDate=' + startStr + '&endDate=' + endStr;
 
+            // Visible period indicator
+            var fmtBR = function(s) { var p = s.split('-'); return p[2] + '/' + p[1] + '/' + p[0]; };
+            var periodEl = document.getElementById('mgrActivePeriod');
+            if (periodEl) periodEl.textContent = 'Período ativo: ' + fmtBR(startStr) + ' até ' + fmtBR(endStr);
+
             // Prefetch all Superbet/Sportingbet data once
-            var sbRows = await fetchAllPages('/api/superbet?action=results' + dateRange + '&groupBy=affiliate&brandIds=' + BRAND_SUPERBET);
-            var spRows = await fetchAllPages('/api/superbet?action=results' + dateRange + '&groupBy=affiliate&brandIds=' + BRAND_SPORTINGBET);
+            var sbRows = [], spRows = [];
+            try {
+                sbRows = await fetchAllPages('/api/superbet?action=results' + dateRange + '&groupBy=affiliate&brandIds=' + BRAND_SUPERBET);
+                spRows = await fetchAllPages('/api/superbet?action=results' + dateRange + '&groupBy=affiliate&brandIds=' + BRAND_SPORTINGBET);
+            } catch (err) {
+                console.error('[loadManagers] API error:', err);
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--danger);">Erro ao buscar dados da API: ' + (err && err.message ? err.message : err) + '</td></tr>';
+                return;
+            }
             var sbMap = {};
             sbRows.forEach(function(r) { sbMap[r.id] = r; });
             var spMap = {};
