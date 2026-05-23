@@ -163,10 +163,16 @@
                 <div class="card">
                     <div class="card-header">
                         <h3>Lista de Gerentes</h3>
-                        <div style="display: flex; gap: 8px;">
+                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                             <button class="period-tab-mgr active" data-days="30">30 dias</button>
                             <button class="period-tab-mgr" data-days="90">90 dias</button>
                             <button class="period-tab-mgr" data-days="365">Geral</button>
+                            <span class="period-divider"></span>
+                            <input type="date" id="mgrDateStart" class="period-date-input" title="Data inicial">
+                            <span style="color: var(--text-muted); font-size: 0.85rem;">até</span>
+                            <input type="date" id="mgrDateEnd" class="period-date-input" title="Data final">
+                            <button id="mgrDateApply" class="period-date-apply">Aplicar</button>
+                            <button id="mgrDateClear" class="period-date-clear" title="Limpar filtro de data" style="display:none;">×</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -255,6 +261,8 @@
         var BRAND_SUPERBET = 'clsuperbet000001';
         var BRAND_SPORTINGBET = 'cmm5dhdqm000e19b58dqc549a';
         var currentDays = 30;
+        var customStart = null;
+        var customEnd = null;
         var allApiAff = [];
 
         document.addEventListener('DOMContentLoaded', async function() {
@@ -278,8 +286,33 @@
                     document.querySelectorAll('.period-tab-mgr').forEach(function(b) { b.classList.remove('active'); });
                     this.classList.add('active');
                     currentDays = parseInt(this.dataset.days) || 30;
+                    customStart = null; customEnd = null;
+                    document.getElementById('mgrDateStart').value = '';
+                    document.getElementById('mgrDateEnd').value = '';
+                    document.getElementById('mgrDateClear').style.display = 'none';
                     loadManagers();
                 });
+            });
+
+            document.getElementById('mgrDateApply').addEventListener('click', function() {
+                var s = document.getElementById('mgrDateStart').value;
+                var e = document.getElementById('mgrDateEnd').value;
+                if (!s || !e) { Toast.error('Selecione data inicial e final'); return; }
+                if (s > e) { Toast.error('Data inicial não pode ser maior que a final'); return; }
+                customStart = s; customEnd = e;
+                document.querySelectorAll('.period-tab-mgr').forEach(function(b) { b.classList.remove('active'); });
+                document.getElementById('mgrDateClear').style.display = '';
+                loadManagers();
+            });
+
+            document.getElementById('mgrDateClear').addEventListener('click', function() {
+                customStart = null; customEnd = null;
+                document.getElementById('mgrDateStart').value = '';
+                document.getElementById('mgrDateEnd').value = '';
+                this.style.display = 'none';
+                var def = document.querySelector('.period-tab-mgr[data-days="30"]');
+                if (def) { def.classList.add('active'); currentDays = 30; }
+                loadManagers();
             });
 
             loadManagers();
@@ -349,12 +382,20 @@
 
             tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted);">Calculando faturamento...</td></tr>';
 
-            // Period
-            var end = new Date();
-            var start = new Date();
-            start.setDate(end.getDate() - currentDays);
-            var fmt = function(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
-            var dateRange = '&startDate=' + fmt(start) + '&endDate=' + fmt(end);
+            // Period — custom range overrides currentDays preset
+            var startStr, endStr;
+            if (customStart && customEnd) {
+                startStr = customStart;
+                endStr = customEnd;
+            } else {
+                var end = new Date();
+                var start = new Date();
+                start.setDate(end.getDate() - currentDays);
+                var fmt = function(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+                startStr = fmt(start);
+                endStr = fmt(end);
+            }
+            var dateRange = '&startDate=' + startStr + '&endDate=' + endStr;
 
             // Prefetch all Superbet/Sportingbet data once
             var sbRows = await fetchAllPages('/api/superbet?action=results' + dateRange + '&groupBy=affiliate&brandIds=' + BRAND_SUPERBET);
@@ -511,6 +552,45 @@
             color: white;
             border-color: var(--accent);
         }
+        .period-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            margin: 0 4px;
+        }
+        .period-date-input {
+            padding: 5px 8px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.75rem;
+            color-scheme: dark;
+        }
+        .period-date-apply {
+            padding: 6px 14px;
+            background: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .period-date-apply:hover { filter: brightness(1.1); }
+        .period-date-clear {
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .period-date-clear:hover { color: #ef4444; border-color: #ef4444; }
         .admin-sidebar { border-right-color: var(--fire-red, #EF4444) !important; }
         .admin-sidebar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--fire-red, #EF4444); }
         .sidebar-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 16px; border-bottom: 1px solid var(--border); }
