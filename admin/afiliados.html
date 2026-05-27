@@ -686,7 +686,8 @@
             var blaze = parseFloat(document.getElementById('dealBlaze').value) || 150;
             var jonbet = parseFloat(document.getElementById('dealJonbet').value) || 150;
             var lottubet = parseFloat(document.getElementById('dealLottubet').value) || 100;
-            var cpaDeals = { superbet: superbet, sportingbet: sportingbet, estrelabet: estrelabet, vupi: vupi, blaze: blaze, jonbet: jonbet, lottubet: lottubet };
+            var esportivabet = parseFloat(document.getElementById('dealEsportivabet').value) || 40;
+            var cpaDeals = { superbet: superbet, sportingbet: sportingbet, estrelabet: estrelabet, vupi: vupi, blaze: blaze, jonbet: jonbet, lottubet: lottubet, esportivabet: esportivabet };
             try {
                 await SupabaseDB.updateUser(userId, { cpa_deals: cpaDeals });
                 await AffiliateManager.fetchAll();
@@ -940,6 +941,10 @@
                             '<div>' +
                                 '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Lottu.bet (R$)</label>' +
                                 '<input type="number" id="dealLottubet" value="' + (deals.lottubet || 100) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
+                            '</div>' +
+                            '<div>' +
+                                '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">EsportivaBet (R$)</label>' +
+                                '<input type="number" id="dealEsportivabet" value="' + (deals.esportivabet || 40) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
                             '</div>' +
                         '</div>' +
                         '<button onclick="saveCpaDeals(' + user.id + ')" style="padding: 8px 20px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Salvar Acordos</button>';
