@@ -406,8 +406,16 @@
                                     <span class="sb-stat-value sb-accent" id="ltQualifiedCPA">0</span>
                                 </div>
                                 <div class="sb-stat">
-                                    <span class="sb-stat-label">Comissão Total</span>
+                                    <span class="sb-stat-label">Comissão Casa (Total)</span>
                                     <span class="sb-stat-value sb-gold" id="ltTotalCommission">R$ 0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">Lucro Agência (R$50/FTD)</span>
+                                    <span class="sb-stat-value" style="color:#F59E0B;" id="ltAgencyProfit">R$ 0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">Comissão Afiliados (R$100/FTD)</span>
+                                    <span class="sb-stat-value" style="color:#3B82F6;" id="ltAffiliateEarnings">R$ 0</span>
                                 </div>
                             </div>
 
@@ -421,7 +429,9 @@
                                             <th>FTDs</th>
                                             <th>Qtd Dep.</th>
                                             <th>Depósitos (R$)</th>
-                                            <th>Comissão</th>
+                                            <th>Comissão Casa</th>
+                                            <th>Lucro Agência</th>
+                                            <th>Afiliado Ganha</th>
                                         </tr>
                                     </thead>
                                     <tbody id="ltAffiliatesBody">
@@ -1005,23 +1015,35 @@
                     totalComm += (r.amount || 0);
                 });
 
+                // Lottu CPA split: house pays R$150/FTD = R$50 agency + R$100 affiliate
+                var LOTTU_AGENCY_PER_FTD = 50;
+                var LOTTU_AFFILIATE_PER_FTD = 100;
+                var totalAgency = totalFtds * LOTTU_AGENCY_PER_FTD;
+                var totalAffiliate = totalFtds * LOTTU_AFFILIATE_PER_FTD;
+
                 // Update top stats
                 document.getElementById('ltRegistrations').textContent = totalRegs;
                 document.getElementById('ltFirstDeposits').textContent = totalFtds;
                 document.getElementById('ltQualifiedCPA').textContent = totalFtds;
                 document.getElementById('ltTotalCommission').textContent = 'R$ ' + totalComm.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+                var elAg = document.getElementById('ltAgencyProfit');
+                if (elAg) elAg.textContent = 'R$ ' + totalAgency.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+                var elAf = document.getElementById('ltAffiliateEarnings');
+                if (elAf) elAf.textContent = 'R$ ' + totalAffiliate.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 
                 // Affiliates table (sorted by commission desc)
                 var rows = Object.values(byAff).sort(function(a, b) { return b.amount - a.amount; });
                 var tbody = document.getElementById('ltAffiliatesBody');
                 if (rows.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">Nenhum dado</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--text-muted);">Nenhum dado</td></tr>';
                 } else {
                     tbody.innerHTML = rows.map(function(r) {
                         var isOrphan = !r.affiliate_id || r.affiliate_id === 0;
                         var nameHtml = isOrphan
                             ? '<strong style="color:var(--warning);">' + r.name + '</strong> <span style="display:inline-block;padding:1px 6px;background:rgba(245,158,11,0.15);color:var(--warning);border-radius:4px;font-size:0.65rem;">SEM CADASTRO</span>'
                             : '<strong>' + r.name + '</strong>';
+                        var agency = r.ftds * LOTTU_AGENCY_PER_FTD;
+                        var affPay = r.ftds * LOTTU_AFFILIATE_PER_FTD;
                         return '<tr' + (isOrphan ? ' style="background:rgba(245,158,11,0.04);"' : '') + '>' +
                             '<td>' + nameHtml + '</td>' +
                             '<td>' + r.regs + '</td>' +
@@ -1029,6 +1051,8 @@
                             '<td>' + r.depCount + '</td>' +
                             '<td style="color:#3B82F6;">R$ ' + r.depAmount.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>' +
                             '<td style="font-weight:700;color:var(--success);">R$ ' + r.amount.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>' +
+                            '<td style="font-weight:700;color:#F59E0B;">R$ ' + agency.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>' +
+                            '<td style="font-weight:700;color:#3B82F6;">R$ ' + affPay.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + '</td>' +
                         '</tr>';
                     }).join('');
                 }
