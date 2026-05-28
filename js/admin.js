@@ -185,6 +185,22 @@ const BettingHouses = {
                 totalClicks: 0,
                 totalConversions: 0,
                 totalPaid: 0
+            },
+            {
+                id: 8,
+                name: 'EsportivaBet',
+                slug: 'esportivabet',
+                logo: '⚡',
+                color: '#10B981',
+                baseUrl: 'https://esportivabet.com',
+                cpa: 40.00,
+                revShare: 0,
+                minDeposit: 40.00,
+                status: 'active',
+                totalAffiliates: 0,
+                totalClicks: 0,
+                totalConversions: 0,
+                totalPaid: 0
             }
         ];
 

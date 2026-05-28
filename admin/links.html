@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
@@ -215,6 +215,7 @@
                             <option value="blaze">🔥 Blaze</option>
                             <option value="jonbet">🎯 Jonbet</option>
                             <option value="lottubet">🎲 Lottu.bet</option>
+                            <option value="esportivabet">⚡ EsportivaBet</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -275,7 +276,7 @@
 
     <script src="../js/supabase-db.js?v=4"></script>
     <script src="../js/main.js?v=4"></script>
-    <script src="../js/admin.js?v=4"></script>
+    <script src="../js/admin.js?v=5"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
             if (!AdminAuth.requireAuth()) return;
@@ -390,9 +391,9 @@
         }
 
         // ── Promotional Links (Bilhetes/Promos admin-managed) ──
-        var HOUSE_LOGOS = { superbet: '🎰', sportingbet: '⚽', estrelabet: '⭐', vupi: '🟣', blaze: '🔥', jonbet: '🎯', lottubet: '🎲' };
-        var HOUSE_NAMES = { superbet: 'Superbet', sportingbet: 'Sportingbet', estrelabet: 'Estrelabet', vupi: 'VUPI', blaze: 'Blaze', jonbet: 'Jonbet', lottubet: 'Lottu.bet' };
-        var HOUSE_COLORS = { superbet: '#E8590C', sportingbet: '#22C55E', estrelabet: '#1a2744', vupi: '#7C3AED', blaze: '#EF4444', jonbet: '#1E90FF', lottubet: '#F59E0B' };
+        var HOUSE_LOGOS = { superbet: '🎰', sportingbet: '⚽', estrelabet: '⭐', vupi: '🟣', blaze: '🔥', jonbet: '🎯', lottubet: '🎲', esportivabet: '⚡' };
+        var HOUSE_NAMES = { superbet: 'Superbet', sportingbet: 'Sportingbet', estrelabet: 'Estrelabet', vupi: 'VUPI', blaze: 'Blaze', jonbet: 'Jonbet', lottubet: 'Lottu.bet', esportivabet: 'EsportivaBet' };
+        var HOUSE_COLORS = { superbet: '#E8590C', sportingbet: '#22C55E', estrelabet: '#1a2744', vupi: '#7C3AED', blaze: '#EF4444', jonbet: '#1E90FF', lottubet: '#F59E0B', esportivabet: '#10B981' };
 
         async function loadPromoLinks() {
             var container = document.getElementById('promoLinksContainer');
