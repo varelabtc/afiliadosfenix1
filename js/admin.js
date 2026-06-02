@@ -147,7 +147,7 @@ const BettingHouses = {
                 baseUrl: 'https://hiperbet.com',
                 cpa: 100.00,
                 revShare: 0,
-                minDeposit: 30.00,
+                minDeposit: 40.00,
                 status: 'active',
                 totalAffiliates: 0,
                 totalClicks: 0,
