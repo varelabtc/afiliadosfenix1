@@ -233,70 +233,6 @@
                 color: '#22C55E'
             },
             {
-                id: 'estrelabet',
-                name: 'Estrelabet',
-                subtitle: 'Estrelabet Brasil',
-                logo: '../img/estrelabet-logo.png',
-                baseline: 'R$50',
-                bonus: 'R$110',
-                wager: '2x',
-                payment: 'Mensal - dia 15',
-                currency: 'BRL',
-                metaTypes: ['QFTD'],
-                models: [{ type: 'CPA', value: null }],
-                defaultCPA: 50,
-                maxCPA: 110,
-                color: '#1a2744'
-            },
-            {
-                id: 'vupi',
-                name: 'VUPI',
-                subtitle: 'VUPI Brasil',
-                logo: '../img/vupi-logo.webp',
-                baseline: 'R$50',
-                bonus: 'R$80',
-                wager: '2x',
-                payment: 'Mensal - dia 15',
-                currency: 'BRL',
-                metaTypes: ['QFTD'],
-                models: [{ type: 'CPA', value: null }],
-                defaultCPA: 50,
-                maxCPA: 80,
-                color: '#2d1b69'
-            },
-            {
-                id: 'blaze',
-                name: 'Blaze',
-                subtitle: 'Blaze Brasil',
-                logo: '../img/blaze-logo.jpeg',
-                baseline: 'R$20',
-                bonus: 'R$150',
-                wager: '1x',
-                payment: 'Mensal - dia 15',
-                currency: 'BRL',
-                metaTypes: ['CPA'],
-                models: [{ type: 'CPA', value: null }],
-                defaultCPA: 20,
-                maxCPA: 150,
-                color: '#E53935'
-            },
-            {
-                id: 'jonbet',
-                name: 'Jonbet',
-                subtitle: 'Jonbet Brasil',
-                logo: '../img/jonbet-logo.webp',
-                baseline: 'R$20',
-                bonus: 'R$150',
-                wager: '1x',
-                payment: 'Mensal - dia 15',
-                currency: 'BRL',
-                metaTypes: ['QFTD'],
-                models: [{ type: 'CPA', value: null }],
-                defaultCPA: 20,
-                maxCPA: 150,
-                color: '#1E90FF'
-            },
-            {
                 id: 'lottubet',
                 name: 'Lottu.bet',
                 subtitle: 'Lottu.bet Brasil',
@@ -327,6 +263,22 @@
                 defaultCPA: 40,
                 maxCPA: 85,
                 color: '#10B981'
+            },
+            {
+                id: 'hiperbet',
+                name: 'HiperBet',
+                subtitle: 'HiperBet Brasil',
+                logo: '../img/hiperbet-logo.jpg',
+                baseline: 'R$30',
+                bonus: 'R$200',
+                wager: '1x',
+                payment: 'Mensal - dia 15',
+                currency: 'BRL',
+                metaTypes: ['CPA'],
+                models: [{ type: 'CPA', value: 100 }],
+                defaultCPA: 100,
+                maxCPA: 100,
+                color: '#1E40AF'
             }
         ];
 
@@ -374,7 +326,7 @@
             return Auth.currentUser || null;
         }
 
-        var HOUSE_ID_MAP = { 'superbet': '1', 'sportingbet': '2', 'estrelabet': '3', 'vupi': '4', 'blaze': '5', 'jonbet': '6', 'lottubet': '7', 'esportivabet': '8' };
+        var HOUSE_ID_MAP = { 'superbet': '1', 'sportingbet': '2', 'lottubet': '7', 'esportivabet': '8', 'hiperbet': '9' };
 
         function getOfferStatus(offerId) {
             const fullUser = getFullUserData();

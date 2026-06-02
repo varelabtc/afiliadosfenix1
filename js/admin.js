@@ -107,70 +107,6 @@ const BettingHouses = {
                 totalPaid: 29400.00
             },
             {
-                id: 3,
-                name: 'Estrelabet',
-                slug: 'estrelabet',
-                logo: '⭐',
-                color: '#1a2744',
-                baseUrl: 'https://estrelabet.com',
-                cpa: 110.00,
-                revShare: 0,
-                minDeposit: 50.00,
-                status: 'active',
-                totalAffiliates: 0,
-                totalClicks: 0,
-                totalConversions: 0,
-                totalPaid: 0
-            },
-            {
-                id: 4,
-                name: 'VUPI',
-                slug: 'vupi',
-                logo: '🟣',
-                color: '#2d1b69',
-                baseUrl: 'https://vupi.com',
-                cpa: 80.00,
-                revShare: 0,
-                minDeposit: 50.00,
-                status: 'active',
-                totalAffiliates: 0,
-                totalClicks: 0,
-                totalConversions: 0,
-                totalPaid: 0
-            },
-            {
-                id: 5,
-                name: 'Blaze',
-                slug: 'blaze',
-                logo: '🔥',
-                color: '#E53935',
-                baseUrl: 'https://blaze.com',
-                cpa: 150.00,
-                revShare: 0,
-                minDeposit: 20.00,
-                status: 'active',
-                totalAffiliates: 0,
-                totalClicks: 0,
-                totalConversions: 0,
-                totalPaid: 0
-            },
-            {
-                id: 6,
-                name: 'Jonbet',
-                slug: 'jonbet',
-                logo: '🎯',
-                color: '#1E90FF',
-                baseUrl: 'https://jonbet.com',
-                cpa: 150.00,
-                revShare: 0,
-                minDeposit: 20.00,
-                status: 'active',
-                totalAffiliates: 0,
-                totalClicks: 0,
-                totalConversions: 0,
-                totalPaid: 0
-            },
-            {
                 id: 7,
                 name: 'Lottu.bet',
                 slug: 'lottubet',
@@ -201,11 +137,28 @@ const BettingHouses = {
                 totalClicks: 0,
                 totalConversions: 0,
                 totalPaid: 0
+            },
+            {
+                id: 9,
+                name: 'HiperBet',
+                slug: 'hiperbet',
+                logo: '🏆',
+                color: '#1E40AF',
+                baseUrl: 'https://hiperbet.com',
+                cpa: 100.00,
+                revShare: 0,
+                minDeposit: 30.00,
+                status: 'active',
+                totalAffiliates: 0,
+                totalClicks: 0,
+                totalConversions: 0,
+                totalPaid: 0
             }
         ];
 
         var stored = Storage.get('bettingHouses');
-        if (!stored || stored.length < defaults.length) {
+        // Use !== so removing houses (defaults shrinks) also re-resets cache
+        if (!stored || stored.length !== defaults.length) {
             Storage.set('bettingHouses', defaults);
             stored = defaults;
         }

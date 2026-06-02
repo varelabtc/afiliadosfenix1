@@ -443,6 +443,65 @@
                     </div>
                 </div>
 
+                <!-- HiperBet — Resumo com tabela (split casa/agencia/afiliado) -->
+                <div class="card" id="hiperbetReportCard">
+                    <div class="card-header">
+                        <h3>
+                            <img src="../img/hiperbet-logo.jpg" style="width:20px;height:20px;border-radius:4px;vertical-align:-4px;margin-right:6px;object-fit:cover;">
+                            HiperBet — Dados Consolidados
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="hpReportContent">
+                            <!-- Stats Row -->
+                            <div class="sb-stats-row">
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">Registros</span>
+                                    <span class="sb-stat-value" id="hpRegistrations">0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">1º Depósitos</span>
+                                    <span class="sb-stat-value" id="hpFirstDeposits">0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">CPA Qualificado</span>
+                                    <span class="sb-stat-value sb-accent" id="hpQualifiedCPA">0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">Comissão Casa (R$140/FTD)</span>
+                                    <span class="sb-stat-value sb-gold" id="hpTotalCommission">R$ 0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">Lucro Agência (R$40/FTD)</span>
+                                    <span class="sb-stat-value" style="color:#1E40AF;" id="hpAgencyProfit">R$ 0</span>
+                                </div>
+                                <div class="sb-stat">
+                                    <span class="sb-stat-label">Comissão Afiliados (R$100/FTD)</span>
+                                    <span class="sb-stat-value" style="color:#3B82F6;" id="hpAffiliateEarnings">R$ 0</span>
+                                </div>
+                            </div>
+
+                            <h4 style="font-size: 0.85rem; font-weight: 700; margin: 20px 0 12px; color: var(--text-primary);">Por Afiliado</h4>
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Afiliado</th>
+                                            <th>FTDs</th>
+                                            <th>Comissão Casa</th>
+                                            <th>Lucro Agência</th>
+                                            <th>Afiliado Ganha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="hpAffiliatesBody">
+                                        <tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted);">Sem dados de HiperBet ainda. Integração via API Smartico ou entrada manual a configurar.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Lottu.bet Manual CPA Entry -->
                 <div class="card" id="lottubetCpaCard">
                     <div class="card-header">
@@ -584,7 +643,7 @@
 
     <script src="../js/supabase-db.js?v=4"></script>
     <script src="../js/main.js?v=4"></script>
-    <script src="../js/admin.js?v=5"></script>
+    <script src="../js/admin.js?v=6"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
             if (!AdminAuth.requireAuth()) return;

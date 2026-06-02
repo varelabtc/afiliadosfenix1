@@ -200,12 +200,9 @@
                             <option value="all">Todas as casas</option>
                             <option value="superbet">Falta Superbet</option>
                             <option value="sportingbet">Falta Sportingbet</option>
-                            <option value="estrelabet">Falta Estrelabet</option>
-                            <option value="vupi">Falta VUPI</option>
-                            <option value="blaze">Falta Blaze</option>
-                            <option value="jonbet">Falta JonBet</option>
                             <option value="lottubet">Falta Lottu.bet</option>
                             <option value="esportivabet">Falta EsportivaBet</option>
+                            <option value="hiperbet">Falta HiperBet</option>
                         </select>
                     </div>
                 </div>
@@ -319,7 +316,7 @@
 
     <script src="../js/supabase-db.js?v=4"></script>
     <script src="../js/main.js?v=4"></script>
-    <script src="../js/admin.js?v=5"></script>
+    <script src="../js/admin.js?v=6"></script>
     <script>
         let currentFilter = 'all';
         let currentSearch = '';
@@ -414,7 +411,7 @@
 
             // Apply missing house link filter
             if (currentHouseMissing !== 'all') {
-                var houseIdMap = { superbet: '1', sportingbet: '2', estrelabet: '3', vupi: '4', blaze: '5', jonbet: '6', lottubet: '7', esportivabet: '8' };
+                var houseIdMap = { superbet: '1', sportingbet: '2', lottubet: '7', esportivabet: '8', hiperbet: '9' };
                 var hid = houseIdMap[currentHouseMissing];
                 filteredUsers = filteredUsers.filter(function(u) {
                     var links = u.house_links || {};
@@ -459,7 +456,7 @@
                 var links = user.house_links || {};
                 var houseNames = { '1': 'SB', '2': 'SP', '3': 'ES', '4': 'VP', '5': 'BL', '6': 'JB', '7': 'LT' };
                 var houseColors = { '1': '#E8590C', '2': '#22C55E', '3': '#1a2744', '4': '#7C3AED', '5': '#EF4444', '6': '#1E90FF', '7': '#F59E0B' };
-                var houseFullNames = { '1': 'Superbet', '2': 'Sportingbet', '3': 'Estrelabet', '4': 'VUPI', '5': 'Blaze', '6': 'JonBet', '7': 'Lottu.bet', '8': 'EsportivaBet' };
+                var houseFullNames = { '1': 'Superbet', '2': 'Sportingbet', '7': 'Lottu.bet', '8': 'EsportivaBet', '9': 'HiperBet' };
                 var linksHtml = '';
                 ['1','2','3','4','5','6','7'].forEach(function(hid) {
                     var has = links[hid] && links[hid].trim() !== '';
@@ -682,13 +679,10 @@
 
             var superbet = parseFloat(document.getElementById('dealSuperbet').value) || 200;
             var sportingbet = parseFloat(document.getElementById('dealSportingbet').value) || 180;
-            var estrelabet = parseFloat(document.getElementById('dealEstrelabet').value) || 110;
-            var vupi = parseFloat(document.getElementById('dealVupi').value) || 80;
-            var blaze = parseFloat(document.getElementById('dealBlaze').value) || 150;
-            var jonbet = parseFloat(document.getElementById('dealJonbet').value) || 150;
             var lottubet = parseFloat(document.getElementById('dealLottubet').value) || 100;
             var esportivabet = parseFloat(document.getElementById('dealEsportivabet').value) || 40;
-            var cpaDeals = { superbet: superbet, sportingbet: sportingbet, estrelabet: estrelabet, vupi: vupi, blaze: blaze, jonbet: jonbet, lottubet: lottubet, esportivabet: esportivabet };
+            var hiperbet = parseFloat(document.getElementById('dealHiperbet').value) || 100;
+            var cpaDeals = { superbet: superbet, sportingbet: sportingbet, lottubet: lottubet, esportivabet: esportivabet, hiperbet: hiperbet };
             try {
                 await SupabaseDB.updateUser(userId, { cpa_deals: cpaDeals });
                 await AffiliateManager.fetchAll();
@@ -744,31 +738,10 @@
                         realStats.sportingbetEarnings = realStats.sbFtds * (deals.sportingbet || 180);
                     }
                 }
-                // Fetch VUPI data
-                var vupiRes = await fetch('/api/vupi?affiliate_id=' + user.id);
-                if (vupiRes.ok) {
-                    var vupiData = await vupiRes.json();
-                    if (Array.isArray(vupiData)) {
-                        vupiData.forEach(function(r) {
-                            realStats.vupiVisitas += (r.visitas || 0);
-                            realStats.vupiRegs += (r.registros || 0);
-                            realStats.vupiFtds += (r.ftds || 0);
-                            realStats.vupiFtdsAmount += parseFloat(r.ftds_amount || 0);
-                            realStats.vupiQftds += (r.qftds || 0);
-                            realStats.vupiDepositos += (r.depositos || 0);
-                            realStats.vupiDepAmount += parseFloat(r.deposito_amount || 0);
-                            realStats.vupiGgr += parseFloat(r.ggr || 0);
-                            realStats.vupiNgr += parseFloat(r.ngr || 0);
-                            realStats.vupiCpa += parseFloat(r.cpa || 0);
-                            realStats.vupiRevshare += parseFloat(r.revshare || 0);
-                        });
-                        realStats.vupiEarnings = realStats.vupiQftds * (deals.vupi || 80);
-                    }
-                }
             } catch(e) { console.error('Erro ao buscar stats:', e); }
 
-            totalEarnings = realStats.superbetEarnings + realStats.sportingbetEarnings + realStats.vupiEarnings;
-            totalFtds = realStats.ftds + realStats.sbFtds + realStats.vupiQftds;
+            totalEarnings = realStats.superbetEarnings + realStats.sportingbetEarnings;
+            totalFtds = realStats.ftds + realStats.sbFtds;
 
             // Update stats by ID without re-rendering (avoids overwriting CPA deal inputs)
             var updates = {
@@ -846,31 +819,6 @@
                     </div>
                 </div>
 
-                <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-bottom: 16px;">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                        <span style="font-size: 1.1rem;">🎯</span>
-                        <h4 style="margin: 0; color: #7C3AED;">VUPI</h4>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px;">
-                        <div><div id="modalVupiVisitas" style="font-size: 1.2rem; font-weight: 700;">${realStats.vupiVisitas}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Visitas</div></div>
-                        <div><div id="modalVupiRegs" style="font-size: 1.2rem; font-weight: 700;">${realStats.vupiRegs}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Registros</div></div>
-                        <div><div id="modalVupiFtds" style="font-size: 1.2rem; font-weight: 700;">${realStats.vupiFtds}</div><div style="font-size: 0.7rem; color: var(--text-muted);">FTDs</div></div>
-                        <div><div id="modalVupiFtdsAmt" style="font-size: 1.2rem; font-weight: 700; color: var(--info);">${Format.currency(realStats.vupiFtdsAmount)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">FTDs Amount</div></div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px;">
-                        <div><div id="modalVupiQftds" style="font-size: 1.2rem; font-weight: 700; color: var(--success);">${realStats.vupiQftds}</div><div style="font-size: 0.7rem; color: var(--text-muted);">QFTDs</div></div>
-                        <div><div id="modalVupiDeps" style="font-size: 1.2rem; font-weight: 700;">${realStats.vupiDepositos}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Depositos</div></div>
-                        <div><div id="modalVupiDepAmt" style="font-size: 1.2rem; font-weight: 700; color: var(--info);">${Format.currency(realStats.vupiDepAmount)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Dep Amount</div></div>
-                        <div><div id="modalVupiGgr" style="font-size: 1.2rem; font-weight: 700; color: #F59E0B;">${Format.currency(realStats.vupiGgr)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">GGR</div></div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-                        <div><div id="modalVupiNgr" style="font-size: 1.2rem; font-weight: 700; color: #8F250C;">${Format.currency(realStats.vupiNgr)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">NGR</div></div>
-                        <div><div id="modalVupiCpa" style="font-size: 1.2rem; font-weight: 700; color: #22C55E;">${Format.currency(realStats.vupiCpa)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">CPA</div></div>
-                        <div><div id="modalVupiRevshare" style="font-size: 1.2rem; font-weight: 700; color: #8B5CF6;">${Format.currency(realStats.vupiRevshare)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">RevShare</div></div>
-                        <div><div id="modalVupiEarnings" style="font-size: 1.2rem; font-weight: 700; color: #7C3AED;">${Format.currency(realStats.vupiEarnings)}</div><div style="font-size: 0.7rem; color: var(--text-muted);">Ganho Fenix</div></div>
-                    </div>
-                </div>
-
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px;">
                     <div style="background: var(--bg-input); padding: 16px; border-radius: 12px;">
                         <div id="modalTotalEarnings" style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">${Format.currency(totalEarnings)}</div>
@@ -897,8 +845,8 @@
                 ${(function() {
                     var reqs = user.link_requests || [];
                     if (reqs.length === 0) return '';
-                    var houseNames = { superbet: 'Superbet', sportingbet: 'Sportingbet', estrelabet: 'Estrelabet', vupi: 'VUPI', blaze: 'Blaze', jonbet: 'Jonbet', lottubet: 'Lottu.bet', esportivabet: 'EsportivaBet' };
-                    var houseColors = { superbet: '#E8590C', sportingbet: '#22C55E', estrelabet: '#1a2744', vupi: '#2d1b69', blaze: '#E53935', jonbet: '#1E90FF', lottubet: '#F59E0B', esportivabet: '#10B981' };
+                    var houseNames = { superbet: 'Superbet', sportingbet: 'Sportingbet', lottubet: 'Lottu.bet', esportivabet: 'EsportivaBet', hiperbet: 'HiperBet' };
+                    var houseColors = { superbet: '#E8590C', sportingbet: '#22C55E', lottubet: '#F59E0B', esportivabet: '#10B981', hiperbet: '#1E40AF' };
                     return '<div style="background: rgba(232,89,12,0.08); border: 1px solid rgba(232,89,12,0.25); padding: 16px; border-radius: 12px; margin-bottom: 20px;">' +
                         '<h4 style="margin-bottom: 12px; color: #E8590C;">Solicitacoes de Link</h4>' +
                         reqs.map(function(r) {
@@ -913,7 +861,7 @@
                 <div style="background: var(--bg-input); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
                     <h4 style="margin-bottom: 12px;">Acordos CPA</h4>
                     ${(function() {
-                        var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, estrelabet: 110, vupi: 80, blaze: 150, jonbet: 150, lottubet: 100, esportivabet: 40 };
+                        var deals = user.cpa_deals || { superbet: 200, sportingbet: 180, lottubet: 100, esportivabet: 40, hiperbet: 100 };
                         return '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 10px;">' +
                             '<div>' +
                                 '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Superbet (R$)</label>' +
@@ -924,28 +872,16 @@
                                 '<input type="number" id="dealSportingbet" value="' + (deals.sportingbet || 180) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
                             '</div>' +
                             '<div>' +
-                                '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Estrelabet (R$)</label>' +
-                                '<input type="number" id="dealEstrelabet" value="' + (deals.estrelabet || 110) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
-                            '</div>' +
-                            '<div>' +
-                                '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">VUPI (R$)</label>' +
-                                '<input type="number" id="dealVupi" value="' + (deals.vupi || 80) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
-                            '</div>' +
-                            '<div>' +
-                                '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Blaze (R$)</label>' +
-                                '<input type="number" id="dealBlaze" value="' + (deals.blaze || 150) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
-                            '</div>' +
-                            '<div>' +
-                                '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Jonbet (R$)</label>' +
-                                '<input type="number" id="dealJonbet" value="' + (deals.jonbet || 150) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
-                            '</div>' +
-                            '<div>' +
                                 '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Lottu.bet (R$)</label>' +
                                 '<input type="number" id="dealLottubet" value="' + (deals.lottubet || 100) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
                             '</div>' +
                             '<div>' +
                                 '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">EsportivaBet (R$)</label>' +
                                 '<input type="number" id="dealEsportivabet" value="' + (deals.esportivabet || 40) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
+                            '</div>' +
+                            '<div>' +
+                                '<label style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block;">HiperBet (R$)</label>' +
+                                '<input type="number" id="dealHiperbet" value="' + (deals.hiperbet || 100) + '" style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-primary); font-size: 0.9rem;" />' +
                             '</div>' +
                         '</div>' +
                         '<button onclick="saveCpaDeals(' + user.id + ')" style="padding: 8px 20px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Salvar Acordos</button>';
@@ -1071,7 +1007,7 @@
             e.preventDefault();
             const userId = parseInt(document.getElementById('cpaUserId').value);
             const houses = BettingHouses.getAll();
-            var slugMap = { 1: 'superbet', 2: 'sportingbet', 3: 'estrelabet', 4: 'vupi', 5: 'blaze', 6: 'jonbet', 7: 'lottubet', 8: 'esportivabet' };
+            var slugMap = { 1: 'superbet', 2: 'sportingbet', 7: 'lottubet', 8: 'esportivabet', 9: 'hiperbet' };
             var cpaDeals = {};
 
             houses.forEach(function(house) {
@@ -1228,7 +1164,7 @@
             if (otgId) updateData.otg_affiliate_id = otgId;
 
             // Clear link_requests for houses that now have links
-            var slugMap = { 1: 'superbet', 2: 'sportingbet', 3: 'estrelabet', 4: 'vupi', 5: 'blaze', 6: 'jonbet', 7: 'lottubet', 8: 'esportivabet' };
+            var slugMap = { 1: 'superbet', 2: 'sportingbet', 7: 'lottubet', 8: 'esportivabet', 9: 'hiperbet' };
             var currentRequests = user.link_requests || [];
             if (currentRequests.length > 0) {
                 var remaining = currentRequests.filter(function(req) {
